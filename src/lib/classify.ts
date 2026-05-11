@@ -36,10 +36,10 @@ const DAVIT_KEYWORDS = [
   'github', 'education', 'degree',
 ];
 
-export function classifyIntent(question: string): Intent {
-  const lower = question.toLowerCase();
+const DAVIT_KEYWORD_REGEXES = DAVIT_KEYWORDS.map((kw) => new RegExp(`\\b${kw}\\b`, 'i'));
 
-  const isDavitRelated = DAVIT_KEYWORDS.some((kw) => lower.includes(kw));
+export function classifyIntent(question: string): Intent {
+  const isDavitRelated = DAVIT_KEYWORD_REGEXES.some((re) => re.test(question));
   if (!isDavitRelated) {
     return 'off_topic';
   }
