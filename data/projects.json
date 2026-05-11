@@ -1,0 +1,30 @@
+[
+  {
+    "name": "OpenDeploy",
+    "description": "An open-source deployment orchestration platform that simplifies rolling deployments for Kubernetes clusters. Features automated rollbacks, canary deployments, and a real-time dashboard.",
+    "tech": ["Go", "Kubernetes", "React", "gRPC"],
+    "url": "https://github.com/davittatenkohayrapetyan/opendeploy",
+    "highlights": ["500+ GitHub stars", "Used in production by 30+ companies", "Contributed to by 15+ open-source contributors"]
+  },
+  {
+    "name": "PersonalPitcher",
+    "description": "This very website — a personal AI pitch platform that lets visitors ask questions about Davit's background, projects, and interests using a local LLM.",
+    "tech": ["Next.js", "TypeScript", "Tailwind CSS", "Ollama"],
+    "url": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
+    "highlights": ["RAG-based retrieval from profile data", "IP rate limiting", "Intent classification"]
+  },
+  {
+    "name": "DevMetrics",
+    "description": "A developer productivity analytics dashboard that aggregates data from GitHub, Jira, and Slack to provide insights on team health and code quality.",
+    "tech": ["TypeScript", "Next.js", "PostgreSQL", "Prisma"],
+    "url": "https://github.com/davittatenkohayrapetyan/devmetrics",
+    "highlights": ["Integrates with 5+ developer tools", "Real-time WebSocket updates", "Used by 3 engineering teams internally"]
+  },
+  {
+    "name": "EchoCache",
+    "description": "A lightweight, distributed caching library for Node.js with support for TTL, LRU eviction, and Redis-compatible persistence.",
+    "tech": ["Node.js", "TypeScript", "Redis"],
+    "url": "https://github.com/davittatenkohayrapetyan/echocache",
+    "highlights": ["10k+ weekly npm downloads", "Zero dependencies", "98% test coverage"]
+  }
+]

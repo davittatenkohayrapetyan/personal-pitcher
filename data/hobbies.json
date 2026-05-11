@@ -1,0 +1,34 @@
+{
+  "hobbies": [
+    {
+      "name": "Chess",
+      "description": "Davit is an avid chess player rated ~1800 on Chess.com. He plays daily and participates in local club tournaments in Yerevan.",
+      "icon": "♟"
+    },
+    {
+      "name": "Hiking",
+      "description": "Davit enjoys hiking in the Armenian mountains, especially around Mount Aragats and the Dilijan National Park. He aims to summit at least 5 peaks per year.",
+      "icon": "🏔"
+    },
+    {
+      "name": "Photography",
+      "description": "Amateur landscape and street photographer. Davit shoots on a Sony Alpha mirrorless camera and shares his work on Instagram.",
+      "icon": "📷"
+    },
+    {
+      "name": "Reading",
+      "description": "Reads ~30 books per year, primarily technical books, sci-fi, and Armenian literature. Current favourites: 'The Pragmatic Programmer', 'Dune', and 'The Master and Margarita'.",
+      "icon": "📚"
+    },
+    {
+      "name": "Coffee",
+      "description": "Passionate about specialty coffee. Davit is a home barista who roasts his own beans and experiments with various brewing methods.",
+      "icon": "☕"
+    }
+  ],
+  "languages": [
+    {"name": "Armenian", "level": "Native"},
+    {"name": "English", "level": "Fluent (C1)"},
+    {"name": "Russian", "level": "Conversational (B2)"}
+  ]
+}
