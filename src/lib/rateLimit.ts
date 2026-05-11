@@ -25,8 +25,11 @@ export function checkRateLimit(ip: string): { allowed: boolean; remaining: numbe
   return { allowed: true, remaining: MAX_REQUESTS - entry.count, resetAt: entry.resetAt };
 }
 
-if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
+let cleanupInterval: ReturnType<typeof setInterval> | null = null;
+
+export function startCleanup(): void {
+  if (cleanupInterval) return;
+  cleanupInterval = setInterval(() => {
     const now = Date.now();
     for (const [key, value] of store.entries()) {
       if (now > value.resetAt) {
@@ -34,4 +37,15 @@ if (typeof setInterval !== 'undefined') {
       }
     }
   }, WINDOW_MS);
+}
+
+export function stopCleanup(): void {
+  if (cleanupInterval) {
+    clearInterval(cleanupInterval);
+    cleanupInterval = null;
+  }
+}
+
+if (typeof setInterval !== 'undefined') {
+  startCleanup();
 }
