@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" width="300" height="380">
+  <!-- Polaroid frame -->
+  <rect width="300" height="380" rx="4" fill="white" />
+  <!-- Warm cafe background -->
+  <rect x="10" y="10" width="280" height="300" fill="#1c0d05" />
+
+  <!-- Warm light from window -->
+  <defs>
+    <radialGradient id="warmlight" cx="80%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="10" y="10" width="280" height="300" fill="url(#warmlight)"/>
+
+  <!-- Coffee beans scattered in bg -->
+  <ellipse cx="45" cy="50" rx="12" ry="8" fill="#3d1a04" opacity="0.5" transform="rotate(20,45,50)"/>
+  <line x1="45" y1="44" x2="45" y2="56" stroke="#5c2d0a" stroke-width="1.5" opacity="0.4" transform="rotate(20,45,50)"/>
+  <ellipse cx="240" cy="70" rx="11" ry="7" fill="#3d1a04" opacity="0.5" transform="rotate(-30,240,70)"/>
+  <line x1="240" y1="64" x2="240" y2="76" stroke="#5c2d0a" stroke-width="1.5" opacity="0.4" transform="rotate(-30,240,70)"/>
+  <ellipse cx="260" cy="230" rx="10" ry="7" fill="#3d1a04" opacity="0.4" transform="rotate(15,260,230)"/>
+  <ellipse cx="30" cy="200" rx="11" ry="7" fill="#3d1a04" opacity="0.4" transform="rotate(-10,30,200)"/>
+
+  <!-- Wooden table surface -->
+  <rect x="10" y="225" width="280" height="85" fill="#3d1a04"/>
+  <rect x="10" y="225" width="280" height="4" fill="#4e2306"/>
+  <!-- Wood grain lines -->
+  <line x1="10" y1="240" x2="290" y2="238" stroke="#5c2d0a" stroke-width="1" opacity="0.4"/>
+  <line x1="10" y1="260" x2="290" y2="258" stroke="#5c2d0a" stroke-width="1" opacity="0.3"/>
+
+  <!-- Saucer -->
+  <ellipse cx="150" cy="272" rx="65" ry="12" fill="#d4a56a"/>
+  <ellipse cx="150" cy="270" rx="60" ry="10" fill="#c8956a"/>
+
+  <!-- Cup outer -->
+  <path d="M100,180 Q95,230 105,260 L195,260 Q205,230 200,180 Z" fill="#f0e6d3"/>
+  <!-- Cup inner (coffee) -->
+  <path d="M108,185 Q104,228 112,255 L188,255 Q196,228 192,185 Z" fill="#3d1a04"/>
+  <!-- Espresso crema layer -->
+  <ellipse cx="150" cy="188" rx="42" ry="10" fill="#c07840"/>
+  <ellipse cx="150" cy="188" rx="38" ry="8" fill="#b8692a"/>
+  <!-- Crema swirl/rosetta -->
+  <path d="M138,185 Q150,178 162,185 Q155,192 150,188 Q145,192 138,185" fill="#d4884a" opacity="0.6"/>
+  <circle cx="150" cy="188" r="4" fill="#c8753a" opacity="0.5"/>
+
+  <!-- Cup handle -->
+  <path d="M200,200 Q228,200 228,220 Q228,240 200,240" fill="none" stroke="#f0e6d3" stroke-width="10" stroke-linecap="round"/>
+  <path d="M200,200 Q228,200 228,220 Q228,240 200,240" fill="none" stroke="#d4c4aa" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Steam wisps -->
+  <path d="M130,178 Q126,163 130,148 Q134,133 130,118" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M150,175 Q145,158 150,142 Q155,126 150,110" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
+  <path d="M170,178 Q175,162 170,147 Q165,132 170,117" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Spoon -->
+  <ellipse cx="215" cy="268" rx="10" ry="5" fill="#c0c0c0"/>
+  <rect x="213" y="268" width="4" height="35" rx="2" fill="#c0c0c0"/>
+
+  <!-- Label area -->
+  <text x="150" y="345" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Specialty Coffee</text>
+  <text x="150" y="365" font-family="Arial, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Home roasting · Barista craft</text>
+</svg>
