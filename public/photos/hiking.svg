@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 380" width="300" height="380">
+  <!-- Polaroid frame -->
+  <rect width="300" height="380" rx="4" fill="white" />
+  <rect x="10" y="10" width="280" height="300" fill="#c8daf5" />
+
+  <!-- Sky gradient -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#5ba3c9"/>
+    </linearGradient>
+    <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cce0f5"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="280" height="300" fill="url(#sky)" />
+
+  <!-- Stars -->
+  <circle cx="40" cy="35" r="1.5" fill="white" opacity="0.8"/>
+  <circle cx="80" cy="25" r="1" fill="white" opacity="0.6"/>
+  <circle cx="130" cy="40" r="1.5" fill="white" opacity="0.7"/>
+  <circle cx="210" cy="30" r="1" fill="white" opacity="0.8"/>
+  <circle cx="260" cy="45" r="1.5" fill="white" opacity="0.6"/>
+  <circle cx="160" cy="22" r="1" fill="white" opacity="0.7"/>
+
+  <!-- Moon -->
+  <circle cx="245" cy="45" r="14" fill="#f5e6a3"/>
+  <circle cx="252" cy="40" r="11" fill="#1e3a5f"/>
+
+  <!-- Far mountains -->
+  <polygon points="10,220 90,80 170,220" fill="#1a2e45"/>
+  <polygon points="100,220 200,70 290,220" fill="#1d3250"/>
+  <polygon points="50,220 140,100 230,220" fill="#1f3660"/>
+
+  <!-- Snow caps -->
+  <polygon points="90,80 100,110 80,110" fill="url(#snow)"/>
+  <polygon points="200,70 213,105 187,105" fill="url(#snow)"/>
+  <polygon points="140,100 152,130 128,130" fill="url(#snow)"/>
+
+  <!-- Foreground hills -->
+  <ellipse cx="150" cy="280" rx="180" ry="80" fill="#0d2318"/>
+  <ellipse cx="50" cy="290" rx="80" ry="50" fill="#0a1c12"/>
+  <ellipse cx="260" cy="285" rx="70" ry="45" fill="#0a1c12"/>
+
+  <!-- Trees (pines) -->
+  <polygon points="50,240 58,270 42,270" fill="#0d3a1a"/>
+  <polygon points="70,230 80,265 60,265" fill="#0d3a1a"/>
+  <polygon points="220,235 230,268 210,268" fill="#0d3a1a"/>
+  <polygon points="245,245 253,272 237,272" fill="#0d3a1a"/>
+  <polygon points="265,238 274,268 256,268" fill="#0d3a1a"/>
+
+  <!-- Hiker silhouette -->
+  <circle cx="150" cy="245" r="7" fill="#080e06"/>
+  <line x1="150" y1="252" x2="150" y2="272" stroke="#080e06" stroke-width="3" stroke-linecap="round"/>
+  <line x1="150" y1="258" x2="140" y2="268" stroke="#080e06" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="150" y1="258" x2="162" y2="266" stroke="#080e06" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="150" y1="272" x2="143" y2="282" stroke="#080e06" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="150" y1="272" x2="158" y2="282" stroke="#080e06" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Walking stick -->
+  <line x1="162" y1="255" x2="168" y2="285" stroke="#080e06" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Label area -->
+  <text x="150" y="345" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155" text-anchor="middle">Hiking · Mount Aragats</text>
+  <text x="150" y="365" font-family="Arial, sans-serif" font-size="11" fill="#64748b" text-anchor="middle">Armenian Highlands</text>
+</svg>

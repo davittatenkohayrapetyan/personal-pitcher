@@ -1,34 +1,52 @@
 {
   "hobbies": [
     {
-      "name": "Chess",
-      "description": "Davit is an avid chess player rated ~1800 on Chess.com. He plays daily and participates in local club tournaments in Yerevan.",
-      "icon": "♟"
+      "name": "Music Production",
+      "description": "Davit produces electronic music under the alias 'Shepard D', combining melodic atmosphere, emotional storytelling, and modern electronic sound design. He collaborates with local artists and participates in creative music projects.",
+      "icon": "🎹"
     },
     {
-      "name": "Hiking",
-      "description": "Davit enjoys hiking in the Armenian mountains, especially around Mount Aragats and the Dilijan National Park. He aims to summit at least 5 peaks per year.",
-      "icon": "🏔"
+      "name": "Fitness & Gym",
+      "description": "Davit regularly works out and views fitness as an important part of discipline, self-development, and maintaining mental clarity alongside engineering work.",
+      "icon": "🏋️"
     },
     {
-      "name": "Photography",
-      "description": "Amateur landscape and street photographer. Davit shoots on a Sony Alpha mirrorless camera and shares his work on Instagram.",
-      "icon": "📷"
+      "name": "Developer Community Building",
+      "description": "Beyond engineering, Davit enjoys organizing technical events, workshops, and conferences that bring developers together and help grow the engineering community in Armenia.",
+      "icon": "🎤"
     },
     {
-      "name": "Reading",
-      "description": "Reads ~30 books per year, primarily technical books, sci-fi, and Armenian literature. Current favorites: 'The Pragmatic Programmer', 'Dune', and 'The Master and Margarita'.",
+      "name": "Teaching & Mentorship",
+      "description": "Davit enjoys mentoring engineers and students, simplifying complex technical concepts, and helping others grow in software engineering and architecture.",
       "icon": "📚"
     },
     {
-      "name": "Coffee",
-      "description": "Passionate about specialty coffee. Davit is a home barista who roasts his own beans and experiments with various brewing methods.",
-      "icon": "☕"
+      "name": "AI & Emerging Technologies",
+      "description": "Passionate about AI agents, developer tooling, intelligent automation, and experimenting with modern AI-assisted engineering workflows.",
+      "icon": "🤖"
+    },
+    {
+      "name": "Travel & Outdoor Exploration",
+      "description": "Enjoys traveling, hiking, exploring new places, and participating in community and technology events internationally.",
+      "icon": "🏔️"
     }
   ],
   "languages": [
-    {"name": "Armenian", "level": "Native"},
-    {"name": "English", "level": "Fluent (C1)"},
-    {"name": "Russian", "level": "Conversational (B2)"}
+    {
+      "name": "Armenian",
+      "level": "Native"
+    },
+    {
+      "name": "Russian",
+      "level": "Native"
+    },
+    {
+      "name": "English",
+      "level": "Professional Working Proficiency (B2)"
+    },
+    {
+      "name": "Spanish",
+      "level": "Elementary (A2)"
+    }
   ]
 }

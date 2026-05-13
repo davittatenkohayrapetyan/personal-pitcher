@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: .
@@ -8,28 +6,10 @@ services:
     environment:
       - NODE_ENV=production
       - LLM_PROVIDER=ollama
-      - OLLAMA_BASE_URL=http://ollama:11434
-      - OLLAMA_MODEL=llama3
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=llama3.2
       - RATE_LIMIT_MAX=10
       - RATE_LIMIT_WINDOW_MS=60000
-    depends_on:
-      ollama:
-        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
-
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-    restart: unless-stopped
-
-volumes:
-  ollama_data:
