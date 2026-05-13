@@ -19,12 +19,33 @@ export function loadProfileContext(): ProfileContext {
     )
     .join('\n\n');
 
+  const communityData = communityRaw.community ?? communityRaw;
+
+  const orgLines = (communityData.organizations ?? [])
+    .map((o: Record<string, unknown>) => `- ${o.role} at ${o.name} (since ${o.since}): ${o.description}`)
+    .join('\n');
+
+  const eventLines = (communityData.events ?? [])
+    .map((e: Record<string, unknown>) => `- ${e.name} (${e.date ?? 'TBD'}), Role: ${e.role}${e.attendees ? `, Attendees: ${e.attendees}` : ''}: ${e.description}`)
+    .join('\n');
+
+  const speakingLines = (communityData.speaking_and_mentoring ?? [])
+    .map((s: Record<string, unknown>) => `- ${s.type} at ${s.organization}: ${s.description}`)
+    .join('\n');
+
+  const strengthLines = (communityData.community_strengths ?? [])
+    .map((s: string) => `- ${s}`)
+    .join('\n');
+
   const community = [
-    'Talks:\n' + communityRaw.talks.map((t: Record<string, unknown>) => `- ${t.title} at ${t.event} (${t.year}): ${t.description}`).join('\n'),
-    'Mentoring:\n' + communityRaw.mentoring.map((m: string) => `- ${m}`).join('\n'),
-    'Open Source:\n' + communityRaw.openSource.map((o: string) => `- ${o}`).join('\n'),
-    'Writing:\n' + communityRaw.writing.map((w: Record<string, unknown>) => `- ${w.title} on ${w.platform} (${w.year})`).join('\n'),
-  ].join('\n\n');
+    communityData.positioning_summary ? `Summary: ${communityData.positioning_summary}` : '',
+    orgLines ? `Organizations:\n${orgLines}` : '',
+    eventLines ? `Events Organized:\n${eventLines}` : '',
+    speakingLines ? `Speaking & Mentoring:\n${speakingLines}` : '',
+    strengthLines ? `Community Strengths:\n${strengthLines}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
 
   const hobbies = [
     'Hobbies:\n' + hobbiesRaw.hobbies.map((h: Record<string, unknown>) => `- ${h.name}: ${h.description}`).join('\n'),

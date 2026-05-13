@@ -51,11 +51,13 @@ export default function ProfileHero() {
       </div>
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-        <div
-          aria-hidden="true"
-          className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-blue-500 text-xl font-bold text-white shadow-lg shadow-violet-900/40 ring-2 ring-white/10 sm:h-20 sm:w-20 sm:text-2xl"
-        >
-          DH
+        <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-2xl ring-2 ring-white/10 shadow-lg shadow-violet-900/40 sm:h-20 sm:w-20">
+          <Image
+            src="/photos/1766579457955.jpg"
+            alt="Davit Hayrapetyan"
+            fill
+            className="object-cover"
+          />
         </div>
         <div className="min-w-0 flex-1">
           <h1

@@ -44,7 +44,7 @@ export default function AppShell({ children }: AppShellProps) {
               GitHub
             </a>
             <a
-              href="https://linkedin.com/in/davithayrapetyan"
+              href="https://www.linkedin.com/in/davit-hayrapetyan-04377561"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-md px-2 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/5 hover:text-white sm:px-3 sm:text-sm"
