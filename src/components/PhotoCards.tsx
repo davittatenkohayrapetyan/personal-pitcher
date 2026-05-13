@@ -1,11 +1,12 @@
 import hobbiesData from '../../data/hobbies.json';
 
 const HOBBY_COLORS: Record<string, string> = {
-  Chess:        'from-amber-400 to-orange-600',
-  Hiking:       'from-emerald-400 to-teal-600',
-  Photography:  'from-rose-400 to-red-600',
-  Reading:      'from-violet-400 to-purple-600',
-  Coffee:       'from-yellow-400 to-amber-600',
+  'Music Production':              'from-violet-400 to-purple-600',
+  'Fitness & Gym':                 'from-amber-400 to-orange-600',
+  'Developer Community Building':  'from-blue-400 to-indigo-600',
+  'Teaching & Mentorship':         'from-emerald-400 to-teal-600',
+  'AI & Emerging Technologies':    'from-cyan-400 to-blue-600',
+  'Travel & Outdoor Exploration':  'from-rose-400 to-red-600',
 };
 
 const HOBBY_ROTATIONS = ['-rotate-3', 'rotate-2', '-rotate-1', 'rotate-3', '-rotate-2'];

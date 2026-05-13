@@ -1,40 +1,309 @@
 {
-  "talks": [
-    {
-      "title": "Building Reliable Microservices with TypeScript and gRPC",
-      "event": "ArmeniaJS Conference 2023",
-      "description": "A deep dive into designing robust microservice communication patterns using TypeScript and gRPC, with live coding demos.",
-      "year": 2023
-    },
-    {
-      "title": "RAG Pipelines for Developers: From Theory to Production",
-      "event": "Yerevan Tech Meetup #12",
-      "description": "Practical guide to building Retrieval-Augmented Generation systems, covering embedding models, vector stores, and prompt engineering.",
-      "year": 2024
-    }
-  ],
-  "mentoring": [
-    "Mentors 3 junior engineers at work on system design and career growth",
-    "Active mentor on ADPList with 30+ mentoring sessions completed",
-    "Volunteer code reviewer for Armenian developers applying to FAANG"
-  ],
-  "openSource": [
-    "Maintainer of OpenDeploy (500+ stars)",
-    "Contributor to NestJS ecosystem (15+ merged PRs)",
-    "Organizer of Yerevan Open Source Hackathon 2023 (120 participants)"
-  ],
-  "writing": [
-    {
-      "title": "Why I switched from REST to gRPC for internal APIs",
-      "platform": "Dev.to",
-      "url": "https://dev.to/davithayrapetyan/rest-to-grpc",
-      "year": 2023
-    },
-    {
-      "title": "Building your own RAG pipeline from scratch",
-      "platform": "Medium",
-      "url": "https://medium.com/@davithayrapetyan/rag-from-scratch",
-      "year": 2024
-    }
-  ]
+  "community": {
+    "organizations": [
+      {
+        "name": "GDG Yerevan",
+        "role": "Organizer",
+        "since": "2022",
+        "location": "Yerevan, Armenia",
+        "members": 1254,
+        "rating": "4.4",
+        "ratings_count": 26,
+        "events_count_visible_on_meetup": 36,
+        "description": "Davit has been organizing GDG Yerevan events since Google I/O Extended Yerevan 2022, helping grow the local software engineering and Google developer community through conferences, workshops, livestreams, and hands-on technical meetups."
+      }
+    ],
+    "events": [
+      {
+        "name": "Build with AI: AI-Powered Frontends with Angular + Google Agent Development Kit",
+        "date": "2026-02-21",
+        "role": "Organizer",
+        "location": "Aigy Business Center, Yerevan, Armenia",
+        "attendees": 42,
+        "description": "A hands-on GDG Yerevan event focused on building an AI-integrated frontend application with Angular and Google Agent Development Kit. The event combined practical development, AI agent concepts, and community learning.",
+        "topics": [
+          "AI",
+          "Angular",
+          "Google ADK",
+          "Agent Development",
+          "Frontend Engineering",
+          "Hands-on Workshop"
+        ]
+      },
+      {
+        "name": "DevFest Armenia 2025",
+        "date": "2025-12-20",
+        "role": "Lead Organizer",
+        "location": "Woods Center, Jrvezh, Armenia",
+        "attendees": 318,
+        "description": "Large-scale GDG Yerevan conference featuring invited speakers, workshops, AI and cloud sessions, community networking, and partner activities. Davit coordinated major parts of the event including agenda planning, speaker communication, partnerships, logistics, promotion, and community engagement.",
+        "topics": [
+          "DevFest",
+          "AI",
+          "Google Cloud",
+          "Software Architecture",
+          "Developer Community",
+          "Workshops",
+          "Networking"
+        ]
+      },
+      {
+        "name": "FireCode Hackathon at Seaside Startup Summit",
+        "date": "Summer 2025",
+        "role": "Mentor",
+        "location": "Seaside Startup Summit",
+        "description": "Mentored participants during the FireCode hackathon at Seaside Startup Summit, supporting teams with technical guidance, product thinking, and practical engineering feedback.",
+        "topics": [
+          "Hackathon",
+          "Mentorship",
+          "Startup Ecosystem",
+          "Software Engineering",
+          "Product Thinking"
+        ]
+      },
+      {
+        "name": "IWD 2025: Redefine Possible — Build with AI",
+        "date": "2025-04-05",
+        "role": "Organizer",
+        "location": "LOFT, Yerevan, Armenia",
+        "attendees": 64,
+        "description": "Women Techmakers and GDG Yerevan event focused on AI, engineering leadership, women in technology, and community-driven technical learning.",
+        "topics": [
+          "International Women's Day",
+          "Women Techmakers",
+          "AI",
+          "Build with AI",
+          "Women in Tech",
+          "Engineering Leadership",
+          "Community"
+        ]
+      },
+      {
+        "name": "Angular 19 Signals Workshop",
+        "date": "2024-12-14",
+        "role": "Organizer",
+        "location": "Woods Center, Jrvezh, Armenia",
+        "attendees": 12,
+        "description": "Practical workshop focused on modern Angular features, especially Angular Signals and frontend architecture patterns.",
+        "topics": [
+          "Angular",
+          "Angular Signals",
+          "Frontend Engineering",
+          "Workshop"
+        ]
+      },
+      {
+        "name": "DevFest Armenia 2024",
+        "date": "2024-10-20",
+        "role": "Organizer",
+        "location": "ARDY Academy, Yerevan, Armenia",
+        "attendees": 118,
+        "description": "Annual GDG Yerevan developer conference bringing together local and international speakers, technical sessions, community networking, and Google technology discussions.",
+        "topics": [
+          "DevFest",
+          "Google Technologies",
+          "AI",
+          "Cloud",
+          "Software Engineering",
+          "Developer Community"
+        ]
+      },
+      {
+        "name": "Mastering the Cloud: A Deep Dive into Google Cloud",
+        "date": "2024-09-21",
+        "role": "Organizer",
+        "attendees": 36,
+        "description": "Technical meetup focused on Google Cloud concepts, practical cloud engineering, and cloud-native development.",
+        "topics": [
+          "Google Cloud",
+          "Cloud Engineering",
+          "Cloud Native",
+          "DevOps"
+        ]
+      },
+      {
+        "name": "NgRx for Angular — Workshop",
+        "date": "2024-08-17",
+        "role": "Organizer",
+        "attendees": 7,
+        "description": "Hands-on Angular workshop focused on state management with NgRx, organized together with ARDY Technological Academy.",
+        "topics": [
+          "Angular",
+          "NgRx",
+          "State Management",
+          "Frontend Engineering",
+          "Workshop"
+        ]
+      },
+      {
+        "name": "KotlinConf'24 Global Yerevan",
+        "date": "2024-05-25",
+        "role": "Supporter / Organizer",
+        "location": "jambit.am LLC, Yerevan, Armenia",
+        "attendees": 20,
+        "description": "Local Yerevan edition of KotlinConf Global, bringing Kotlin developers together for talks, discussions, and community networking.",
+        "topics": [
+          "Kotlin",
+          "KotlinConf",
+          "Backend Engineering",
+          "Mobile Development",
+          "Community"
+        ]
+      },
+      {
+        "name": "The State of Kotlin Multiplatform — Extended Recap & Networking Session",
+        "date": "2023-11-25",
+        "role": "Organizer",
+        "location": "jambit.am LLC, Yerevan, Armenia",
+        "attendees": 3,
+        "description": "Follow-up Kotlin Multiplatform community session with recap, discussion, and networking after a livestream watch party.",
+        "topics": [
+          "Kotlin",
+          "Kotlin Multiplatform",
+          "Networking",
+          "Community Discussion"
+        ]
+      },
+      {
+        "name": "The State of Kotlin Multiplatform — Live Stream Watch Party",
+        "date": "2023-11-21",
+        "role": "Organizer",
+        "location": "jambit.am LLC, Yerevan, Armenia",
+        "attendees": 2,
+        "description": "Community watch party dedicated to Kotlin Multiplatform announcements and discussion.",
+        "topics": [
+          "Kotlin",
+          "Kotlin Multiplatform",
+          "Livestream",
+          "Community"
+        ]
+      },
+      {
+        "name": "DevFest Armenia 2023 — 10th Anniversary",
+        "date": "2023-10-21",
+        "role": "Organizer",
+        "attendees": 34,
+        "description": "DevFest Armenia 2023 celebrating 10 years of tech innovation and developer community growth in Armenia.",
+        "topics": [
+          "DevFest",
+          "Software Engineering",
+          "Google Technologies",
+          "Developer Community",
+          "Tech Innovation"
+        ]
+      },
+      {
+        "name": "Google I/O 2023 Extended — Yerevan",
+        "date": "2023-08-12",
+        "role": "Organizer",
+        "location": "jambit.am LLC, Yerevan, Armenia",
+        "attendees": 26,
+        "description": "Local Google I/O Extended event bringing developers together to discuss Google announcements, technology updates, and hands-on learning.",
+        "topics": [
+          "Google I/O",
+          "Google Technologies",
+          "Developer Community",
+          "Technology Updates"
+        ]
+      },
+      {
+        "name": "KotlinConf'23 Global Yerevan",
+        "date": "2023-05-20",
+        "role": "Supporter / Organizer",
+        "attendees": null,
+        "description": "Local KotlinConf Global event in Yerevan reconnecting the Kotlin community after several years.",
+        "topics": [
+          "Kotlin",
+          "KotlinConf",
+          "Backend Engineering",
+          "Mobile Development",
+          "Community"
+        ]
+      },
+      {
+        "name": "Tech Talks: Go and Flutter",
+        "date": "2022-12-10",
+        "role": "Organizer",
+        "attendees": null,
+        "description": "Technical meetup covering Go and Flutter topics for the local developer community.",
+        "topics": [
+          "Go",
+          "Flutter",
+          "Backend Engineering",
+          "Mobile Development",
+          "Tech Talks"
+        ]
+      },
+      {
+        "name": "Google I/O Extended Yerevan 2022",
+        "aliases": [
+          "I/O Extended Yerevan 2022"
+        ],
+        "date": "2022-06-25",
+        "role": "Organizer",
+        "location": "LOFT, Yerevan, Armenia",
+        "description": "Davit's starting point as a GDG Yerevan organizer, contributing to a local Google I/O Extended event for developers and technology enthusiasts.",
+        "topics": [
+          "Google I/O",
+          "Google Technologies",
+          "Developer Community",
+          "Community Learning"
+        ]
+      }
+    ],
+    "speaking_and_mentoring": [
+      {
+        "type": "University Lecturer",
+        "organization": "Yerevan State University",
+        "since": "2019",
+        "description": "Part-time lecturer teaching practical software engineering topics including Java, Kotlin, Android, Assembly x86, and C++."
+      },
+      {
+        "type": "Hackathon Mentor",
+        "organization": "FireCode Hackathon / Seaside Startup Summit",
+        "date": "Summer 2025",
+        "description": "Mentored hackathon participants during Seaside Startup Summit, helping teams shape ideas, solve technical challenges, and improve their project direction."
+      },
+      {
+        "type": "Community Speaker / Mentor",
+        "organization": "GDG Yerevan",
+        "description": "Participates in developer education through GDG events, workshops, mentoring, technical discussions, and speaker coordination."
+      },
+      {
+        "type": "Event Organizer and Speaker Coordinator",
+        "organization": "GDG Yerevan",
+        "description": "Coordinates technical agendas, speaker communication, CFP processes, partner discussions, and event promotion for GDG Yerevan conferences and workshops."
+      }
+    ],
+    "community_strengths": [
+      "Long-term commitment to GDG Yerevan since 2022",
+      "Experience organizing both small technical workshops and large developer conferences",
+      "Ability to coordinate speakers, partners, venues, logistics, promotion, and community communication",
+      "Strong network with local and international engineers, Google Developer Experts, speakers, and technology partners",
+      "Focus on practical developer education and hands-on learning",
+      "Experience mentoring hackathon teams and supporting early-stage product thinking",
+      "Strong public-facing communication through event announcements, speaker coordination, and community engagement"
+    ],
+    "topics": [
+      "AI",
+      "AI Agents",
+      "Google Cloud",
+      "Angular",
+      "Google ADK",
+      "Kotlin",
+      "Kotlin Multiplatform",
+      "Frontend Engineering",
+      "Backend Engineering",
+      "Developer Tooling",
+      "Software Architecture",
+      "Cloud Engineering",
+      "DevOps",
+      "Women in Tech",
+      "Hackathons",
+      "Startup Ecosystem",
+      "Community Building",
+      "Engineering Education"
+    ],
+    "positioning_summary": "Davit is not only a senior backend and architecture-oriented engineer, but also an active technology community builder in Armenia. Since 2022, he has helped organize GDG Yerevan events ranging from Google I/O Extended and KotlinConf Global local editions to DevFest Armenia, Build with AI workshops, and Women Techmakers initiatives. His community work demonstrates leadership, communication, ownership, mentorship, and the ability to bring engineers, speakers, companies, and learners together around practical technology education."
+  }
 }

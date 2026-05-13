@@ -17,14 +17,14 @@ interface PhotoPlacement {
 }
 
 const PLACEMENTS: PhotoPlacement[] = [
-  { top: '3%',  left: '1%',   rotate: '-8deg',  opacity: 0.10, width: 130, height: 165 },
-  { top: '10%', right: '2%',  rotate: '6deg',   opacity: 0.08, width: 120, height: 152 },
-  { top: '40%', left: '0%',   rotate: '-4deg',  opacity: 0.09, width: 115, height: 146 },
-  { top: '55%', right: '1%',  rotate: '9deg',   opacity: 0.08, width: 125, height: 158 },
-  { top: '72%', left: '4%',   rotate: '3deg',   opacity: 0.07, width: 110, height: 140 },
-  { top: '28%', right: '4%',  rotate: '-6deg',  opacity: 0.09, width: 120, height: 152 },
-  { top: '80%', right: '3%',  rotate: '5deg',   opacity: 0.07, width: 105, height: 133 },
-  { top: '18%', left: '3%',   rotate: '4deg',   opacity: 0.08, width: 108, height: 137 },
+  { top: '3%', left: '1%', rotate: '-8deg', opacity: 0.10, width: 130, height: 165 },
+  { top: '10%', right: '2%', rotate: '6deg', opacity: 0.08, width: 120, height: 152 },
+  { top: '40%', left: '0%', rotate: '-4deg', opacity: 0.09, width: 115, height: 146 },
+  { top: '55%', right: '1%', rotate: '9deg', opacity: 0.08, width: 125, height: 158 },
+  { top: '72%', left: '4%', rotate: '3deg', opacity: 0.07, width: 110, height: 140 },
+  { top: '28%', right: '4%', rotate: '-6deg', opacity: 0.09, width: 120, height: 152 },
+  { top: '80%', right: '3%', rotate: '5deg', opacity: 0.07, width: 105, height: 133 },
+  { top: '18%', left: '3%', rotate: '4deg', opacity: 0.08, width: 108, height: 137 },
 ];
 
 interface BackgroundPhotosProps {

@@ -1,23 +1,22 @@
 import BackgroundPhotos from './BackgroundPhotos';
 
 const HERO_PHOTOS = [
-  { src: '/photos/hiking.svg',      alt: 'Hiking in Armenian mountains' },
-  { src: '/photos/chess.svg',       alt: 'Chess player rated ~1800' },
-  { src: '/photos/coding.svg',      alt: 'Late-night coding sessions' },
-  { src: '/photos/speaking.svg',    alt: 'Speaking at ArmeniaJS 2023' },
-  { src: '/photos/photography.svg', alt: 'Photography with Sony Alpha' },
-  { src: '/photos/coffee.svg',      alt: 'Specialty coffee roasting' },
-  { src: '/photos/reading.svg',     alt: 'Reading ~30 books per year' },
+  { src: '/photos/devfest.jpg',      alt: 'Organizing DevFest' },
+  { src: '/photos/certificate.jpg',       alt: 'Davit and a Certificate' },
+  { src: '/photos/drums.jpg',      alt: 'Davit and drum sticks' },
+  { src: '/photos/firecode.jpg',    alt: 'Mentoring at FireCode' },
+  { src: '/photos/kond.jpg', alt: 'Davit at KOND' },
+  { src: '/photos/speaker.jpg',      alt: 'Davit as a speaker' },
 ];
 
 const STATS = [
-  { value: '6+',    label: 'Years Experience' },
-  { value: '500k+', label: 'Daily Active Users' },
-  { value: '500+',  label: 'GitHub Stars' },
-  { value: '30+',   label: 'ADPList Sessions' },
+  { value: '13+',  label: 'Years Experience' },
+  { value: '3+',   label: 'Events Organized' },
+  { value: '9+',   label: 'Companies Served' },
+  { value: '2',    label: 'Advanced Degrees' },
 ];
 
-const SKILLS = ['TypeScript', 'Go', 'React', 'Next.js', 'Kubernetes', 'AI/ML', 'gRPC', 'RAG'];
+const SKILLS = ['Java', 'Kotlin', 'Spring Boot', 'Microservices', 'Distributed Systems', 'Cloud', 'AI / RAG', 'Architecture'];
 
 export default function HeroSection() {
   return (
@@ -42,11 +41,11 @@ export default function HeroSection() {
           Davit Hayrapetyan
         </h1>
         <p className="text-lg sm:text-xl md:text-2xl text-blue-300 mb-4 font-medium">
-          Senior Software Engineer &amp; Open Source Builder
+          Staff Software Engineer &amp; Backend Architect
         </p>
         <p className="text-base sm:text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed px-2">
-          Building scalable distributed systems, AI-powered products, and developer tooling.
-          Open source maintainer and community contributor based in Yerevan, Armenia.
+          13+ years building distributed systems, microservices, and resilient backend platforms.
+          Community organizer, university lecturer, and AI enthusiast based in Yerevan, Armenia.
         </p>
 
         {/* Skill tags */}
