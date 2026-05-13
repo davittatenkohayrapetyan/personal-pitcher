@@ -22,10 +22,10 @@ export default function Home() {
             Left  (flex): ProfileHero + StatsGrid + Explore cards
             Right (sticky): AssistantPanel
       */}
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] lg:items-start lg:gap-8">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(560px,1fr)_minmax(460px,540px)] lg:items-start lg:gap-8">
 
         {/* ── GROUP 1: Identity ── order-1 on mobile; left-col row-1 on desktop */}
-        <div className="order-1 flex flex-col gap-5 lg:col-start-1 lg:row-start-1">
+        <div className="order-1 flex flex-col gap-6 lg:col-start-1 lg:row-start-1">
           <ProfileHero />
           <StatsGrid />
         </div>
@@ -45,18 +45,18 @@ export default function Home() {
         >
           <h2
             id="explore-heading"
-            className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400"
+            className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400"
           >
             Explore
           </h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
             <ExperienceCard />
             <SkillsCard />
             <ProjectsCard />
             <CommunityImpactCard />
             <HobbiesCard />
           </div>
-          <p className="mt-3 text-xs text-slate-500">
+          <p className="mt-4 text-sm text-slate-500">
             Tap any card to see full details, or ask the assistant.
           </p>
         </section>
