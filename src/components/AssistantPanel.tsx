@@ -81,14 +81,14 @@ export default function AssistantPanel() {
   return (
     <section
       aria-labelledby="assistant-heading"
-      className="flex h-full flex-col overflow-hidden rounded-2xl border border-violet-400/20 bg-gradient-to-br from-slate-900/90 to-slate-950/90 shadow-xl shadow-violet-950/30"
+      className="flex flex-col overflow-hidden rounded-2xl border border-violet-400/25 bg-slate-900/90 shadow-2xl shadow-violet-950/40"
     >
-      <header className="flex items-start justify-between gap-3 border-b border-white/5 px-5 py-4 sm:px-6">
+      <header className="flex items-start justify-between gap-3 border-b border-slate-400/10 px-5 py-4 sm:px-6">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
-              className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 text-xs font-bold text-white shadow"
+              className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-sky-500 text-xs font-bold text-white shadow"
             >
               AI
             </span>
@@ -108,13 +108,13 @@ export default function AssistantPanel() {
         </span>
       </header>
 
-      {/* Conversation area — fixed-ish height on desktop, grows on mobile */}
-      <div className="scrollbar-thin flex-1 overflow-y-auto px-5 py-4 sm:px-6 sm:py-5 lg:max-h-[420px]">
+      {/* Conversation area — min 420px tall on desktop so assistant feels prominent */}
+      <div className="scrollbar-thin flex-1 overflow-y-auto px-5 py-4 sm:px-6 sm:py-5 lg:min-h-[420px] lg:max-h-[520px]">
         {entries.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center py-6 text-center">
+          <div className="flex h-full min-h-[180px] flex-col items-center justify-center py-8 text-center">
             <div aria-hidden="true" className="mb-3 text-4xl">💬</div>
             <p className="text-sm font-medium text-slate-200">No questions yet</p>
-            <p className="mt-1 max-w-xs text-xs text-slate-500">
+            <p className="mt-1 max-w-xs text-xs leading-relaxed text-slate-500">
               Try a suggestion below, or ask anything about Davit&apos;s career, projects, community
               work, or hobbies.
             </p>
@@ -125,7 +125,7 @@ export default function AssistantPanel() {
       </div>
 
       {/* Composer */}
-      <div className="border-t border-white/5 bg-slate-950/40 px-5 py-4 sm:px-6">
+      <div className="border-t border-slate-400/10 bg-slate-950/50 px-5 py-4 sm:px-6">
         <div className="mb-3">
           <SuggestedQuestions
             questions={SUGGESTED_QUESTIONS}
@@ -137,7 +137,7 @@ export default function AssistantPanel() {
         <label htmlFor="assistant-input" className="sr-only">
           Ask a question about Davit
         </label>
-        <div className="relative rounded-xl border border-white/10 bg-slate-900/80 transition-colors focus-within:border-violet-400/60">
+        <div className="relative rounded-xl border border-slate-400/15 bg-slate-900 transition-colors focus-within:border-violet-400/60 focus-within:ring-1 focus-within:ring-violet-400/20">
           <textarea
             id="assistant-input"
             ref={inputRef}
@@ -149,7 +149,7 @@ export default function AssistantPanel() {
             maxLength={500}
             disabled={isLoading}
             aria-describedby="assistant-helper"
-            className="block w-full resize-none rounded-xl bg-transparent px-4 py-3 pr-14 text-sm leading-relaxed text-white placeholder-slate-500 focus:outline-none"
+            className="block w-full resize-none rounded-xl bg-transparent px-4 py-3 pr-16 text-sm leading-relaxed text-white placeholder-slate-500 focus:outline-none"
           />
           <div className="absolute bottom-2 right-2 flex items-center gap-2">
             <span className="text-[10px] tabular-nums text-slate-600">{question.length}/500</span>
@@ -158,7 +158,7 @@ export default function AssistantPanel() {
               onClick={() => handleSubmit(question)}
               disabled={!question.trim() || isLoading}
               aria-label="Send question"
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 text-white shadow-md transition-all hover:from-violet-400 hover:to-blue-400 disabled:cursor-not-allowed disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-sky-500 text-white shadow-md transition-all hover:from-violet-400 hover:to-sky-400 disabled:cursor-not-allowed disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500"
             >
               {isLoading ? (
                 <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -180,7 +180,7 @@ export default function AssistantPanel() {
           </p>
         )}
         <p id="assistant-helper" className="mt-2 text-[11px] text-slate-500">
-          Press Enter to send · Shift+Enter for new line · Rate limited to 10 requests/min
+          Enter to send · Shift+Enter for new line · Rate limited to 10 req/min
         </p>
       </div>
     </section>

@@ -106,9 +106,9 @@ export default function DetailsDialog({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
-        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-white/10 bg-slate-900 shadow-2xl shadow-black/40 sm:rounded-2xl"
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-slate-400/15 bg-slate-900 shadow-2xl shadow-black/40 sm:rounded-2xl"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-white/5 px-5 py-4 sm:px-6">
+        <div className="flex items-start justify-between gap-4 border-b border-slate-400/10 px-5 py-4 sm:px-6">
           <div className="min-w-0">
             <h2 id={titleId} className="text-lg font-semibold text-white sm:text-xl">
               {title}
@@ -123,7 +123,7 @@ export default function DetailsDialog({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-slate-400/15 bg-slate-800/50 text-slate-300 transition-colors hover:bg-slate-700/50 hover:text-white"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

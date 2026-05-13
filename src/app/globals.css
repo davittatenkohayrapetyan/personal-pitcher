@@ -6,22 +6,17 @@
   margin: 0;
 }
 
-html,
-body {
-  /* Eliminate horizontal scrollbars from any decorative absolutely-positioned content */
-  overflow-x: hidden;
-  max-width: 100%;
-}
-
 html {
   scroll-behavior: smooth;
+  /* overflow-x: hidden is a safety net only — the real fix is no large fixed-width
+     or absolutely-positioned elements extending beyond the viewport. */
+  overflow-x: hidden;
 }
 
 body {
-  background: #0b1120; /* navy/slate base */
+  background: #0b1120;
   color: #f1f5f9;
   font-family: Arial, Helvetica, sans-serif;
-  min-height: 100vh;
 }
 
 /* Consistent, visible keyboard focus across the app */
@@ -31,12 +26,12 @@ body {
   border-radius: 6px;
 }
 
-/* Hide scrollbars on the conversation history while keeping it scrollable */
+/* Custom thin scrollbar for conversation panel */
 .scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3); /* slate-400/30 */
+  background: rgba(148, 163, 184, 0.25);
   border-radius: 3px;
 }
 .scrollbar-thin::-webkit-scrollbar-track {
