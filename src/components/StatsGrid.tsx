@@ -1,6 +1,10 @@
+import communityData from '../../data/community.json';
+
+const org = communityData.community.organizations[0];
+
 const STATS = [
   { value: '13+', label: 'Years Experience' },
-  { value: '36+', label: 'GDG Events' },
+  { value: `${org.events_count_visible_on_meetup}+`, label: 'GDG Events' },
   { value: '9+', label: 'Companies Served' },
   { value: '2', label: 'Advanced Degrees' },
 ];
