@@ -27,7 +27,7 @@ export default function ProfileHero() {
             src="/photos/1766579457955.jpg"
             alt="Davit Hayrapetyan"
             fill
-            className="object-cover object-top"
+            className="object-cover object-center"
             priority
           />
         </div>

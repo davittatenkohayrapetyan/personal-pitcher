@@ -50,7 +50,7 @@ export default function HighlightCard({
 
       {/* Text content */}
       <div className="min-w-0 flex-1">
-        <h3 className="text-sm font-semibold text-slate-100 leading-tight">{title}</h3>
+        <h3 className="text-sm font-semibold leading-tight text-slate-100">{title}</h3>
         {subtitle && (
           <p className="mt-0.5 text-xs font-medium text-violet-300/80">{subtitle}</p>
         )}

@@ -57,7 +57,7 @@ export default function Home() {
             <HobbiesCard />
           </div>
           <p className="mt-3 text-xs text-slate-500">
-            Tap any card to see full details, or ask the assistant on the right.
+            Tap any card to see full details, or ask the assistant.
           </p>
         </section>
 
