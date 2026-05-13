@@ -39,13 +39,7 @@ export default function QATimeline({ entries }: QATimelineProps) {
   }, [entries]);
 
   if (entries.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">💬</div>
-        <p className="text-slate-400 text-lg">No questions yet.</p>
-        <p className="text-slate-500 text-sm mt-1">Ask Davit&apos;s AI assistant something above!</p>
-      </div>
-    );
+    return null;
   }
 
   return (

@@ -6,12 +6,39 @@
   margin: 0;
 }
 
+html,
+body {
+  /* Eliminate horizontal scrollbars from any decorative absolutely-positioned content */
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: #0f172a;
+  background: #0b1120; /* navy/slate base */
   color: #f1f5f9;
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Consistent, visible keyboard focus across the app */
+:focus-visible {
+  outline: 2px solid #818cf8; /* indigo-400 */
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Hide scrollbars on the conversation history while keeping it scrollable */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3); /* slate-400/30 */
+  border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
 }
