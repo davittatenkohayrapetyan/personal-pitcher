@@ -1,11 +1,12 @@
 # Personal Pitcher 🎯
 
-A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions about Davit's professional background, projects, community contributions, and personal interests — powered by a local LLM via Ollama.
+A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions about Davit's professional background, projects, community contributions, and personal interests — powered by OpenAI with an automatic Ollama (Llama) fallback.
 
 ## Features
 
 - 🎨 **Clean portfolio UI** — Hero section, photo cards, and Q&A timeline
-- 🤖 **AI-powered answers** — Uses Ollama (local) or OpenAI (fallback)
+- 🤖 **AI-powered answers** — OpenAI primary with automatic Ollama/Llama fallback
+- 🔁 **Circuit breaker** — Automatically skips OpenAI when it is down/overloaded, then probes for recovery
 - 🛡️ **Request validation** — Input length, type checks
 - ⏱️ **IP-based rate limiting** — 10 requests per minute per IP
 - 🧠 **Intent classification** — Routes questions to relevant profile sections
@@ -16,7 +17,7 @@ A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions ab
 
 ### Prerequisites
 - Node.js 20+
-- [Ollama](https://ollama.ai) installed and running with `llama3` model
+- [Ollama](https://ollama.ai) installed and running with `llama3` model (used as fallback)
 
 ### Local Development
 
@@ -27,7 +28,7 @@ npm install
 # Copy environment file
 cp .env.example .env.local
 
-# Pull the LLM model (requires Ollama)
+# Pull the LLM model (requires Ollama — used as fallback)
 ollama pull llama3
 
 # Start development server
@@ -45,14 +46,48 @@ docker compose up -d
 docker compose exec ollama ollama pull llama3
 ```
 
-### Using OpenAI Instead
+### Using OpenAI (Recommended)
 
 Set in `.env.local`:
 ```
-LLM_PROVIDER=openai
 OPENAI_API_KEY=sk-your-key
 OPENAI_MODEL=gpt-4o-mini
 ```
+
+When `OPENAI_API_KEY` is present, every request is first sent to OpenAI. If OpenAI fails for any reason, the system automatically falls back to Ollama — no user-visible error. If `OPENAI_API_KEY` is not set, all requests go directly to Ollama.
+
+## LLM Provider Strategy
+
+The system uses an **OpenAI-first, Ollama-fallback** strategy with a circuit breaker:
+
+1. **Primary** — If `OPENAI_API_KEY` is configured and the circuit breaker is closed, OpenAI is called first.
+2. **Fallback** — If OpenAI fails (network error, timeout, quota/rate limit, or any server error), the request is transparently retried against Ollama.
+3. **Circuit breaker** — After `CB_FAILURE_THRESHOLD` consecutive transient OpenAI failures the breaker opens. While open all requests bypass OpenAI and go straight to Ollama. After `CB_COOLDOWN_MS` milliseconds the breaker enters `half_open` and allows a small number of probe requests through. On a successful probe the breaker closes again.
+
+### Circuit breaker states
+
+| State | Behaviour |
+|-------|-----------|
+| `closed` | OpenAI is called normally. |
+| `open` | OpenAI is skipped; requests go straight to Ollama. |
+| `half_open` | A limited number of probe requests are sent to OpenAI to test recovery. |
+
+### Configuration
+
+| Variable | Default | Description |
+|---|---|---|
+| `OPENAI_API_KEY` | _(unset)_ | When set, OpenAI is the primary provider. |
+| `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI model name. |
+| `OPENAI_TIMEOUT_MS` | `30000` | Request timeout for OpenAI (ms). |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL (fallback). |
+| `OLLAMA_MODEL` | `llama3` | Ollama model name. |
+| `CB_FAILURE_THRESHOLD` | `5` | Consecutive transient failures before breaker opens. |
+| `CB_COOLDOWN_MS` | `60000` | Cooldown before breaker enters half_open (ms). |
+| `CB_PROBE_COUNT` | `1` | Successful probes required to close the breaker. |
+
+### Multi-instance deployments
+
+The circuit breaker state is held **in process memory**. In a multi-instance deployment each instance maintains its own breaker independently. A shared store (e.g. Redis) is not required; each instance will discover OpenAI recovery on its own probe cycle.
 
 ## API Reference
 
@@ -75,7 +110,7 @@ OPENAI_MODEL=gpt-4o-mini
 **Error responses:**
 - `400` — Missing/invalid question
 - `429` — Rate limit exceeded
-- `500` — LLM error
+- `500` — Both OpenAI and Ollama failed to generate an answer
 
 ## Architecture
 
@@ -92,9 +127,12 @@ src/
 │   └── QATimeline.tsx        # Conversation history
 ├── lib/
 │   ├── llm/
-│   │   ├── provider.ts       # Provider factory
-│   │   ├── ollama.ts         # Ollama implementation
-│   │   └── openai.ts         # OpenAI implementation
+│   │   ├── provider.ts       # Provider factory (returns FallbackOrchestrator)
+│   │   ├── orchestrator.ts   # OpenAI → Ollama fallback logic
+│   │   ├── circuitBreaker.ts # In-memory circuit breaker for OpenAI
+│   │   ├── errors.ts         # Typed LLMError + transient-error helper
+│   │   ├── openai.ts         # OpenAI adapter
+│   │   └── ollama.ts         # Ollama adapter
 │   ├── profile/loader.ts     # Load profile data files
 │   ├── rateLimit.ts          # IP rate limiting
 │   ├── classify.ts           # Intent classification

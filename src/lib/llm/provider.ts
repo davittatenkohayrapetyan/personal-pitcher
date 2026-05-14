@@ -1,6 +1,7 @@
 import type { LLMProvider } from '@/types';
 import { OllamaProvider } from './ollama';
 import { OpenAIProvider } from './openai';
+import { FallbackOrchestrator } from './orchestrator';
 
 export type ProviderType = 'ollama' | 'openai';
 
@@ -11,7 +12,10 @@ export function createLLMProvider(type: ProviderType): LLMProvider {
   return new OllamaProvider();
 }
 
+/**
+ * Returns the default LLM provider: a FallbackOrchestrator that tries OpenAI
+ * first (when OPENAI_API_KEY is set) and falls back to Ollama automatically.
+ */
 export function getDefaultProvider(): LLMProvider {
-  const providerType = (process.env.LLM_PROVIDER as ProviderType) || 'ollama';
-  return createLLMProvider(providerType);
+  return new FallbackOrchestrator();
 }
