@@ -12,6 +12,8 @@ A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions ab
 - 🧠 **Intent classification** — Routes questions to relevant profile sections
 - 📚 **RAG-style retrieval** — Pulls context from curated markdown/JSON profile files
 - 🚧 **Guardrails** — Only answers questions about Davit Hayrapetyan
+- 📝 **JSON request logging** — Every request/response is logged as JSON to a daily-rotated file (`logs/app-YYYY-MM-DD.log`) plus stdout
+- 📱 **Pushover notifications** — Optional per-iteration push to your phone (time, question, success/failure, duration, LLMs used)
 
 ## Quick Start
 
@@ -144,6 +146,23 @@ data/
 ├── community.json            # Talks, mentoring, writing
 └── hobbies.json              # Personal interests
 ```
+
+## Observability
+
+### Request logging
+
+Every request to `/api/ask` is logged as a single JSON line via [winston](https://github.com/winstonjs/winston) with [winston-daily-rotate-file](https://github.com/winstonjs/winston-daily-rotate-file). Logs go both to stdout and to a rotating file in `LOG_DIR` (default: `./logs`).
+
+- Files rotate daily: `app-YYYY-MM-DD.log` (and `app-error-YYYY-MM-DD.log` for errors only).
+- Old files are gzipped and pruned per `LOG_MAX_FILES` (default `14d`); a single file is capped at `LOG_MAX_SIZE` (default `20m`), so no file grows unbounded.
+- Each `request_completed` entry includes: `requestId`, `method`, `path`, `ip`, `userAgent`, `startedAt`, `durationMs`, `workflowSteps` (e.g. `rate_limit_passed → classify_intent → intent:projects → retrieve_context → llm_generate → openai_attempt → openai_success`), `status`, `success`, `question`, `intent`, `modelsUsed`, and `errorMessage` for failures.
+- All failure paths (rate limit, validation, JSON errors, LLM errors) are logged.
+
+Tunables: `LOG_DIR`, `LOG_LEVEL`, `LOG_MAX_SIZE`, `LOG_MAX_FILES`. In Docker the `/app/logs` directory is exposed as a volume so logs persist across restarts.
+
+### Pushover notifications
+
+Set `PUSHOVER_USER_KEY` and `PUSHOVER_API_TOKEN` to receive a friendly per-iteration push for each Q&A: time, question, success/failure, duration, and the LLMs used. Notifications are sent fire-and-forget — Pushover errors never block the API response.
 
 ## License
 

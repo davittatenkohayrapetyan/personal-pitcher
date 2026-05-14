@@ -41,3 +41,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# logs (rotated JSON request/response logs written by src/lib/logger.ts)
+/logs/
+*.log
+*.log.gz
