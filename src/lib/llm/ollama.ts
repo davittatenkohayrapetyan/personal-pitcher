@@ -1,4 +1,5 @@
 import type { LLMProvider } from '@/types';
+import { LLMError } from './errors';
 
 export class OllamaProvider implements LLMProvider {
   private baseUrl: string;
@@ -16,18 +17,28 @@ export class OllamaProvider implements LLMProvider {
     }
     messages.push({ role: 'user', content: prompt });
 
-    const response = await fetch(`${this.baseUrl}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: this.model,
-        messages,
-        stream: false,
-      }),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${this.baseUrl}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: this.model,
+          messages,
+          stream: false,
+        }),
+      });
+    } catch (err) {
+      throw new LLMError(`Ollama network error: ${String(err)}`, 'ollama', 'network');
+    }
 
     if (!response.ok) {
-      throw new Error(`Ollama error: ${response.status} ${response.statusText}`);
+      throw new LLMError(
+        `Ollama error: ${response.status} ${response.statusText}`,
+        'ollama',
+        'http',
+        response.status,
+      );
     }
 
     const data = await response.json();
