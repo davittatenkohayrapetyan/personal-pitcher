@@ -1,9 +1,298 @@
-[
-  {
-    "name": "PersonalPitcher",
-    "description": "This very website — a personal AI pitch platform that lets visitors ask questions about Davit's background, projects, and interests using a local LLM.",
-    "tech": ["Next.js", "TypeScript", "Tailwind CSS", "Ollama"],
-    "url": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
-    "highlights": ["RAG-based retrieval from profile data", "IP rate limiting", "Intent classification"]
-  }
-]
+{
+  "projects": [
+    {
+      "name": "PersonalPitcher",
+      "category": "Public GitHub Project",
+      "description": "A personal AI pitch platform that lets visitors ask questions about Davit's professional background, projects, community work, and interests using curated profile data and an LLM.",
+      "tech": ["Next.js", "TypeScript", "Tailwind CSS", "Ollama", "OpenAI", "RAG"],
+      "url": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
+      "highlights": [
+        "RAG-style retrieval from curated Markdown/JSON profile files",
+        "Local Ollama support with OpenAI fallback",
+        "Intent classification for profile, projects, community, hobbies, and off-topic questions",
+        "Guardrails to keep answers focused on Davit-related topics",
+        "IP-based rate limiting and request validation",
+        "Portfolio-style UI with AI assistant interaction"
+      ]
+    },
+    {
+      "name": "DevFest Armenia 2025 Website",
+      "category": "Public GitHub Project",
+      "description": "Single-page PWA for DevFest Armenia 2025, built to present the event, speakers, agenda, workshops, partners, photos, and GDG Yerevan community information.",
+      "tech": ["Vite", "TypeScript", "Tailwind CSS", "PWA", "Docker", "GitHub Actions", "Sessionize"],
+      "url": "https://github.com/davittatenkohayrapetyan/devfest-armenia-2025",
+      "highlights": [
+        "Progressive Web App with offline support",
+        "Responsive design with DevFest/GDG branding",
+        "Sessionize integration for agenda, sessions, speakers, and speaker wall",
+        "Google Photos gallery integration",
+        "WordPress subfolder deployment support",
+        "Docker-ready deployment and GitHub Actions CI/CD"
+      ]
+    },
+    {
+      "name": "Calendar Bot",
+      "category": "Public GitHub Project",
+      "description": "Telegram bot that parses natural language text into calendar events and generates .ics files, with multilingual support and OpenAI fallback for complex or typo-heavy input.",
+      "tech": ["Kotlin", "Ktor", "Telegram Bot API", "OpenAI", "Docker", "iCalendar"],
+      "url": "https://github.com/davittatenkohayrapetyan/calendar-bot",
+      "highlights": [
+        "Parses casual event descriptions in English, Armenian, and Russian",
+        "Uses regex-based parsing for fast common cases",
+        "Falls back to OpenAI for complex parsing and typos",
+        "Generates .ics files compatible with major calendar applications",
+        "Telegram bot interface with simple commands",
+        "Designed with future Google Calendar integration in mind"
+      ]
+    },
+    {
+      "name": "Spring AI SpaceX MCP POC",
+      "category": "Public GitHub Project",
+      "description": "Spring Boot REST service that uses Spring AI and OpenAI to answer natural language questions about SpaceX data, with an MCP tool server for AI-agent integration.",
+      "tech": ["Java 17", "Spring Boot 3.4", "Spring AI", "OpenAI", "MCP", "WebFlux", "Docker", "JUnit 5"],
+      "url": "https://github.com/davittatenkohayrapetyan/spring-ai-poc",
+      "highlights": [
+        "Natural-language `/ask` endpoint backed by Spring AI",
+        "Integration with public SpaceX API data",
+        "MCP tool server for agent-style workflows",
+        "Docker and Docker Compose support",
+        "Unit tests and MockWebServer-based testing",
+        "Demonstrates practical Java/Spring AI-agent integration"
+      ]
+    },
+    {
+      "name": "Menu PWA AI",
+      "category": "Public GitHub Project",
+      "description": "AI-powered Progressive Web App that scans restaurant menus via camera, extracts dishes, enriches them with descriptions and estimated nutrition, and supports offline usage.",
+      "tech": ["Next.js 15", "TypeScript", "Tailwind CSS", "shadcn/ui", "OpenAI", "Prisma", "SQLite", "Dexie", "Docker"],
+      "url": "https://github.com/davittatenkohayrapetyan/menu-pwa-ai",
+      "highlights": [
+        "Camera-based menu capture workflow",
+        "AI-powered dish extraction and parsing",
+        "Interactive editing of extracted menu items",
+        "AI enrichment with descriptions, nutrition estimates, and generated images",
+        "Offline support using Dexie and IndexedDB",
+        "PWA capabilities with Dockerized deployment"
+      ]
+    },
+    {
+      "name": "Menu Flutter AI",
+      "category": "Public GitHub Project",
+      "description": "Flutter mobile app for Android and iOS that lets users capture or upload menu photos, parse dishes via an OpenAI-backed API, edit items, and request AI-generated enrichment.",
+      "tech": ["Flutter", "Dart", "OpenAI", "Node.js API Stub", "Offline Cache", "Clean Architecture"],
+      "url": "https://github.com/davittatenkohayrapetyan/menu-flutter-ai",
+      "highlights": [
+        "Cross-platform mobile app for Android and iOS",
+        "Photo-based restaurant menu parsing",
+        "OpenAI-backed dish extraction and enrichment",
+        "Editable menu item workflow",
+        "Offline cache support",
+        "Clean architecture approach"
+      ]
+    },
+    {
+      "name": "Hotel Contract Parser",
+      "category": "Public GitHub Project",
+      "description": "Java CLI tool that parses hotel-vendor contract PDFs, extracts metadata and page information, and generates DOCX reports, with OCR fallback for incomplete text extraction.",
+      "tech": ["Java 17", "Maven", "Apache PDFBox", "Apache POI", "Tess4J", "Tesseract OCR", "picocli", "Docker", "JUnit 5"],
+      "url": "https://github.com/davittatenkohayrapetyan/hotel-contract-parser",
+      "highlights": [
+        "PDF parsing using Apache PDFBox",
+        "DOCX report generation using Apache POI",
+        "OCR fallback using Tess4J/Tesseract",
+        "Command-line interface with picocli",
+        "Dockerized execution",
+        "CI/CD build and test flow with GitHub Actions"
+      ]
+    },
+    {
+      "name": "Weather Monitoring Service",
+      "category": "Public GitHub Project",
+      "description": "Distributed weather monitoring system with multiple warehouse services, sensor data ingestion, Kafka messaging, central monitoring, timeout handling, and Docker Compose orchestration.",
+      "tech": ["Kotlin", "Java", "Apache Kafka", "Docker Compose", "Zookeeper", "Microservices"],
+      "url": "https://github.com/davittatenkohayrapetyan/WeatherMonitoringService",
+      "highlights": [
+        "Multi-service architecture with warehouse and central monitoring services",
+        "Kafka-based communication between services",
+        "Sensor data simulation over UDP/netcat",
+        "Timeout detection for warehouse failures",
+        "Warning generation for missing or problematic sensor data",
+        "Docker Compose setup for full local environment"
+      ]
+    },
+    {
+      "name": "Nakama RPC",
+      "category": "Public GitHub Project",
+      "description": "Go-based Nakama RPC implementation that reads files, persists data, calculates content hashes, and responds through a game-server RPC flow with Docker-based end-to-end testing.",
+      "tech": ["Go", "Nakama", "PostgreSQL", "Docker", "Docker Compose", "PGAdmin", "E2E Testing"],
+      "url": "https://github.com/davittatenkohayrapetyan/nakama-rpc",
+      "highlights": [
+        "Custom Nakama RPC function implementation",
+        "Payload handling with type, version, and hash parameters",
+        "File reading and content hash calculation",
+        "PostgreSQL persistence",
+        "Docker Compose setup with Nakama, PostgreSQL, and PGAdmin",
+        "End-to-end tests running as a separate Docker service"
+      ]
+    },
+    {
+      "name": "Scratch Game",
+      "category": "Public GitHub Project",
+      "description": "Java-based scratch game engine that generates a symbol matrix based on configurable probabilities and calculates rewards using standard and bonus symbol rules.",
+      "tech": ["Java", "Maven", "JSON Configuration", "JUnit"],
+      "url": "https://github.com/davittatenkohayrapetyan/scratch-game",
+      "highlights": [
+        "Configurable game engine using JSON-based rules",
+        "Probability-based matrix generation",
+        "Winning combination evaluation",
+        "Bonus symbol reward modification",
+        "CLI execution with configurable betting amount",
+        "Unit-tested game logic"
+      ]
+    },
+    {
+      "name": "Spring Proxy Beans",
+      "category": "Public GitHub Project",
+      "description": "Spring Boot demo project explaining how a singleton service can safely interact with a proxied request-scoped bean while preserving request isolation and thread safety.",
+      "tech": ["Java", "Spring Boot", "Spring IoC", "Request Scope", "Maven", "JUnit"],
+      "url": "https://github.com/davittatenkohayrapetyan/spring-proxy-beans",
+      "highlights": [
+        "Demonstrates Spring request-scoped proxy behavior",
+        "Shows safe injection of request-scoped beans into singleton services",
+        "Includes endpoints for testing request-specific data isolation",
+        "Explains proxy routing and automatic cleanup",
+        "Useful educational project for Spring IoC concepts"
+      ]
+    },
+    {
+      "name": "Java Algorithms Playground",
+      "category": "Public GitHub Project",
+      "description": "Java algorithms playground with clean, testable implementations of classic problems and data structures, starting with LFU cache variants.",
+      "tech": ["Java", "JUnit", "Concurrency", "Benchmarks", "Data Structures"],
+      "url": "https://github.com/davittatenkohayrapetyan/java-algorithms-playground",
+      "highlights": [
+        "Clean implementations of classic algorithmic problems",
+        "LFU cache implementation",
+        "Concurrent thread-safe LFU cache variant",
+        "Unit tests and benchmarks",
+        "Demonstrates attention to correctness and performance"
+      ]
+    },
+    {
+      "name": "High-Load Wealth Management Platform Modernization",
+      "category": "Anonymized Professional Project",
+      "description": "Mission-critical enterprise platform modernization project focused on moving from legacy monolithic systems toward resilient, observable Java/Spring microservices.",
+      "tech": ["Java 17", "Spring Boot", "Redis", "Message Queues", "Oracle DB", "OpenTelemetry", "Splunk", "CI/CD"],
+      "url": null,
+      "highlights": [
+        "Acted as technical lead for modernization of a high-load enterprise platform",
+        "Designed and implemented resilient Java/Spring microservices",
+        "Introduced Redis caching to reduce downstream calls and support strict latency expectations",
+        "Worked on cache TTL strategy, reload notifications, and critical-data identification",
+        "Designed fallback-to-database behavior and circuit breakers to prevent cascading failures",
+        "Contributed to a resiliency roadmap involving CQRS and read-optimized data access",
+        "Owned third-party API integration analysis, domain mapping, clarification loops, and end-to-end integration follow-through",
+        "Improved incident visibility through observability and immediate alerting for unreachable external APIs"
+      ]
+    },
+    {
+      "name": "Governmental Mobile Driver License Platform",
+      "category": "Anonymized Professional Project",
+      "description": "Microservices-based governmental platform for mobile driver license workflows, including backend APIs, frontend interfaces, deployment, observability, and document-related processes.",
+      "tech": ["Kotlin", "Java 21", "Spring Boot", "Angular", "MongoDB", "AWS", "Docker Swarm"],
+      "url": null,
+      "highlights": [
+        "Led development of a resilient microservices-based platform",
+        "Designed RESTful APIs for mobile-oriented workflows",
+        "Developed Angular frontend functionality",
+        "Managed cloud and DevOps tasks",
+        "Configured observability and Docker Swarm deployment setups",
+        "Worked on enrollment, document, encryption, and signature-oriented workflows"
+      ]
+    },
+    {
+      "name": "Automotive Material Verification System",
+      "category": "Anonymized Professional Project",
+      "description": "Enterprise Java system for automotive material verification and synchronization, focused on stable data exchange, reliability, and maintaining core business workflows.",
+      "tech": ["Java EE", "Payara", "OracleDB", "Azure", "Swing", "Angular"],
+      "url": null,
+      "highlights": [
+        "Led an enterprise Java project in the automotive domain",
+        "Worked on material verification synchronization workflows",
+        "Enhanced core system functionality with stable and maintainable solutions",
+        "Supported both legacy desktop-oriented and web-oriented application layers",
+        "Worked with relational databases and enterprise application server technologies"
+      ]
+    },
+    {
+      "name": "Interactive Omnichannel Survey Platform",
+      "category": "Anonymized Professional Project",
+      "description": "Microservices-based customer engagement platform for dynamic omnichannel post-interaction surveys, focused on orchestration, flow control, and scalable backend design.",
+      "tech": ["Java 16", "Spring Boot", "Redis", "Kafka", "Docker", "Jenkins", "State Machine"],
+      "url": null,
+      "highlights": [
+        "Designed and implemented backend microservices for dynamic survey experiences",
+        "Proposed a state-machine-based survey flow to reduce conditional branching",
+        "Researched workflow and state-machine libraries compatible with platform constraints",
+        "Compared options by maturity, extensibility, integration fit, and maintainability",
+        "Selected and championed Spring State Machine",
+        "Supported adoption through documentation and implementation patterns"
+      ]
+    },
+    {
+      "name": "E-Commerce Search Migration to Elasticsearch",
+      "category": "Anonymized Professional Project",
+      "description": "Search and data migration initiative for European e-commerce systems, focused on moving from relational database search patterns to Elasticsearch-powered query and aggregation workflows.",
+      "tech": ["Java", "Spring Boot", "Elasticsearch", "MariaDB", "PostgreSQL"],
+      "url": null,
+      "highlights": [
+        "Led migration from relational databases to Elasticsearch",
+        "Optimized aggregation and search queries",
+        "Improved data retrieval performance for online store use cases",
+        "Worked across relational and document/search-oriented data models",
+        "Supported scalable search functionality for multiple e-commerce shops"
+      ]
+    },
+    {
+      "name": "Embedded Memory Testing and Repair Software",
+      "category": "Anonymized Professional Project",
+      "description": "Low-level engineering project focused on software for embedded memory testing, repair workflows, and production analysis for hardware-oriented systems.",
+      "tech": ["C++", "Qt", "Verilog"],
+      "url": null,
+      "highlights": [
+        "Developed software for embedded memory testing and repair",
+        "Worked on production and post-production analysis tooling",
+        "Applied low-level systems thinking and performance-sensitive engineering",
+        "Worked close to hardware/software boundaries",
+        "Built experience in C++, Qt, and hardware-description-oriented workflows"
+      ]
+    },
+    {
+      "name": "Cloud-Based Competitor Pricing Scraper",
+      "category": "Anonymized Professional Project",
+      "description": "Automated cloud-based scraping system for extracting competitor pricing data and supporting pricing intelligence workflows.",
+      "tech": ["Java", "Spring Boot", "AWS"],
+      "url": null,
+      "highlights": [
+        "Developed automated scraping jobs",
+        "Worked with cloud-based execution",
+        "Extracted competitor pricing data",
+        "Supported pricing analysis and automation use cases"
+      ]
+    },
+    {
+      "name": "Government CMS and Desktop/Web Integration Platform",
+      "category": "Anonymized Professional Project",
+      "description": "CMS and integration platform for government-oriented systems, combining web and desktop application components with backend services and relational database storage.",
+      "tech": ["Java EE", "JavaScript", "jQuery", "MySQL", "Swing", "JSP"],
+      "url": null,
+      "highlights": [
+        "Enhanced CMS software for government-oriented use cases",
+        "Integrated web and desktop application components",
+        "Worked with Java EE backend systems and JSP-based web interfaces",
+        "Used relational database storage with MySQL",
+        "Built early experience across full-stack enterprise application development"
+      ]
+    }
+  ]
+}

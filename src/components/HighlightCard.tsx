@@ -32,7 +32,7 @@ export default function HighlightCard({
       onClick={onClick}
       aria-label={ariaLabel ?? `Open details for ${title}`}
       aria-haspopup="dialog"
-      className="group flex h-full w-full flex-col gap-4 rounded-2xl border border-slate-400/15 bg-slate-900/70 p-5 text-left transition-all hover:-translate-y-0.5 hover:border-violet-400/35 hover:bg-slate-900 hover:shadow-lg hover:shadow-violet-950/25"
+      className="group flex h-full w-full flex-col gap-4 rounded-2xl border border-slate-400/15 bg-slate-900/70 p-5 text-left transition-all hover:-translate-y-0.5 hover:border-violet-400/35 hover:bg-slate-900 hover:shadow-lg hover:shadow-violet-950/25 sm:p-6"
     >
       {/* Icon + badge row */}
       <div className="flex w-full items-start justify-between gap-2">

@@ -60,7 +60,7 @@ export default function CommunityImpactCard() {
               {FEATURED_EVENTS.map((event) => (
                 <li
                   key={event.name}
-                  className="rounded-lg border border-white/10 bg-white/[0.02] p-3"
+                  className="rounded-lg border border-white/10 bg-white/[0.02] p-4"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-medium text-slate-100">{event.name}</p>
@@ -83,7 +83,7 @@ export default function CommunityImpactCard() {
             </h3>
             <ul className="space-y-3">
               {community.speaking_and_mentoring.map((item, i) => (
-                <li key={i} className="rounded-lg border border-white/10 bg-white/[0.02] p-3">
+                <li key={i} className="rounded-lg border border-white/10 bg-white/[0.02] p-4">
                   <p className="text-sm font-medium text-slate-100">{item.type}</p>
                   {'organization' in item && (
                     <p className="text-[11px] text-emerald-300">{item.organization}</p>

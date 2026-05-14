@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import type { QAEntry } from '@/types';
 
 interface QATimelineProps {
@@ -66,8 +67,8 @@ export default function QATimeline({ entries }: QATimelineProps) {
             <div className="flex justify-start">
               <div className="max-w-[85%] md:max-w-[70%]">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center text-xs font-bold text-white shadow">
-                    DH
+                  <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full shadow">
+                    <Image src="/photos/avatar.png" alt="Davo" fill className="object-cover" />
                   </div>
                   <div className="flex-1">
                     <div className="bg-slate-800 border border-slate-700 text-slate-200 rounded-2xl rounded-tl-md px-4 py-3 shadow-lg">

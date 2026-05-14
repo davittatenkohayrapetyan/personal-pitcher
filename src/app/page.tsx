@@ -22,7 +22,7 @@ export default function Home() {
             Left  (flex): ProfileHero + StatsGrid + Explore cards
             Right (sticky): AssistantPanel
       */}
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(560px,1fr)_minmax(460px,540px)] lg:items-start lg:gap-8">
+      <div className="mx-auto flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(560px,1fr)_minmax(460px,540px)] lg:items-start lg:gap-8">
 
         {/* ── GROUP 1: Identity ── order-1 on mobile; left-col row-1 on desktop */}
         <div className="order-1 flex flex-col gap-6 lg:col-start-1 lg:row-start-1">

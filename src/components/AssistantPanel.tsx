@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Image from 'next/image';
 import type { QAEntry } from '@/types';
 import SuggestedQuestions from './SuggestedQuestions';
 import QATimeline from './QATimeline';
@@ -83,21 +84,18 @@ export default function AssistantPanel() {
       aria-labelledby="assistant-heading"
       className="flex flex-col overflow-hidden rounded-3xl border border-violet-400/30 bg-slate-900/90 shadow-2xl shadow-violet-900/20"
     >
-      <header className="flex items-start justify-between gap-3 border-b border-slate-400/10 px-6 py-5">
+      <header className="flex items-start justify-between gap-3 border-b border-slate-400/10 px-6 py-6">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5">
-            <span
-              aria-hidden="true"
-              className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-sky-500 text-sm font-bold text-white shadow"
-            >
-              AI
-            </span>
+            <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-xl shadow">
+              <Image src="/photos/avatar.png" alt="Davo" fill className="object-cover" />
+            </div>
             <h2 id="assistant-heading" className="text-lg font-semibold text-white">
-              Ask Davit&apos;s AI assistant
+              Ask Davo
             </h2>
           </div>
           <p className="mt-1 text-sm text-slate-400">
-            Powered by a local LLM with Davit&apos;s curated profile data.
+            Davit&apos;s AI buddy for professional background, projects, and community work.
           </p>
         </div>
         <span
@@ -109,15 +107,23 @@ export default function AssistantPanel() {
       </header>
 
       {/* Conversation area — tall on desktop so assistant feels like the main product */}
-      <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-5 lg:min-h-[560px] lg:max-h-[620px]">
+      <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-6 lg:min-h-[560px] lg:max-h-[620px]">
         {entries.length === 0 ? (
-          <div className="flex h-full min-h-[200px] flex-col items-center justify-center py-10 text-center">
-            <div aria-hidden="true" className="mb-4 text-5xl">💬</div>
-            <p className="text-base font-medium text-slate-200">No questions yet</p>
-            <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">
-              Try a suggestion below, or ask anything about Davit&apos;s career, projects, community
-              work, or hobbies.
-            </p>
+          <div className="flex h-full min-h-[200px] flex-col justify-start py-4">
+            <div className="flex justify-start">
+              <div className="max-w-[85%]">
+                <div className="flex items-start gap-3">
+                  <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-full shadow">
+                    <Image src="/photos/avatar.png" alt="Davo" fill className="object-cover" />
+                  </div>
+                  <div className="rounded-2xl rounded-tl-md border border-slate-700 bg-slate-800 px-4 py-3 text-slate-200 shadow-lg">
+                    <p className="text-sm leading-relaxed">
+                      Hi, I&apos;m Davo — Davit&apos;s AI buddy. Ask me about his engineering background, projects, community work, or creative side.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
           <QATimeline entries={entries} />
@@ -125,7 +131,7 @@ export default function AssistantPanel() {
       </div>
 
       {/* Composer — pinned at the bottom of the panel */}
-      <div className="border-t border-slate-400/10 bg-slate-950/60 px-6 py-5">
+      <div className="border-t border-slate-400/10 bg-slate-950/60 px-6 py-6">
         <div className="mb-3">
           <SuggestedQuestions
             questions={SUGGESTED_QUESTIONS}
@@ -179,7 +185,7 @@ export default function AssistantPanel() {
             {error}
           </p>
         )}
-        <p id="assistant-helper" className="mt-2 text-xs text-slate-500">
+        <p id="assistant-helper" className="mt-2 pl-1 text-xs text-slate-500">
           Enter to send · Shift+Enter for new line · Rate limited to 10 req/min
         </p>
       </div>

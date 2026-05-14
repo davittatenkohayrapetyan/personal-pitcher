@@ -13,7 +13,8 @@ export function loadProfileContext(): ProfileContext {
   const communityRaw = JSON.parse(readDataFile('community.json'));
   const hobbiesRaw = JSON.parse(readDataFile('hobbies.json'));
 
-  const projects = projectsRaw
+  const projectsList: Record<string, unknown>[] = projectsRaw.projects ?? projectsRaw;
+  const projects = projectsList
     .map((p: Record<string, unknown>) =>
       `Project: ${p.name}\nDescription: ${p.description}\nTech: ${(p.tech as string[]).join(', ')}\nHighlights: ${(p.highlights as string[]).join('; ')}`
     )

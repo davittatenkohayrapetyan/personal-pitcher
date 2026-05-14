@@ -102,7 +102,7 @@ export default function ExperienceCard() {
                   aria-hidden="true"
                   className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-gradient-to-br from-violet-400 to-blue-400 ring-4 ring-slate-900"
                 />
-                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                     <p className="text-sm font-semibold text-white">{role.title}</p>
                     <p className="text-[11px] text-slate-400">{role.period}</p>
@@ -135,7 +135,7 @@ export default function ExperienceCard() {
             {EDUCATION.map((e) => (
               <li
                 key={e.degree}
-                className="flex items-baseline justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-3"
+                className="flex items-baseline justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-4"
               >
                 <div>
                   <p className="text-sm font-medium text-white">{e.degree}</p>

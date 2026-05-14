@@ -108,7 +108,7 @@ export default function DetailsDialog({
         tabIndex={-1}
         className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-slate-400/15 bg-slate-900 shadow-2xl shadow-black/40 sm:rounded-2xl"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-slate-400/10 px-5 py-4 sm:px-6">
+        <div className="flex items-start justify-between gap-4 border-b border-slate-400/10 px-6 py-5 sm:px-8">
           <div className="min-w-0">
             <h2 id={titleId} className="text-lg font-semibold text-white sm:text-xl">
               {title}
@@ -130,7 +130,7 @@ export default function DetailsDialog({
             </svg>
           </button>
         </div>
-        <div className="scrollbar-thin flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-6">{children}</div>
+        <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">{children}</div>
       </div>
     </div>,
     document.body,
