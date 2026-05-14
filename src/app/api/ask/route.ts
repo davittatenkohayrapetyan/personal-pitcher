@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { randomUUID } from 'crypto';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { classifyIntentWithLLM, isOffTopic } from '@/lib/classify';
 import { retrieveContext } from '@/lib/retrieval';
 import { getDefaultProvider } from '@/lib/llm/provider';
+import { FallbackOrchestrator } from '@/lib/llm/orchestrator';
+import { logger } from '@/lib/logger';
+import { sendPushover, formatIterationMessage } from '@/lib/pushover';
 import type { AskRequest, AskResponse } from '@/types';
+
+// Force the Node.js runtime so the file-rotating winston logger works
+// (the Edge runtime has no fs access).
+export const runtime = 'nodejs';
 
 const SYSTEM_PROMPT = `You are "Ask Davit", an AI assistant on Davit Hayrapetyan's personal professional website.
 
@@ -95,11 +103,112 @@ function getClientIP(request: NextRequest): string {
   return request.headers.get('x-real-ip') || 'unknown';
 }
 
+interface RequestLogContext {
+  requestId: string;
+  method: string;
+  path: string;
+  ip: string;
+  userAgent: string;
+  startedAt: Date;
+  steps: string[];
+}
+
+function buildLogContext(request: NextRequest): RequestLogContext {
+  return {
+    requestId: request.headers.get('x-request-id') || randomUUID(),
+    method: request.method,
+    path: new URL(request.url).pathname,
+    ip: getClientIP(request),
+    userAgent: request.headers.get('user-agent') || 'unknown',
+    startedAt: new Date(),
+    steps: ['request_received'],
+  };
+}
+
+function elapsedMs(ctx: RequestLogContext): number {
+  return Date.now() - ctx.startedAt.getTime();
+}
+
+function logRequestOutcome(
+  ctx: RequestLogContext,
+  outcome: {
+    status: number;
+    success: boolean;
+    question?: string;
+    intent?: string;
+    modelsUsed?: string[];
+    errorMessage?: string;
+  },
+): void {
+  const payload = {
+    event: 'request_completed',
+    requestId: ctx.requestId,
+    method: ctx.method,
+    path: ctx.path,
+    ip: ctx.ip,
+    userAgent: ctx.userAgent,
+    startedAt: ctx.startedAt.toISOString(),
+    durationMs: elapsedMs(ctx),
+    workflowSteps: ctx.steps,
+    status: outcome.status,
+    success: outcome.success,
+    question: outcome.question,
+    intent: outcome.intent,
+    modelsUsed: outcome.modelsUsed || [],
+    errorMessage: outcome.errorMessage,
+  };
+
+  if (outcome.success) {
+    logger.info('request_completed', payload);
+  } else {
+    logger.error('request_completed', payload);
+  }
+}
+
+function notifyPushover(
+  ctx: RequestLogContext,
+  outcome: {
+    success: boolean;
+    question: string;
+    modelsUsed: string[];
+    errorMessage?: string;
+  },
+): void {
+  const { title, message } = formatIterationMessage({
+    timestamp: ctx.startedAt,
+    question: outcome.question,
+    success: outcome.success,
+    durationMs: elapsedMs(ctx),
+    modelsUsed: outcome.modelsUsed,
+    errorMessage: outcome.errorMessage,
+  });
+
+  // Fire-and-forget: never block the HTTP response on Pushover.
+  void sendPushover({ title, message }).catch((err) => {
+    logger.warn('pushover_dispatch_failed', {
+      requestId: ctx.requestId,
+      error: err instanceof Error ? err.message : String(err),
+    });
+  });
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse<AskResponse | { error: string }>> {
-  const ip = getClientIP(request);
-  const rateLimit = checkRateLimit(ip);
+  const ctx = buildLogContext(request);
+  logger.info('request_received', {
+    event: 'request_received',
+    requestId: ctx.requestId,
+    method: ctx.method,
+    path: ctx.path,
+    ip: ctx.ip,
+    userAgent: ctx.userAgent,
+    startedAt: ctx.startedAt.toISOString(),
+  });
+
+  const rateLimit = checkRateLimit(ctx.ip);
 
   if (!rateLimit.allowed) {
+    ctx.steps.push('rate_limited');
+    logRequestOutcome(ctx, { status: 429, success: false, errorMessage: 'rate_limited' });
     return NextResponse.json(
       { error: 'Too many requests. Please wait before asking another question.' },
       {
@@ -111,32 +220,66 @@ export async function POST(request: NextRequest): Promise<NextResponse<AskRespon
       }
     );
   }
+  ctx.steps.push('rate_limit_passed');
 
   let body: AskRequest;
   try {
     body = await request.json();
   } catch {
+    ctx.steps.push('invalid_json');
+    logRequestOutcome(ctx, { status: 400, success: false, errorMessage: 'invalid_json' });
     return NextResponse.json({ error: 'Invalid JSON in request body.' }, { status: 400 });
   }
 
   const { question } = body;
 
   if (!question || typeof question !== 'string') {
+    ctx.steps.push('validation_failed_missing_question');
+    logRequestOutcome(ctx, { status: 400, success: false, errorMessage: 'missing_question' });
     return NextResponse.json({ error: 'A "question" string field is required.' }, { status: 400 });
   }
 
   const trimmedQuestion = question.trim();
   if (trimmedQuestion.length === 0) {
+    ctx.steps.push('validation_failed_empty_question');
+    logRequestOutcome(ctx, {
+      status: 400,
+      success: false,
+      question: trimmedQuestion,
+      errorMessage: 'empty_question',
+    });
     return NextResponse.json({ error: 'Question cannot be empty.' }, { status: 400 });
   }
 
   if (trimmedQuestion.length > 500) {
+    ctx.steps.push('validation_failed_question_too_long');
+    logRequestOutcome(ctx, {
+      status: 400,
+      success: false,
+      question: trimmedQuestion,
+      errorMessage: 'question_too_long',
+    });
     return NextResponse.json({ error: 'Question must be 500 characters or fewer.' }, { status: 400 });
   }
 
+  ctx.steps.push('classify_intent');
   const intent = await classifyIntentWithLLM(trimmedQuestion);
+  ctx.steps.push(`intent:${intent}`);
 
   if (isOffTopic(intent)) {
+    ctx.steps.push('off_topic_short_circuit');
+    logRequestOutcome(ctx, {
+      status: 200,
+      success: true,
+      question: trimmedQuestion,
+      intent,
+      modelsUsed: [],
+    });
+    notifyPushover(ctx, {
+      success: true,
+      question: trimmedQuestion,
+      modelsUsed: [],
+    });
     return NextResponse.json(
       {
         answer: "I can only answer questions about Davit Hayrapetyan — his background, projects, community work, and hobbies. Try asking something like 'What projects has Davit built?' or 'What are his hobbies?'",
@@ -146,6 +289,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AskRespon
     );
   }
 
+  ctx.steps.push('retrieve_context');
   const context = retrieveContext(intent);
 
   const prompt = `Context about Davit Hayrapetyan:
@@ -157,10 +301,54 @@ Please answer the question based on the context provided above.`;
 
   try {
     const provider = getDefaultProvider();
-    const answer = await provider.generate(prompt, SYSTEM_PROMPT);
+    ctx.steps.push('llm_generate');
+    let answer: string;
+    let modelsUsed: string[] = [];
+    if (provider instanceof FallbackOrchestrator) {
+      const result = await provider.generateWithMeta(prompt, SYSTEM_PROMPT);
+      answer = result.content;
+      modelsUsed = result.modelsUsed;
+      ctx.steps.push(...result.steps);
+    } else {
+      answer = await provider.generate(prompt, SYSTEM_PROMPT);
+    }
+
+    logRequestOutcome(ctx, {
+      status: 200,
+      success: true,
+      question: trimmedQuestion,
+      intent,
+      modelsUsed,
+    });
+    notifyPushover(ctx, {
+      success: true,
+      question: trimmedQuestion,
+      modelsUsed,
+    });
+
     return NextResponse.json({ answer, intent, sources: [intent] });
   } catch (error) {
-    console.error('LLM generation error:', error);
+    ctx.steps.push('llm_generate_failed');
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    logger.error('llm_generation_error', {
+      event: 'llm_generation_error',
+      requestId: ctx.requestId,
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    logRequestOutcome(ctx, {
+      status: 500,
+      success: false,
+      question: trimmedQuestion,
+      intent,
+      errorMessage,
+    });
+    notifyPushover(ctx, {
+      success: false,
+      question: trimmedQuestion,
+      modelsUsed: [],
+      errorMessage,
+    });
     return NextResponse.json(
       { error: 'Failed to generate an answer. Please try again.' },
       { status: 500 }
