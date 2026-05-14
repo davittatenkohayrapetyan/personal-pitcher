@@ -53,8 +53,8 @@ export class FallbackOrchestrator implements LLMProvider {
           onFailure();
         }
         // Fall through to Ollama regardless of error type.
+        console.info(JSON.stringify({ event: 'fallback_to_ollama', ts: new Date().toISOString() }));
       }
-      console.info(JSON.stringify({ event: 'fallback_to_ollama', ts: new Date().toISOString() }));
     } else if (openaiConfigured) {
       // Breaker is open — skip OpenAI and go straight to Ollama.
       console.info(

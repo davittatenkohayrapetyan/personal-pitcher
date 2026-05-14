@@ -69,9 +69,10 @@ export function allowRequest(): boolean {
 
   if (breaker.current === 'open') {
     if (breaker.openedAt !== null && Date.now() - breaker.openedAt >= cfg.cooldownMs) {
-      breaker.halfOpenProbes = 0;
+      // Set to 1 directly (not reset-then-increment) so that concurrent callers
+      // that also reach this branch don't each get a free probe slot.
+      breaker.halfOpenProbes = 1;
       transition('half_open');
-      breaker.halfOpenProbes += 1;
       return true;
     }
     return false;
