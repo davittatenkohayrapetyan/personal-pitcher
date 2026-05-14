@@ -1,77 +1,67 @@
-'use client';
-
-import { useState } from 'react';
-import HeroSection from '@/components/HeroSection';
-import PhotoCards from '@/components/PhotoCards';
-import ProjectsSection from '@/components/ProjectsSection';
-import CommunitySection from '@/components/CommunitySection';
-import ChatInput from '@/components/ChatInput';
-import QATimeline from '@/components/QATimeline';
-import type { QAEntry } from '@/types';
+import AppShell from '@/components/AppShell';
+import ProfileHero from '@/components/ProfileHero';
+import StatsGrid from '@/components/StatsGrid';
+import AssistantPanel from '@/components/AssistantPanel';
+import ProjectsCard from '@/components/cards/ProjectsCard';
+import CommunityImpactCard from '@/components/cards/CommunityImpactCard';
+import HobbiesCard from '@/components/cards/HobbiesCard';
+import SkillsCard from '@/components/cards/SkillsCard';
+import ExperienceCard from '@/components/cards/ExperienceCard';
 
 export default function Home() {
-  const [entries, setEntries] = useState<QAEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleAnswer = (entry: QAEntry) => {
-    setEntries((prev) => {
-      const existingIndex = prev.findIndex((e) => e.id === entry.id);
-      if (existingIndex >= 0) {
-        const next = [...prev];
-        next[existingIndex] = entry;
-        return next;
-      }
-      return [...prev, entry];
-    });
-  };
-
   return (
-    <main>
-      <HeroSection />
-      <ProjectsSection />
-      <PhotoCards />
-      <CommunitySection />
+    <AppShell>
+      {/*
+        Responsive layout:
+          Mobile / tablet  — flex-col with `order-*`:
+            1. ProfileHero + StatsGrid
+            2. AssistantPanel  ← primary CTA near the top
+            3. Explore cards
 
-      {/* Ask section */}
-      <section id="ask" className="min-h-screen bg-slate-900 py-16 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Ask Davit&apos;s AI Assistant
-            </h2>
-            <p className="text-slate-400 text-sm sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Powered by a local LLM with Davit&apos;s curated profile data. Ask about his career, projects, community work, or personal interests.
-            </p>
-          </div>
+          Desktop (lg+) — two-column grid:
+            Left  (flex): ProfileHero + StatsGrid + Explore cards
+            Right (sticky): AssistantPanel
+      */}
+      <div className="mx-auto flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(560px,1fr)_minmax(460px,540px)] lg:items-start lg:gap-8">
 
-          <ChatInput
-            onAnswer={handleAnswer}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-          />
-
-          {entries.length > 0 && (
-            <div className="mt-10 border-t border-slate-800 pt-10">
-              <h3 className="text-base sm:text-lg font-semibold text-slate-400 mb-6">Conversation</h3>
-              <QATimeline entries={entries} />
-            </div>
-          )}
+        {/* ── GROUP 1: Identity ── order-1 on mobile; left-col row-1 on desktop */}
+        <div className="order-1 flex flex-col gap-6 lg:col-start-1 lg:row-start-1">
+          <ProfileHero />
+          <StatsGrid />
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 py-8 px-4 sm:px-6 border-t border-slate-800">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 text-sm text-center sm:text-left">
-            © 2024 Davit Hayrapetyan · Senior Software Engineer · Yerevan, Armenia
+        {/* ── GROUP 2: AI Assistant ── order-2 on mobile; right-col spanning both rows on desktop */}
+        <aside
+          className="order-2 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start lg:sticky lg:top-20"
+          aria-label="AI assistant"
+        >
+          <AssistantPanel />
+        </aside>
+
+        {/* ── GROUP 3: Explore cards ── order-3 on mobile; left-col row-2 on desktop */}
+        <section
+          className="order-3 lg:col-start-1 lg:row-start-2"
+          aria-labelledby="explore-heading"
+        >
+          <h2
+            id="explore-heading"
+            className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400"
+          >
+            Explore
+          </h2>
+          <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+            <ExperienceCard />
+            <SkillsCard />
+            <ProjectsCard />
+            <CommunityImpactCard />
+            <HobbiesCard />
+          </div>
+          <p className="mt-4 text-sm text-slate-500">
+            Tap any card to see full details, or ask the assistant.
           </p>
-          <div className="flex gap-4 sm:gap-6">
-            <a href="https://github.com/davittatenkohayrapetyan" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors text-sm">GitHub</a>
-            <a href="https://linkedin.com/in/davithayrapetyan" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors text-sm">LinkedIn</a>
-            <a href="mailto:davit@example.com" className="text-slate-500 hover:text-white transition-colors text-sm">Email</a>
-          </div>
-        </div>
-      </footer>
-    </main>
+        </section>
+
+      </div>
+    </AppShell>
   );
 }

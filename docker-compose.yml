@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "3000:3000"
+      - "3333:3000"
     environment:
       - NODE_ENV=production
       - LLM_PROVIDER=ollama

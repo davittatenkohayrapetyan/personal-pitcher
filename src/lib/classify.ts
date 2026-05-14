@@ -54,6 +54,54 @@ export function classifyIntent(question: string): Intent {
   return 'general';
 }
 
+const VALID_INTENTS = new Set<Intent>([
+  'background', 'projects', 'community', 'hobbies', 'contact', 'general', 'off_topic',
+]);
+
+const INTENT_CLASSIFICATION_PROMPT = `You are an intent classifier. Given a user question, classify it into exactly one of these intents:
+- background: questions about work experience, career, education, skills, tech stack
+- projects: questions about projects, code, GitHub repos, things built
+- community: questions about talks, conferences, mentoring, volunteering, blog posts
+- hobbies: questions about personal interests, hobbies, free time activities
+- contact: questions about how to reach or hire Davit
+- general: general questions about who Davit is
+- off_topic: anything unrelated to Davit Hayrapetyan
+
+Respond with ONLY the single intent word, nothing else.`;
+
+export async function classifyIntentWithLLM(question: string): Promise<Intent> {
+  try {
+    const baseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+    const response = await fetch(`${baseUrl}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'llama3.2',
+        messages: [
+          { role: 'system', content: INTENT_CLASSIFICATION_PROMPT },
+          { role: 'user', content: question },
+        ],
+        stream: false,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ollama responded with ${response.status}`);
+    }
+
+    const data = await response.json();
+    const raw = (data.message?.content as string | undefined)?.trim().toLowerCase();
+
+    if (raw && VALID_INTENTS.has(raw as Intent)) {
+      return raw as Intent;
+    }
+  } catch {
+    // fall through to regex fallback
+  }
+
+  return classifyIntent(question);
+}
+
 export function isOffTopic(intent: Intent): boolean {
   return intent === 'off_topic';
 }

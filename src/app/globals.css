@@ -2,16 +2,38 @@
 
 * {
   box-sizing: border-box;
-  padding: 0;
+  padding: 3px;
   margin: 0;
 }
 
 html {
   scroll-behavior: smooth;
+  /* overflow-x: hidden is a safety net only — the real fix is no large fixed-width
+     or absolutely-positioned elements extending beyond the viewport. */
+  overflow-x: hidden;
 }
 
 body {
-  background: #0f172a;
+  background: #0b1120;
   color: #f1f5f9;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Consistent, visible keyboard focus across the app */
+:focus-visible {
+  outline: 2px solid #818cf8; /* indigo-400 */
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Custom thin scrollbar for conversation panel */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
 }
