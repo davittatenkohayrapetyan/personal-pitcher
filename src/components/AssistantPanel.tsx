@@ -10,6 +10,7 @@ const SUGGESTED_QUESTIONS = [
   'What projects has Davit built?',
   "What is Davit's tech stack?",
   "Tell me about Davit's community work",
+  'Tell me about Shepard D',
   "What are Davit's hobbies?",
   'How can I contact Davit?',
 ] as const;

@@ -23,10 +23,12 @@ export function retrieveContext(intent: Intent): string {
       return `${ctx.bio}\n\n## Community Work\n${ctx.community}`;
     case 'hobbies':
       return `${ctx.bio}\n\n## Personal Interests\n${ctx.hobbies}`;
+    case 'music':
+      return `${ctx.bio}\n\n## Music\n${ctx.music}`;
     case 'contact':
       return ctx.bio;
     case 'general':
-      return `${ctx.bio}\n\n## Projects\n${ctx.projects}\n\n## Community Work\n${ctx.community}\n\n## Personal Interests\n${ctx.hobbies}`;
+      return `${ctx.bio}\n\n## Projects\n${ctx.projects}\n\n## Community Work\n${ctx.community}\n\n## Personal Interests\n${ctx.hobbies}\n\n## Music\n${ctx.music}`;
     default:
       return ctx.bio;
   }

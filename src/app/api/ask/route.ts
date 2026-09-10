@@ -263,7 +263,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<AskRespon
   }
 
   ctx.steps.push('classify_intent');
-  const intent = await classifyIntentWithLLM(trimmedQuestion);
+  const { intent, classifier, steps: classifierSteps } = await classifyIntentWithLLM(trimmedQuestion);
+  ctx.steps.push(...classifierSteps);
   ctx.steps.push(`intent:${intent}`);
 
   if (isOffTopic(intent)) {
@@ -273,12 +274,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<AskRespon
       success: true,
       question: trimmedQuestion,
       intent,
-      modelsUsed: [],
+      modelsUsed: [classifier],
     });
     notifyPushover(ctx, {
       success: true,
       question: trimmedQuestion,
-      modelsUsed: [],
+      modelsUsed: [classifier],
     });
     return NextResponse.json(
       {
@@ -303,11 +304,11 @@ Please answer the question based on the context provided above.`;
     const provider = getDefaultProvider();
     ctx.steps.push('llm_generate');
     let answer: string;
-    let modelsUsed: string[] = [];
+    let modelsUsed: string[] = [classifier];
     if (provider instanceof FallbackOrchestrator) {
       const result = await provider.generateWithMeta(prompt, SYSTEM_PROMPT);
       answer = result.content;
-      modelsUsed = result.modelsUsed;
+      modelsUsed = [classifier, ...result.modelsUsed];
       ctx.steps.push(...result.steps);
     } else {
       answer = await provider.generate(prompt, SYSTEM_PROMPT);
@@ -346,7 +347,7 @@ Please answer the question based on the context provided above.`;
     notifyPushover(ctx, {
       success: false,
       question: trimmedQuestion,
-      modelsUsed: [],
+      modelsUsed: [classifier],
       errorMessage,
     });
     return NextResponse.json(

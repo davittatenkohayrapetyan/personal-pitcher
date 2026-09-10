@@ -256,6 +256,34 @@ Yerevan State University
 
 ---
 
+## Music — Shepard D
+
+Davit produces electronic music under the alias **Shepard D**.
+
+Producing since 2008, Shepard D has spent over a decade exploring sound through different genres, collaborations, and creative phases. His music lives in the electronic world, defined by emotional melodies, atmospheric textures, and a signature love for piano themes. For Shepard D, music is a journal — every track is written to preserve a feeling, a moment, a state of mind. What you hear is always honest, always alive, and always rooted in what he feels right now.
+
+### Genres & Style
+- Electronic
+- Ambient
+- Melodic Electronic
+- Piano-driven Electronic
+
+### Selected Releases
+- **Addictions** — Album, 2026 (latest release)
+- **Repressed** — EP, 2025
+- **Revelations** — Album, 2024
+- **Hearts Reborn** — Album, 2024
+- **Inner Hamster** — Album, 2024
+- **Amber Sun** — Single, 2023
+- **Purrifire** — Single, 2023
+- **We** — Album, 2021
+
+### Listen
+- Spotify: https://open.spotify.com/artist/4G26tr9xqGvtZa9B0qboob
+- Spotify-curated playlist: *Shepard D Radio*
+
+---
+
 ## Contact
 
 Location: Yerevan, Armenia

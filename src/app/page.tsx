@@ -5,6 +5,7 @@ import AssistantPanel from '@/components/AssistantPanel';
 import ProjectsCard from '@/components/cards/ProjectsCard';
 import CommunityImpactCard from '@/components/cards/CommunityImpactCard';
 import HobbiesCard from '@/components/cards/HobbiesCard';
+import MusicCard from '@/components/cards/MusicCard';
 import SkillsCard from '@/components/cards/SkillsCard';
 import ExperienceCard from '@/components/cards/ExperienceCard';
 
@@ -54,6 +55,7 @@ export default function Home() {
             <SkillsCard />
             <ProjectsCard />
             <CommunityImpactCard />
+            <MusicCard />
             <HobbiesCard />
           </div>
           <p className="mt-4 text-sm text-slate-500">

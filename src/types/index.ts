@@ -25,4 +25,5 @@ export interface ProfileContext {
   projects: string;
   community: string;
   hobbies: string;
+  music: string;
 }
