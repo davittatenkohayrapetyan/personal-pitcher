@@ -46,3 +46,6 @@ next-env.d.ts
 /logs/
 *.log
 *.log.gz
+
+# Claude Code local settings (personal overrides, not shared with the team)
+.claude/settings.local.json
