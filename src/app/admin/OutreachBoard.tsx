@@ -120,6 +120,8 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [showRejected, setShowRejected] = useState(false);
+  const [filters, setFilters] = useState<QueueFilters>(NO_FILTERS);
+  const [sort, setSort] = useState<SortKey>('fit');
 
   const now = Date.now();
   const queue = useMemo(
@@ -130,6 +132,10 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
     [data.opportunities, now],
   );
   const snoozed = data.opportunities.length - queue.length;
+  // What the list actually renders. Kept apart from `queue`, which is what the
+  // header and the tab badge count: a filter narrows what you are looking at,
+  // not how much is waiting for a decision.
+  const visible = useMemo(() => visibleQueue(queue, filters, sort), [queue, filters, sort]);
 
   async function act(action: string, payload: Record<string, unknown>, key: string) {
     setBusy(key);
@@ -150,6 +156,10 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
       }
 
       setData(result);
+      // A server-sent notice outranks whatever the caller was going to say: it
+      // is the one that knows something the browser does not, such as a draft
+      // having been written without the preference doc behind it.
+      if (typeof result.notice === 'string') setNotice(result.notice);
       router.refresh();
       return true;
     } catch {
@@ -174,6 +184,25 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
       ...current,
       [id]: { ...(current[id] ?? { subject: '', body: '' }), ...patch },
     }));
+  }
+
+  /**
+   * Forgets local edits for one card, so what the server just wrote is what
+   * shows.
+   *
+   * Deleting the key rather than blanking the values, and the difference is the
+   * whole thing: `draftFor` falls back to `item.draft` with `??`, which does not
+   * treat an empty string as absent. Setting both fields to `''` therefore left
+   * a 90-second draft written to `pending.json` and invisible on screen, with
+   * Save and Approve both refusing an empty subject underneath it.
+   */
+  function forgetEdits(id: string) {
+    setEdits((current) => {
+      if (!(id in current)) return current;
+      const next = { ...current };
+      delete next[id];
+      return next;
+    });
   }
 
   const views: { id: View; label: string; count: number }[] = [
@@ -242,14 +271,28 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
       )}
 
       {view === 'queue' && (
-        <QueueView
-          queue={queue}
-          busy={busy}
-          draftFor={draftFor}
-          setDraft={setDraft}
-          act={act}
-          setNotice={setNotice}
-        />
+        <>
+          {queue.length > 0 && (
+            <QueueToolbar
+              queue={queue}
+              filters={filters}
+              setFilters={setFilters}
+              sort={sort}
+              setSort={setSort}
+              shown={visible.length}
+            />
+          )}
+          <QueueView
+            queue={visible}
+            filtered={visible.length !== queue.length}
+            busy={busy}
+            draftFor={draftFor}
+            setDraft={setDraft}
+            forgetEdits={forgetEdits}
+            act={act}
+            setNotice={setNotice}
+          />
+        </>
       )}
 
       {view === 'companies' && <CompaniesView suggestions={data.suggestions} busy={busy} act={act} />}
@@ -300,25 +343,233 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
   );
 }
 
+type SortKey = 'fit' | 'company' | 'newest' | 'oldest';
+
+interface QueueFilters {
+  company: string;
+  eligibility: string;
+  status: string;
+  minFit: number;
+  search: string;
+}
+
+const NO_FILTERS: QueueFilters = {
+  company: 'all',
+  eligibility: 'all',
+  status: 'all',
+  minFit: 0,
+  search: '',
+};
+
+/**
+ * Applies the toolbar, in one place, so the list a person sees and the count
+ * above it can never disagree.
+ *
+ * Filtering is deliberately *not* applied to the tab badge or to the "N to
+ * review" line in the header: those answer "how much is waiting?", which a
+ * filter does not change. Only this list narrows.
+ */
+function visibleQueue(queue: QueuedOpportunity[], filters: QueueFilters, sort: SortKey) {
+  const needle = filters.search.trim().toLowerCase();
+
+  const filtered = queue.filter((item) => {
+    if (filters.company !== 'all' && item.company !== filters.company) return false;
+    if (filters.eligibility !== 'all' && item.verdict?.eligibility !== filters.eligibility) return false;
+    if (filters.status === 'scored' && !item.verdict) return false;
+    if (filters.status === 'unscored' && item.verdict) return false;
+    if (filters.status === 'drafted' && !item.draft?.body) return false;
+    if (filters.status === 'undrafted' && item.draft?.body) return false;
+    // An unscored card has no fit, and a floor is a statement about scores --
+    // so a floor above zero hides them rather than treating "no verdict" as
+    // zero, which would bury exactly the cards that need a second run.
+    if (filters.minFit > 0 && (item.verdict?.fit ?? -1) < filters.minFit) return false;
+    if (needle && !`${item.company} ${item.title}`.toLowerCase().includes(needle)) return false;
+    return true;
+  });
+
+  const byFit = (a: QueuedOpportunity, b: QueuedOpportunity) =>
+    (b.verdict?.fit ?? -1) - (a.verdict?.fit ?? -1);
+
+  return [...filtered].sort((a, b) => {
+    switch (sort) {
+      case 'company':
+        // Company first, then best-scoring role within it: the point of
+        // grouping by employer is to decide about the employer, and the
+        // strongest role is the one that decision hangs on.
+        return a.company.localeCompare(b.company) || byFit(a, b);
+      case 'newest':
+        return Date.parse(b.discoveredAt) - Date.parse(a.discoveredAt);
+      case 'oldest':
+        return Date.parse(a.discoveredAt) - Date.parse(b.discoveredAt);
+      default:
+        return byFit(a, b);
+    }
+  });
+}
+
+const SELECT_CLASS =
+  'rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1.5 text-xs text-slate-200 focus:border-violet-400/50 focus:outline-none';
+
+function QueueToolbar({
+  queue,
+  filters,
+  setFilters,
+  sort,
+  setSort,
+  shown,
+}: {
+  queue: QueuedOpportunity[];
+  filters: QueueFilters;
+  setFilters: (next: QueueFilters) => void;
+  sort: SortKey;
+  setSort: (next: SortKey) => void;
+  shown: number;
+}) {
+  // Built from the queue rather than from the watch list: a card can come from
+  // an aggregator, so the employers in the queue are not the companies being
+  // watched, and offering a filter that matches nothing is worse than offering
+  // none.
+  const companies = useMemo(
+    () => [...new Set(queue.map((item) => item.company))].sort((a, b) => a.localeCompare(b)),
+    [queue],
+  );
+
+  const dirty = shown !== queue.length;
+  const set = (patch: Partial<QueueFilters>) => setFilters({ ...filters, ...patch });
+
+  return (
+    <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2.5">
+      <label className="sr-only" htmlFor="queue-search">
+        Search the queue by company or title
+      </label>
+      <input
+        id="queue-search"
+        value={filters.search}
+        onChange={(event) => set({ search: event.target.value })}
+        placeholder="Search company or title"
+        className="min-w-[10rem] flex-1 rounded-lg border border-white/10 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:border-violet-400/50 focus:outline-none"
+      />
+
+      <label className="sr-only" htmlFor="queue-company">
+        Filter by company
+      </label>
+      <select
+        id="queue-company"
+        value={filters.company}
+        onChange={(event) => set({ company: event.target.value })}
+        className={SELECT_CLASS}
+      >
+        <option value="all">All companies</option>
+        {companies.map((company) => (
+          <option key={company} value={company}>
+            {company}
+          </option>
+        ))}
+      </select>
+
+      <label className="sr-only" htmlFor="queue-fit">
+        Minimum fit
+      </label>
+      <select
+        id="queue-fit"
+        value={filters.minFit}
+        onChange={(event) => set({ minFit: Number(event.target.value) })}
+        className={SELECT_CLASS}
+      >
+        <option value={0}>Any fit</option>
+        <option value={40}>fit 40+</option>
+        <option value={60}>fit 60+</option>
+        <option value={80}>fit 80+</option>
+      </select>
+
+      <label className="sr-only" htmlFor="queue-eligibility">
+        Filter by eligibility
+      </label>
+      <select
+        id="queue-eligibility"
+        value={filters.eligibility}
+        onChange={(event) => set({ eligibility: event.target.value })}
+        className={SELECT_CLASS}
+      >
+        <option value="all">Any eligibility</option>
+        <option value="eligible">eligible</option>
+        <option value="needs_check">needs check</option>
+        <option value="ineligible">ineligible</option>
+      </select>
+
+      <label className="sr-only" htmlFor="queue-status">
+        Filter by status
+      </label>
+      <select
+        id="queue-status"
+        value={filters.status}
+        onChange={(event) => set({ status: event.target.value })}
+        className={SELECT_CLASS}
+      >
+        <option value="all">Any status</option>
+        <option value="scored">scored</option>
+        <option value="unscored">unscored</option>
+        <option value="drafted">has a draft</option>
+        <option value="undrafted">no draft yet</option>
+      </select>
+
+      <label className="sr-only" htmlFor="queue-sort">
+        Sort the queue
+      </label>
+      <select
+        id="queue-sort"
+        value={sort}
+        onChange={(event) => setSort(event.target.value as SortKey)}
+        className={SELECT_CLASS}
+      >
+        <option value="fit">Best fit first</option>
+        <option value="company">By company</option>
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+
+      <span className="text-xs text-slate-500" aria-live="polite">
+        {dirty ? `${shown} of ${queue.length}` : `${queue.length} card${queue.length === 1 ? '' : 's'}`}
+      </span>
+
+      {dirty && (
+        <button
+          onClick={() => setFilters(NO_FILTERS)}
+          className="rounded-lg px-2 py-1 text-xs text-slate-400 hover:bg-white/5 hover:text-slate-200"
+        >
+          Clear
+        </button>
+      )}
+    </div>
+  );
+}
+
 function QueueView({
   queue,
+  filtered,
   busy,
   draftFor,
   setDraft,
+  forgetEdits,
   act,
   setNotice,
 }: {
   queue: QueuedOpportunity[];
+  /** True when the toolbar is hiding cards, so an empty list can say which empty it is. */
+  filtered: boolean;
   busy: string | null;
   draftFor: (item: QueuedOpportunity) => { subject: string; body: string };
   setDraft: (id: string, patch: Partial<{ subject: string; body: string }>) => void;
+  forgetEdits: (id: string) => void;
   act: (action: string, payload: Record<string, unknown>, key: string) => Promise<boolean>;
   setNotice: (value: string | null) => void;
 }) {
   if (queue.length === 0) {
     return (
       <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-8 text-center text-sm text-slate-400">
-        Nothing to review. A quiet morning is the expected state once the filters are right.
+        {filtered
+          ? 'No cards match these filters. Clear them to see the rest of the queue.'
+          : 'Nothing to review. A quiet morning is the expected state once the filters are right.'}
       </p>
     );
   }
@@ -327,6 +578,7 @@ function QueueView({
     <ul className="space-y-4">
       {queue.map((item) => {
         const draft = draftFor(item);
+        const drafting = busy === `${item.id}:draft`;
         const verdict = item.verdict;
 
         return (
@@ -407,11 +659,32 @@ function QueueView({
                 value={draft.body}
                 onChange={(event) => setDraft(item.id, { body: event.target.value })}
                 rows={5}
-                placeholder="No draft yet — stage C arrives in phase 6. Write the message here."
+                placeholder="No draft yet. Generate one on the Mac, or write it here."
                 aria-label={`Message for ${item.title}`}
                 className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-slate-100 focus:border-violet-400/50 focus:outline-none"
               />
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={async () => {
+                    const written = await act('generate_draft', { id: item.id }, `${item.id}:draft`);
+                    if (written) {
+                      // The edit buffer has to be dropped, or the box keeps
+                      // showing whatever was in it and the new draft is
+                      // invisible until a reload.
+                      forgetEdits(item.id);
+                      setNotice('Drafted. Read it before you approve it — it is a first attempt, not a send.');
+                    }
+                  }}
+                  disabled={busy !== null || !item.extracted}
+                  title={
+                    item.extracted
+                      ? 'Writes a subject and message on the Mac from your profile and this posting'
+                      : 'Nothing to draft from yet — stage A has not read this posting'
+                  }
+                  className="rounded-lg border border-violet-400/30 px-3 py-1.5 text-xs font-semibold text-violet-200 hover:bg-violet-500/10 disabled:opacity-40"
+                >
+                  {busy === `${item.id}:draft` ? 'Drafting on the Mac…' : 'Generate draft'}
+                </button>
                 <button
                   onClick={async () => {
                     const saved = await act('save_draft', { id: item.id, edits: draft }, item.id);
@@ -422,10 +695,20 @@ function QueueView({
                 >
                   Save draft
                 </button>
-                {item.draft && (
-                  <span className="text-xs text-slate-500">
-                    saved {formatDate(item.draft.draftedAt)} · {item.draft.model}
+                {drafting ? (
+                  // Said out loud because it is true and because the button is
+                  // disabled for the whole time: a local model on a laptop
+                  // takes 45-90 seconds, and a screen that looks stuck for a
+                  // minute gets clicked again.
+                  <span className="text-xs text-violet-300" aria-live="polite">
+                    up to 90 seconds — the model runs on the Mac, not in the cloud
                   </span>
+                ) : (
+                  item.draft && (
+                    <span className="text-xs text-slate-500">
+                      saved {formatDate(item.draft.draftedAt)} · {item.draft.model}
+                    </span>
+                  )
                 )}
               </div>
             </div>

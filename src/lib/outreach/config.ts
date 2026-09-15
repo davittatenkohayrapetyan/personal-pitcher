@@ -47,6 +47,18 @@ export function isAggregator(source: SourceId): boolean {
 }
 
 export const DATA_DIR = path.resolve(process.cwd(), 'data');
+/**
+ * The curated profile — the only permitted source of claims about Davit in a
+ * draft (§17.5).
+ *
+ * The same file the website answers visitors from, read directly rather than
+ * through `src/lib/profile/loader.ts`. The direction matters and only one of
+ * them is dangerous: outreach reading public profile content is fine, while the
+ * loader reaching into `private/` or `data/outreach/` is the thing §19.8's
+ * greps exist to prevent. Importing the loader here would also drag its cache
+ * and its `ProfileContext` shaping into a batch job that wants the markdown.
+ */
+export const PROFILE_FILE = path.join(DATA_DIR, 'profile.md');
 export const OUTREACH_DIR = path.join(DATA_DIR, 'outreach');
 export const FIXTURE_DIR = path.join(OUTREACH_DIR, 'fixtures');
 export const COMPANIES_FILE = path.join(OUTREACH_DIR, 'companies.json');
@@ -378,6 +390,30 @@ export function outreachTimeoutMs(): number {
 }
 
 /**
+ * The same budget, capped so a draft can never outlive a visitor's patience.
+ *
+ * Stage C is the one call in this system that runs *inside the website's
+ * process*, on a button in `/admin`, in the middle of the working day. Ollama
+ * serialises per model, so a draft holds tier 0 while it runs — and with the
+ * plain budget it could hold it for 180 seconds while `MAC_OLLAMA_TIMEOUT_MS`
+ * gives a visitor 120. A visitor's question would then time out *twice* behind
+ * one draft (the classifier call and the answer call), which is the whole
+ * `MAC_CB_FAILURE_THRESHOLD` of 2: the breaker opens, a Pushover alert claims
+ * the Mac is down, and five minutes of visitors are answered by OpenAI —
+ * because somebody clicked a button.
+ *
+ * Ten seconds of headroom rather than a fraction, because the number that
+ * matters is "finishes before the other one gives up", not a ratio. This
+ * narrows the window; it does not close it, and §23 records why closing it
+ * properly means giving the two workloads separate model instances.
+ */
+export function draftTimeoutMs(): number {
+  const visitor = parseInt(process.env.MAC_OLLAMA_TIMEOUT_MS ?? '', 10);
+  const ceiling = Number.isFinite(visitor) ? Math.max(30_000, visitor - 10_000) : 110_000;
+  return Math.min(outreachTimeoutMs(), ceiling);
+}
+
+/**
  * §7: a role in Yerevan is never auto-drafted, whatever it scores.
  *
  * Not because those roles are worse — the Align Sr. Java Engineer is the best
@@ -410,6 +446,29 @@ export function queueTtlDays(): number {
 }
 
 // ─── Sending and the ledger (§8.1, §10) ────────────────────────────────────
+
+/**
+ * The sentence appended to every drafted message, verbatim.
+ *
+ * §16's fifth open question asked whether this belongs in v1 at all. It does,
+ * and for the reason the plan gives: a system that hides what it is, inside an
+ * application arguing for engineering integrity, contradicts itself. For these
+ * roles it is also a differentiator rather than an apology — the thing being
+ * disclosed is a piece of work.
+ *
+ * It is a setting so the wording can be changed deliberately, and it is
+ * appended **by code** in `draft.ts` so that a model can never reword, soften
+ * or drop it (§7, §17.5). Every claim in it is enforced elsewhere in this
+ * codebase rather than merely asserted: nothing is transmitted without an
+ * explicit approval in `/admin`, and the approved text is the byte-identical
+ * text that is sent.
+ */
+export function disclosureLine(): string {
+  return (
+    env('OUTREACH_DISCLOSURE') ??
+    'P.S. I drafted this with Personal Pitcher, an application assistant I built and run on my own hardware — I read and approved every word before it was sent. It, and the rest of my work, is at https://davithayrapetyan.dev.'
+  );
+}
 
 /**
  * Nothing is transmitted while this is true, and it is true unless someone

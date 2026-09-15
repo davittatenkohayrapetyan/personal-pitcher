@@ -1,4 +1,5 @@
 import { OpenAIProvider } from '../llm/openai';
+import { isTransientError } from '../llm/errors';
 import {
   openMacTier,
   createMacProvider,
@@ -7,7 +8,7 @@ import {
   getMacModelName,
 } from '../llm/macOllama';
 import { macBreaker } from '../llm/circuitBreaker';
-import { allowPaidFallback, outreachTimeoutMs, stageModel } from './config';
+import { allowPaidFallback, draftTimeoutMs, outreachTimeoutMs, stageModel } from './config';
 import { logger } from '../logger';
 
 /**
@@ -79,11 +80,18 @@ export async function openOutreachModel(stage: OutreachStage): Promise<ModelGate
   const resolved = stageModel(stage) ?? getMacModelName();
   const shared = {
     model: resolved,
-    timeoutMs: outreachTimeoutMs(),
+    // Drafting is the stage that runs in the website's own process, so it gets
+    // the capped budget — see `draftTimeoutMs`.
+    timeoutMs: stage === 'draft' ? draftTimeoutMs() : outreachTimeoutMs(),
     // Extraction and scoring are not creative work, and a run that reaches
     // different verdicts from identical inputs is a run nobody can review with
-    // confidence.
-    options: { temperature: 0.1 } as Record<string, unknown>,
+    // confidence. Drafting is the opposite on both counts: a letter is prose,
+    // and at 0.1 the same four sentences come back for every posting with the
+    // company name swapped -- which a recruiter who has seen two of them will
+    // notice. It is still well below 1: the constraint that matters is that
+    // every claim traces to the profile, and temperature is exactly the knob
+    // that loosens it.
+    options: { temperature: stage === 'draft' ? 0.6 : 0.1 } as Record<string, unknown>,
   };
 
   const gate = await openMacTier(shared);
@@ -107,7 +115,21 @@ export async function openOutreachModel(stage: OutreachStage): Promise<ModelGate
             return text;
           } catch (err) {
             logMacFailure(err);
-            macBreaker.onFailure();
+
+            // Gated, where `orchestrator.ts` and `classify.ts` record
+            // unconditionally, and the difference is `generate_draft`: that
+            // button runs *in the website's process*, so a failure here spends
+            // the breaker budget that keeps tier 0 available to visitors. The
+            // failure it is most likely to spend it on is deterministic — a
+            // schema Ollama will not compile answers 400 every time, so two
+            // clicks of a button whose error message says "the log has the
+            // reason" would open the breaker, push an alert claiming the Mac is
+            // down, and route five minutes of visitors to OpenAI. A machine
+            // that answers 400 instantly is not an absent machine, which is the
+            // only thing this breaker exists to detect. `errors.ts` already
+            // draws exactly this line for OpenAI; it is the same line.
+            if (isTransientError(err)) macBreaker.onFailure();
+
             throw err;
           }
         },

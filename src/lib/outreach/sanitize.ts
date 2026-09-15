@@ -777,8 +777,10 @@ export function sanitizeEditedField(
   field: string,
   raw: unknown,
   maxLength: number,
+  /** Which stage to record a refusal against. A model-written draft is not a score. */
+  stage: OutreachViolation['stage'] = 'score',
 ): SanitizeResult<string> {
-  const result = checked('score', field, raw, maxLength);
+  const result = checked(stage, field, raw, maxLength);
   const ok = result.violations.length === 0;
   return { ok, value: ok ? result.value : null, violations: result.violations };
 }
@@ -806,6 +808,8 @@ export function sanitizeEditedBody(
   field: string,
   raw: unknown,
   maxLength: number,
+  /** Which stage to record a refusal against. A model-written draft is not a score. */
+  stage: OutreachViolation['stage'] = 'score',
 ): SanitizeResult<string> {
   if (typeof raw !== 'string') {
     return {
@@ -822,7 +826,7 @@ export function sanitizeEditedBody(
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
-  const result = checked('score', field, preserved, maxLength);
+  const result = checked(stage, field, preserved, maxLength);
   const ok = result.violations.length === 0;
 
   // `result.value` is the flattened form the checks ran against; what is stored

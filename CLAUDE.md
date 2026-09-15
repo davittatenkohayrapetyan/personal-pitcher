@@ -190,15 +190,17 @@ proposes verified additions to it. Design, phase table and per-phase definition
 of done live in `docs/job-outreach-plan.md`; §23 records every place the build
 disagreed with it, and should be read before changing anything here.
 
-**Phases 0 to 5 are built**: the typed preference loader, all nine source
+**Phases 0 to 5 are built, plus stage C drafting out of order**: the typed preference loader, all nine source
 adapters (Workday, Pinpoint, Greenhouse, Lever, Ashby, Remotive, RemoteOK,
 Arbeitnow, Himalayas), the deterministic geo filter, `seen.json` dedupe, the
 budgeted run loop, stage A extraction, the outreach sanitiser, stage B scoring,
 the review queue in `data/outreach/pending.json`, the `/admin` outreach tab with
 its three decisions and the applied ledger behind them, and the 07:00 discovery
 job with ATS detection, endpoint verification and the watch-list hygiene rules.
-No drafting, no browser and no sending code exists yet — `approve_send` writes a
-`dryRun` ledger row and refuses outright if `OUTREACH_DRY_RUN` is off.
+Stage C drafting was pulled forward out of phase 6 on request and is on the
+card as a **Generate draft** button; no browser and **no sending code** exists
+— `approve_send` writes a `dryRun` ledger row and refuses outright with 501 if
+`OUTREACH_DRY_RUN` is off.
 
 Flags on `outreach`: `--explain`, `--source=`, `--company=`, `--max=`,
 `--deadline=`, `--no-model`, `--no-cache`, `--geo-fixtures`,
@@ -276,6 +278,28 @@ Flags on `outreach`: `--explain`, `--source=`, `--company=`, `--max=`,
   exercises all of them with no model, because the override only fires when a
   model *has* said `draft`, which a fortnight of real mornings might not
   produce.
+- **Stage C drafts; nothing drafts at 08:00.** `draft.ts` runs on a click in
+  `/admin`, not in the run loop, because a draft generated for a card nobody
+  opens is 90 seconds of the Mac spent on a guess. Its inputs are all
+  second-hand — the sanitised `ExtractedPosting`, stage B's verdict, the typed
+  preferences and `data/profile.md` — so it never sees a line of employer prose,
+  which is the same split stages A and B keep.
+- **The profile is the only permitted source of claims about Davit**, and the
+  system prompt says so. No salary figure reaches this prompt in either
+  currency: a number in a prompt is a number that can be quoted back in a
+  letter (§5, §23).
+- **The disclosure line is appended by code and never asked for** (`config.ts`,
+  `OUTREACH_DISCLOSURE`). A model asked to include a disclosure will reword it,
+  and the wording is a commitment rather than a pitch — every claim in it is
+  enforced elsewhere in this codebase.
+- **Drafting runs at temperature 0.6; extraction and scoring stay at 0.1.** A
+  letter is prose, and at 0.1 the same four sentences come back for every
+  posting with the company name swapped. Everything that must not vary is
+  enforced after the call, by the sanitiser, not by the temperature.
+- **A large `maxLength` in an Ollama JSON schema is a 400.** llama.cpp expands
+  it into that many grammar repetitions, so `maxLength: 2600` on a letter body
+  fails to compile while 600 is fine. Schemas here carry *shape*; the sanitiser
+  carries size. Bisected, not guessed — see §23.
 - **A run with no model still produces a queue.** Postings arrive `unscored`,
   `seen.json` keeps them `deferred`, and the next run that finds a model scores
   them and replaces the placeholder. Six unscored links with real titles beat an

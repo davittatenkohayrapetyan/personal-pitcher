@@ -426,7 +426,8 @@ export interface FitVerdict {
  * names are shared, because they come from the same rule tables.
  */
 export interface OutreachViolation {
-  stage: 'extract' | 'score';
+  /** `draft` arrived with stage C; a refusal there is not a scoring refusal. */
+  stage: 'extract' | 'score' | 'draft';
   field: string;
   rule: string;
   detail: string;
