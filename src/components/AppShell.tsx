@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { LINKEDIN_URL } from '@/lib/constants';
 
 interface AppShellProps {
   children: ReactNode;
@@ -39,15 +40,15 @@ export default function AppShell({ children }: AppShellProps) {
               href="https://github.com/davittatenkohayrapetyan"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-400/10 hover:text-white sm:px-3 sm:text-sm"
+              className="rounded-md px-2.5 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-400/10 hover:text-white sm:px-3 sm:py-1.5 sm:text-sm"
             >
               GitHub
             </a>
             <a
-              href="https://www.linkedin.com/in/davit-hayrapetyan-04377561"
+              href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-400/10 hover:text-white sm:px-3 sm:text-sm"
+              className="rounded-md px-2.5 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-400/10 hover:text-white sm:px-3 sm:py-1.5 sm:text-sm"
             >
               LinkedIn
             </a>
@@ -62,7 +63,9 @@ export default function AppShell({ children }: AppShellProps) {
       <footer className="border-t border-slate-400/10 bg-slate-950/60">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-slate-500 sm:flex-row sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} Davit Hayrapetyan · Yerevan, Armenia</p>
-          <p className="text-slate-600">Built with Next.js · Powered by a local LLM</p>
+          <p className="font-mono text-[11px] text-slate-600">
+            Next.js · OpenAI primary → Ollama fallback · circuit breaker
+          </p>
         </div>
       </footer>
     </div>

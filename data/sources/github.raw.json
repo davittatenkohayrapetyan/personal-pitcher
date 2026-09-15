@@ -1,0 +1,37 @@
+{
+  "source": "github",
+  "target": "projects.json",
+  "records": [
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
+      "facts": {
+        "name": "personal-pitcher",
+        "url": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
+        "defaultBranch": "main",
+        "primaryLanguage": "TypeScript",
+        "languages": [
+          "TypeScript"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2026-05-11T21:47:29Z",
+        "pushedAt": "2026-09-10T13:38:35Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "Personal Pitcher 🎯 A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions about Davit's professional background, projects, community contributions, and personal interests — powered by OpenAI with an automatic Ollama (Llama) fallback. Features - 🎨 **Clean portfolio UI** — Hero section, photo cards, and Q&A timeline - 🤖 **AI-powered answers** — OpenAI primary with automatic Ollama/Llama fallback - 🔁 **Circuit breaker** — Automatically skips OpenAI when it is down/overloaded, then probes for recovery - 🛡️ **Request validation** — Input length, type checks - ⏱️ **IP-based rate limiting** — 10 requests per minute per IP - 🧠 **Intent classification** — Routes questions to relevant profile sections - 📚 **RAG-style retrieval** — Pulls context from curated markdown/JSON profile files - 🚧 **Guardrails** — Only answers questions about Davit Hayrapetyan - 📝 **JSON request logging** — Every request/response is logged as JSON to a daily-rotated file (`logs/app-YYYY-MM-DD.log`) plus stdout - 📱 **Pushover notifications** — Optional per-iteration push to your phone (time, question, success/failure, duration, LLMs used) Quick Start Prerequisites - Node.js 20+ - Ollama installed and running with `llama3` model (used as fallback) Local Development Open http://localhost:3000. Docker Compose (with Ollama) Using OpenAI (Recommended) Set in `.env.local`: When `OPENAI_API_KEY` is present, every request is first sent to OpenAI. If OpenAI fails for any reason, the system automatically falls back to Ollama — no user-visible error. If `OPENAI_API_KEY` is not set, all requests go directly to Ollama. LLM Provider Strategy The system uses an **OpenAI-first, Ollama-fallback** strategy with a circuit breaker: 1. **Primary** — If `OPENAI_API_KEY` is configured and the circuit breaker is closed, OpenAI is called first. 2. **Fallback** — If OpenAI fails (network error, timeout, quota/rate limit, or any server error), the request is transparently retried against Ollama. "
+      }
+    }
+  ],
+  "summary": {
+    "user": "davittatenkohayrapetyan",
+    "publicRepos": 19,
+    "authenticated": false,
+    "skippedUnchanged": 18,
+    "processed": 1
+  },
+  "fetchedAt": "2026-09-15T05:55:59.597Z"
+}

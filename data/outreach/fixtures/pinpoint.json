@@ -1,0 +1,204 @@
+{
+  "data": [
+    {
+      "id": "570579",
+      "benefits": null,
+      "benefits_header": "Job Benefits",
+      "compensation": null,
+      "compensation_minimum": null,
+      "compensation_maximum": null,
+      "compensation_currency": null,
+      "compensation_frequency": null,
+      "compensation_visible": false,
+      "deadline_at": null,
+      "description": "<div><!--block--><strong>Role summary</strong><br>This position is ideal for experienced business analysis professionals to join the Treatment Planning Automation team as a <strong>Senior Business Analyst</strong>. You will contribute to the analysis, development, and delivery of features across several internal applications that automate and improve the orthodontic treatment planning process. Partnering with cross-functional and multiregional teams, you’ll translate business needs into actionable requirements, evaluate the impact and benefits of proposed solutions, and analyze the usage and efficiency of released features. This role is important in driving product improvements and increasing automation throughout treatment planning.</div>",
+      "employment_type": "full_time",
+      "employment_type_text": "Full Time",
+      "key_responsibilities": "<div><!--block--><strong>Role expectations</strong></div><ul><li><!--block-->Identify and define key metrics for new features and business requests.</li><li><!--block-->Assess the impact of business requests and evaluate their expected benefits.</li><li><!--block-->Generate project ideas and propose initiatives to improve treatment planning automation and operational efficiency.</li><li><!--block-->Gather, analyze, clarify, and document business and system requirements with stakeholders.</li><li><!--block-->Discuss requirements, priorities, and proposed solutions with cross-functional and multiregional teams.</li><li><!--block-->Translate business needs into clear and actionable requirements in collaboration with development and SQA teammates.</li><li><!--block-->Support formal system documentation and regulatory paperwork in accordance with company processes.</li><li><!--block-->Support feature development and delivery throughout the product lifecycle.</li><li><!--block-->Analyze the usage, performance, and efficiency of released features through production monitoring and data analysis.</li><li><!--block-->Support multiple projects at different stages of development in parallel.</li></ul>",
+      "key_responsibilities_header": "Key Responsibilities",
+      "reporting_to": null,
+      "skills_knowledge_expertise": "<div><!--block--><strong>What we’re looking for</strong></div><ul><li><!--block--><strong>Education:</strong> Bachelor’s degree in Business Analysis, Computer Science, Information Systems, Mathematics, Engineering, or a related field, or equivalent practical experience.</li><li><!--block--><strong>Experience:</strong> 4+ years of experience as a Business Analyst, System Analyst, Product Analyst, or in a similar role.</li><li><!--block--><strong>Data analysis:</strong> Experience with SQL and automated data analysis; advanced Microsoft Excel skills are required.</li><li><!--block--><strong>Requirements:</strong> Experience gathering, analyzing, clarifying, and documenting business and system requirements.</li><li><!--block--><strong>Documentation:</strong> Experience preparing and supporting formal business, system, or regulatory documentation.</li><li><!--block--><strong>Analytical skills:</strong> Strong analytical, problem-solving, and critical-thinking abilities.</li><li><!--block--><strong>Organization:</strong> Ability to manage and support multiple projects at different stages in parallel.</li><li><!--block--><strong>Communication:</strong> Strong communication skills and the ability to collaborate effectively with multiple stakeholders and cross-functional teams.</li><li><!--block--><strong>Teamwork:</strong> Ability to work both independently and collaboratively in a cross-functional, multiregional environment.</li><li><!--block--><strong>Ownership:</strong> Ability to work proactively, propose improvements, and transform business needs into actionable solutions.</li><li><!--block--><strong>English:</strong> B2 level or higher, with the ability to discuss requirements and project activities with international colleagues.</li></ul><div><!--block--><br><br><strong>Complementary skills</strong></div><ul><li><!--block-->Experience with <strong>Redshift SQL</strong>, <strong>Aginity Pro</strong>, <strong>SQuirreL SQL Client</strong>, <strong>Microsoft Excel</strong>, <strong>Splunk</strong>, and <strong>Jira</strong>.</li><li><!--block-->Experience using <strong>Python</strong> for data analysis and automation.</li><li><!--block-->Knowledge of mathematical disciplines such as <strong>optimization</strong>, <strong>linear algebra</strong>, and <strong>analytical geometry</strong>.</li><li><!--block-->Experience with <strong>3D computational software</strong> or CAD-related systems.</li><li><!--block-->Experience supporting product lifecycle management.</li><li><!--block-->Experience working in a regulated software or medical device environment.</li></ul>",
+      "skills_knowledge_expertise_header": "Skills, Knowledge & Expertise",
+      "title": "Sr. Business Analyst",
+      "url": "https://jobs.aligntech.com/en/postings/cac2d8af-73fa-4fd5-a0ce-5fbe0c77a818",
+      "path": "/en/postings/cac2d8af-73fa-4fd5-a0ce-5fbe0c77a818",
+      "workplace_type": "onsite",
+      "workplace_type_text": "Onsite",
+      "job": {
+        "id": "572819",
+        "requisition_id": "ALGN-31792",
+        "department": {
+          "id": "44673",
+          "name": "Research & Development"
+        },
+        "division": {
+          "id": "6694",
+          "name": "Align Technology"
+        },
+        "structure_custom_group_one": {
+          "id": "7466",
+          "name": "Russia/Armenia",
+          "title": "Region"
+        }
+      },
+      "location": {
+        "id": "40500",
+        "city": "Yerevan",
+        "name": "EMEA-Armenia-Yerevan",
+        "postal_code": "0001-0099",
+        "province": null,
+        "street_address": "24/1 Azatutyan Ave, Floors 4-5"
+      }
+    },
+    {
+      "id": "570598",
+      "benefits": null,
+      "benefits_header": "Job Benefits",
+      "compensation": null,
+      "compensation_minimum": null,
+      "compensation_maximum": null,
+      "compensation_currency": null,
+      "compensation_frequency": null,
+      "compensation_visible": false,
+      "deadline_at": null,
+      "description": "<div><!--block-->This position is ideal for senior-level software development professionals to join the Clinical OPS Services team as a Sr. Software Engineer, contributing to the development, enhancement, and maintenance of business-critical application. Partnering with cross-functional teams including product management, QA, DevOps, BA and stakeholders, you’ll provide efficient, scalable solutions and incremental improvements to existing system to support evolving business needs and drive project outcomes. This role is essential in ensuring stability, performance, and continuous evolution of the application landscape, directly impacting the organization’s ability to deliver on its strategic and operational goals.</div><div><!--block--><br></div><div><!--block--><br></div>",
+      "employment_type": "full_time",
+      "employment_type_text": "Full Time",
+      "key_responsibilities": "<div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Support the Engineering Manager and relevant delivery leads in implementing incremental changes into a main workflow controller application, working closely with business partners to translate business goals into technical solutions and actionable development tasks.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Design, develop, and enhance application using Java, ensuring high-quality, scalable, and maintainable solutions aligned with project and business objectives.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Analyze existing system and application contexts, conduct deep technical and functional investigations to understand dependencies, constraints, and opportunities for improvement.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Collaborate closely with Business Analysts, SQA engineers, and cross-functional teams to refine requirements, ensure testability, and deliver reliable, well-validated features.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Maintain and continuously improve the health of the codebase by addressing technical debt in a structured and sustainable way, identifying opportunities for refactoring, modernization, and performance optimization.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Monitor application performance, stability, and code quality, proactively identifying areas for enhancement and implementing improvements to increase reliability and efficiency.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Participate in code reviews, design discussions, and knowledge sharing across teams, contributing to engineering best practices and consistent development standards.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Communicate effectively with teams both within and outside the department, ensuring alignment, transparency, and smooth coordination across initiatives.</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Support release processes, troubleshooting, and post-deployment activities to ensure smooth delivery and ongoing application stability.</div><div><!--block-->&nbsp;</div><div><!--block--><br></div>",
+      "key_responsibilities_header": "Key Responsibilities",
+      "reporting_to": null,
+      "skills_knowledge_expertise": "<div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Computer Science or related education&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 5+ years of industry development&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Understanding of OOP, data structures, algorithms, bug tracking, code review, unit tests&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Git knowledge&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Java expert knowledge&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Soft skills: desire to learn, intelligence, smooth communication, stress resistance, customer focus, decision making, independency&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; English upper intermediate&nbsp;<br><br>Complementary skills&nbsp;</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Experience with AWS</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Experience with Python</div><div><!--block-->•&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Experience with feature or scope ownership</div><div><!--block--><br></div>",
+      "skills_knowledge_expertise_header": "Skills, Knowledge & Expertise",
+      "title": "Sr. Java Engineer",
+      "url": "https://jobs.aligntech.com/en/postings/ca5b2a72-fd3c-423a-8954-a6edff489dd2",
+      "path": "/en/postings/ca5b2a72-fd3c-423a-8954-a6edff489dd2",
+      "workplace_type": "onsite",
+      "workplace_type_text": "Onsite",
+      "job": {
+        "id": "572838",
+        "requisition_id": "ALGN-31793",
+        "department": {
+          "id": "31235",
+          "name": "Operations"
+        },
+        "division": {
+          "id": "6694",
+          "name": "Align Technology"
+        },
+        "structure_custom_group_one": {
+          "id": "7466",
+          "name": "Russia/Armenia",
+          "title": "Region"
+        }
+      },
+      "location": {
+        "id": "40500",
+        "city": "Yerevan",
+        "name": "EMEA-Armenia-Yerevan",
+        "postal_code": "0001-0099",
+        "province": null,
+        "street_address": "24/1 Azatutyan Ave, Floors 4-5"
+      }
+    },
+    {
+      "id": "301508",
+      "benefits": "<div><!--block--><strong>Wynagrodzenie miesięczne: 5150 zł - 6245zł brutto</strong></div><ul><li><!--block-->Zatrudnienie na podstawie umowy o pracę, bezpośrednio przez Align Technology AFAB Poland Sp. z o. o,</li><li><!--block-->Dofinansowanie do opieki medycznej Luxmed,</li><li><!--block-->Dofinansowanie do posiłków w firmowej restauracji,</li><li><!--block-->Pieniężne świadczenia z ZFŚS: m.in. dofinansowanie wypoczynku, świadczenia świąteczne i inne,</li><li><!--block-->Dofinansowanie do dojazdów do pracy,</li><li><!--block-->Dofinansowanie do karty Multisport, ubezpieczenia na życie UNUM i PZU,</li><li><!--block-->Atrakcyjny finansowo program polecania pracowników,</li><li><!--block-->Pracę w komfortowych warunkach w nowoczesnym zakładzie produkcyjnym,</li><li><!--block-->Program zniżek pracowniczych na produkty firmowe (Invisalign),</li><li><!--block-->Przejrzystą ścieżkę rozwoju<br><br></li><li><!--block-->Chęć do pracy oraz rozwoju, chcemy by nasi pracownicy nabywali nowe umiejętności oraz awansowali w strukturach firmy,</li></ul><div><!--block--><br><br></div><div><!--block--><br><br><br>Informacje dotyczące zasad wynagradzania oraz widełek płacowych dla tego stanowiska znajdują się w Polityce Wynagrodzeń dostępnej w sekcji Zastrzeżenia korporacyjne na naszej stronie kariery: <a href=\"https://jobs.aligntech.com/pl/corporate-disclaimers\">https://jobs.aligntech.com/pl/corporate-disclaimers</a><br><br>Zachęcamy wszystkich kandydatów do zapoznania się z tym dokumentem przed przystąpieniem do kolejnych etapów procesu rekrutacyjnego.</div>",
+      "benefits_header": "Oferujemy",
+      "compensation": null,
+      "compensation_minimum": null,
+      "compensation_maximum": null,
+      "compensation_currency": null,
+      "compensation_frequency": null,
+      "compensation_visible": false,
+      "deadline_at": null,
+      "description": "<div><!--block-->Obsługa maszyn, urządzeń i narzędzi produkcyjnych na nowej i technologicznie zaawansowanej hali produkcyjnej.</div>",
+      "employment_type": "fixed_term_full_time",
+      "employment_type_text": "Fixed Term - Full Time",
+      "key_responsibilities": "<ul><li><!--block-->W zależności od obszaru produkcyjnego, wykonywanie powtarzalnych i precyzyjnych prac manualnych (np. frezowanie, polerowanie) oraz wzrokowej kontroli jakości produktów lub obsługa maszyn i paneli sterujących oraz komputera lub sortowanie i pakowanie.</li></ul><div><!--block--><br></div>",
+      "key_responsibilities_header": "Zakres obowiązków",
+      "reporting_to": null,
+      "skills_knowledge_expertise": "<ul><li><!--block-->Osób ze zdolnościami manualnymi, skrupulatnych, energicznych i komunikatywnych,</li><li><!--block-->Gotowość do pracy w systemie zmianowym (obecnie 4 brygadowa organizacja pracy),</li><li><!--block-->Mile widziana znajomość komputera i doświadczenie w pracy na produkcji.</li><li><!--block-->Znajomość języka polskiego w stopniu komunikatywnym w mowie i w piśmie&nbsp;</li></ul><div><!--block--><strong><br>Mile widziane...</strong></div><ul><li><!--block-->Doświadczenie w gabinetach kosmetycznych (umiejętność frezowania i polerowania),</li><li><!--block-->Doświadczenie w obsłudze automatycznych oraz półautomatycznych maszyn produkcyjnych,</li><li><!--block-->Podstawowa znajomość MS Excel oraz komputerowych systemów produkcyjnych,</li></ul><div><!--block--><br></div><div><!--block--><br></div>",
+      "skills_knowledge_expertise_header": "Poszukujemy",
+      "title": "Operator / Operatorka Produkcji ",
+      "url": "https://jobs.aligntech.com/en/postings/e4044f6f-1ea9-41ab-9971-e6420c94ec62",
+      "path": "/en/postings/e4044f6f-1ea9-41ab-9971-e6420c94ec62",
+      "workplace_type": "onsite",
+      "workplace_type_text": "Onsite",
+      "job": {
+        "id": "316495",
+        "requisition_id": "ALGN-21713",
+        "department": {
+          "id": "31235",
+          "name": "Operations"
+        },
+        "division": {
+          "id": "6694",
+          "name": "Align Technology"
+        },
+        "structure_custom_group_one": {
+          "id": "7461",
+          "name": "EMEA (excl Israel & Russia)",
+          "title": "Region"
+        }
+      },
+      "location": {
+        "id": "40274",
+        "city": "Wroclaw",
+        "name": "EMEA-Poland-AFAB",
+        "postal_code": "51-317",
+        "province": null,
+        "street_address": "Bierutowska 44"
+      }
+    },
+    {
+      "id": "306615",
+      "benefits": null,
+      "benefits_header": null,
+      "compensation": null,
+      "compensation_minimum": null,
+      "compensation_maximum": null,
+      "compensation_currency": null,
+      "compensation_frequency": null,
+      "compensation_visible": false,
+      "deadline_at": null,
+      "description": "<div><!--block-->The individual in this position will be responsible for preparing the Invisalign virtual set ups from start to finish for treatments submitted to Align Technology from the customers.</div><div><!--block-->カスタマー（歯科医師）からの指示に基づき、CADシステムを使用して、歯科矯正器具（クリアアライナー）を用いた治療計画を作成する。</div>",
+      "employment_type": "full_time",
+      "employment_type_text": "Full Time",
+      "key_responsibilities": "<div><!--block--><strong>ESSENTIAL DUTIES AND RESPONSIBILITIES</strong></div><div><!--block--><strong>コア業務について</strong></div><ul><li><!--block-->The employee will be trained and must work on all the steps of the process, from the preparation of the virtual impressions, the treatment set up and the gingiva adjustment.</li><li><!--block-->当社が提供する研修を通して学んだ知識・経験を用いて、ソフトウェア上で印象データ、配列、歯肉の調整を行う。</li><li><!--block-->All of these operations will be done by using the Align proprietary SW Treat, in addition to the submitting doctor’s prescription and the Align internal treatment protocols.</li><li><!--block-->上記作業は、歯科医師の指示および当社の治療プロトコルに基づき、当社独自のTreatソフトウェアツールを用いて実施する。</li><li><!--block-->Update and complete cases, such as complaint follow ups, reassigned cases.</li><li><!--block-->症例の修正、提出を行う。クレームのフォローアップ、割り当てられた症例を担当する。</li><li><!--block-->Propose ideas for procedures and processes to promote improved service and customer satisfaction and overall department improvements.</li><li><!--block-->サービスおよび顧客満足度向上のために、手順やプロセスに改善点が見つかれば改善案を提案する。</li><li><!--block-->The employee must show strong ability to understand orthodontic clinical concepts and have computer literacy.</li><li><!--block-->矯正・臨床的な知識への理解、PCを使いこなす。</li><li><!--block-->It is expected that the employee works with high quality and in an efficient manner.</li><li><!--block-->品質を担保しながら効率的に業務を進める。</li><li><!--block-->It is expected that the employee follows production requirements from their supervisors including RTT Lead in a timely manner.</li><li><!--block-->スーパーバイザーまたはグループリーダーからの指示に従って適宜対応する</li></ul><div><!--block--><strong>Additional Responsibilities:</strong></div><div><!--block--><strong>その他の業務について</strong></div><ul><li><!--block-->Performance metrics including, but not limited to, volume handled, average handle time and quality.</li><li><!--block-->対応症例数、平均の応時間、対応した症例の質などのパフォーマンス指標を満たすように業務を進める。</li><li><!--block-->The employee may be identified to work on process improvements regarding quality, time and cost reduction.</li><li><!--block-->品質、時間、コスト削減に関してのプロセス改善案を出す。</li><li><!--block-->Actively participation and expectation to comply with all goals and objectives set for the team.</li><li><!--block-->チームごとに設定されたゴールや目標を達成できるように積極的に業務に取り組む。</li><li><!--block-->Proactive participation to achieve the company’s Goals and Objectives.</li><li><!--block-->当社の目指す目標やゴールを理解し、達成できるように積極的に業務に取り組む。</li></ul><div><!--block--><strong>Expertise:</strong></div><div><!--block--><strong>専門知識・スキルについて</strong></div><ul><li><!--block-->Applies acquired job skills and company policies and procedures to complete assigned tasks</li><li><!--block-->研修や実務を通じて取得したソフトウェアの技術や業務経験を用い、会社方針・手順に従って業務を遂行する。</li><li><!--block-->Meets the requirements of production standard in terms of quantity, quality &amp; customer compliance</li><li><!--block-->設定された基準（症例数・品質・顧客へのコンプライアンス）を満たすように業務を遂行する。</li></ul><div><!--block--><strong>Supervision</strong></div><div><!--block--><strong>業務指示について</strong></div><ul><li><!--block-->Normally follo",
+      "key_responsibilities_header": "Role expectations",
+      "reporting_to": null,
+      "skills_knowledge_expertise": "<div><!--block--><strong>EXPERIENCE/QUALIFICATION</strong></div><div><!--block--><strong>必要な経験・資格について</strong></div><ul><li><!--block-->The Japan Dental Technician License</li><li><!--block-->【必須】歯科技工士資格</li></ul><div><!--block--><strong>WORK HOURS</strong></div><div><!--block--><strong>就業時間について</strong></div><ul><li><!--block-->Follow work rules specified by the Company</li><li><!--block-->会社の就業規則に則る勤務時間：9:00～17:45（1時間のお昼休憩または45分のお昼休憩＋15分の午後休憩）</li></ul><div><!--block--><strong>LANGUAGE</strong></div><ul><li><!--block-->Native level fluency in Japanese</li><li><!--block-->【必須】日本語（読み書き、会話）</li><li><!--block-->&nbsp;英語の読み書き・会話ができれば尚良い</li></ul>",
+      "skills_knowledge_expertise_header": "What we're looking for",
+      "title": "Associate CAD Designer",
+      "url": "https://jobs.aligntech.com/en/postings/40cd337b-ab0c-46ca-a0ba-db87f22c031c",
+      "path": "/en/postings/40cd337b-ab0c-46ca-a0ba-db87f22c031c",
+      "workplace_type": "onsite",
+      "workplace_type_text": "Onsite",
+      "job": {
+        "id": "321477",
+        "requisition_id": "ALGN-21979",
+        "department": {
+          "id": "31235",
+          "name": "Operations"
+        },
+        "division": {
+          "id": "6694",
+          "name": "Align Technology"
+        },
+        "structure_custom_group_one": {
+          "id": "7459",
+          "name": "APAC",
+          "title": "Region"
+        }
+      },
+      "location": {
+        "id": "40320",
+        "city": "Yokohama-shi",
+        "name": "APAC-Japan-Yokohama",
+        "postal_code": "220-0012",
+        "province": null,
+        "street_address": "3-7-1 Minatomirai, Nishi-ku"
+      }
+    }
+  ]
+}

@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "refresh:profile": "tsx --env-file-if-exists=.env scripts/refresh-profile.ts",
+    "outreach": "tsx --env-file-if-exists=.env scripts/job-outreach.ts"
   },
   "dependencies": {
     "next": "16.2.6",
@@ -20,6 +22,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }

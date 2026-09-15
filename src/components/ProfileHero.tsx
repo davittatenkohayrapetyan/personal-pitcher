@@ -1,12 +1,19 @@
 import Image from 'next/image';
+import { LINKEDIN_URL } from '@/lib/constants';
 
+/**
+ * Badges lead with the architecture and AI claims and put the JVM third —
+ * deliberately. Recruiters read the first badge as the label, and "Java ·
+ * Kotlin · Spring Boot" reads as a language specialist rather than as someone
+ * who has designed systems in C++, Kotlin, TypeScript and Java across 13 years.
+ */
 const BADGES = [
-  { icon: '⚙️', label: 'Java · Kotlin · Spring Boot' },
-  { icon: '🌐', label: 'Distributed Systems' },
-  { icon: '☁️', label: 'Cloud · DevOps' },
+  { icon: '🧩', label: 'Distributed Systems Architecture' },
+  { icon: '🤖', label: 'AI Systems · RAG · Agents' },
+  { icon: '⚙️', label: 'Java · Kotlin · C++ · TypeScript' },
+  { icon: '☁️', label: 'Cloud · Observability · DevOps' },
   { icon: '🎤', label: 'GDG Yerevan Organizer' },
-  { icon: '🎓', label: 'University Lecturer' },
-  { icon: '🎹', label: 'Music Producer' },
+  { icon: '🎹', label: 'Music Producer — Shepard D' },
 ];
 
 /**
@@ -41,11 +48,20 @@ export default function ProfileHero() {
             Davit Hayrapetyan
           </h1>
           <p className="mt-1 text-sm font-medium text-violet-300 sm:text-base">
-            Staff Software Engineer · Backend Architect
+            PhD · Staff Engineer · Backend Architect building AI systems
           </p>
           <p className="mt-2.5 text-sm leading-relaxed text-slate-300">
-            13+ years building resilient distributed systems. GDG Yerevan organizer,
-            university lecturer, and electronic music producer.
+            13+ years designing resilient distributed systems — across the JVM, C++
+            and TypeScript. Currently leading a monolith-to-microservices
+            modernization; on the side, building the AI pipeline that answers you on
+            this page.
+          </p>
+          <p className="mt-2.5 flex items-start gap-2 rounded-xl border border-violet-400/20 bg-violet-500/[0.07] px-3 py-2 text-sm leading-relaxed text-slate-300">
+            <span aria-hidden="true">🎯</span>
+            <span>
+              Looking for the hard problem — architecture ownership, AI systems, or a
+              platform that has outgrown its design.
+            </span>
           </p>
         </div>
       </div>
@@ -78,7 +94,7 @@ export default function ProfileHero() {
           GitHub
         </a>
         <a
-          href="https://www.linkedin.com/in/davit-hayrapetyan-04377561/"
+          href={LINKEDIN_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl border border-slate-400/15 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-sky-400/40 hover:text-white"
@@ -90,7 +106,7 @@ export default function ProfileHero() {
           LinkedIn
         </a>
         <a
-          href="https://davithayraeptyan.dev"
+          href="https://davithayrapetyan.dev"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-xl border border-slate-400/15 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:border-emerald-400/40 hover:text-white"
@@ -101,7 +117,7 @@ export default function ProfileHero() {
           </svg>
           Website
         </a>
-        <span className="ml-auto text-xs text-slate-500">
+        <span className="w-full text-xs text-slate-500 sm:ml-auto sm:w-auto">
           📍 Yerevan, Armenia
         </span>
       </div>

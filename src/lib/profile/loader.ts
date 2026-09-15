@@ -2,6 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import type { ProfileContext } from '@/types';
 
+/**
+ * Reads one file out of `data/`.
+ *
+ * `loadProfileContext` names every file it loads, and that list must stay
+ * explicit — no directory scan, and nothing from outside `data/`. Everything
+ * returned here is concatenated into the prompt beside `SYSTEM_PROMPT` on every
+ * visitor question, so a file that arrives in the context without someone
+ * having decided it should is a file a visitor can be told the contents of.
+ * Section 9 of the `verify` skill greps for the ways that goes wrong.
+ */
 function readDataFile(filename: string): string {
   const filePath = path.join(process.cwd(), 'data', filename);
   return fs.readFileSync(filePath, 'utf-8');
@@ -13,6 +23,7 @@ export function loadProfileContext(): ProfileContext {
   const communityRaw = JSON.parse(readDataFile('community.json'));
   const hobbiesRaw = JSON.parse(readDataFile('hobbies.json'));
   const musicRaw = JSON.parse(readDataFile('music.json'));
+  const siteRaw = JSON.parse(readDataFile('site.json'));
 
   const projectsList: Record<string, unknown>[] = projectsRaw.projects ?? projectsRaw;
   const projects = projectsList
@@ -83,10 +94,60 @@ export function loadProfileContext(): ProfileContext {
           .map((p) => `- ${p.title} (curated by ${p.curator})${p.url ? ` — ${p.url}` : ''}`)
           .join('\n')}`
       : '',
-    musicLinks?.spotify ? `Spotify artist URL: ${musicLinks.spotify}` : '',
+    // Listed as a labelled block so the model can answer "where can I hear his
+    // music?" with every platform rather than whichever one it happened to see.
+    musicLinks
+      ? [
+          'Where to listen:',
+          musicLinks.spotify ? `- Spotify: ${musicLinks.spotify}` : '',
+          musicLinks.appleMusic ? `- Apple Music: ${musicLinks.appleMusic}` : '',
+          musicLinks.soundcloud ? `- SoundCloud: ${musicLinks.soundcloud}` : '',
+        ]
+          .filter(Boolean)
+          .join('\n')
+      : '',
   ]
     .filter(Boolean)
     .join('\n\n');
 
-  return { bio, projects, community, hobbies, music: musicSections };
+  // This site, described for the model. Written as prose rather than dumped as
+  // data because it is pasted straight into the prompt — see the note in
+  // `.claude/skills/add-content-section`.
+  const siteData = siteRaw.site ?? siteRaw;
+  const chain = siteData.fallback_chain as Record<string, unknown> | undefined;
+  const bullets = (items: unknown) =>
+    Array.isArray(items) && items.length
+      ? (items as string[]).map((i) => `- ${i}`).join('\n')
+      : '';
+
+  const assistant = siteData.assistant as Record<string, unknown> | undefined;
+
+  const site = [
+    `${siteData.name} — ${siteData.tagline}`,
+    assistant?.name
+      ? `The assistant: ${assistant.name} — ${assistant.expansion}. ${assistant.note ?? ''}`.trim()
+      : '',
+    siteData.summary ? `Summary: ${siteData.summary}` : '',
+    siteData.url ? `Live at: ${siteData.url}` : '',
+    siteData.repo ? `Source: ${siteData.repo}` : '',
+    bullets(siteData.stack) ? `Stack:\n${bullets(siteData.stack)}` : '',
+    bullets(siteData.how_answers_are_produced)
+      ? `How an answer is produced:\n${bullets(siteData.how_answers_are_produced)}`
+      : '',
+    chain?.summary ? `Model fallback chain: ${chain.summary}` : '',
+    bullets(chain?.tiers) ? `Tiers:\n${bullets(chain?.tiers)}` : '',
+    bullets(chain?.design_notes) ? `Design notes:\n${bullets(chain?.design_notes)}` : '',
+    bullets(siteData.guardrails) ? `Guardrails:\n${bullets(siteData.guardrails)}` : '',
+    bullets(siteData.observability) ? `Observability:\n${bullets(siteData.observability)}` : '',
+    siteData.why_it_exists ? `Why it exists: ${siteData.why_it_exists}` : '',
+    // Restated inside the retrieved context, not only in the system prompt, so
+    // the boundary travels with the content that invites the question.
+    siteData.privacy_note
+      ? `IMPORTANT — what must never be disclosed: ${siteData.privacy_note}`
+      : '',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+
+  return { bio, projects, community, hobbies, music: musicSections, site };
 }

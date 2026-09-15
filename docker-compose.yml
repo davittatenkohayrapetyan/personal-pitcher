@@ -3,13 +3,55 @@ services:
     build: .
     ports:
       - "3333:3000"
+    # Secrets and provider config are injected at RUNTIME, never baked into the
+    # image. `.dockerignore` excludes .env from the build context on purpose —
+    # without it, `COPY . .` in the builder stage puts OPENAI_API_KEY into an
+    # image layer.
+    env_file:
+      - .env
+    # `environment` wins over `env_file`, so these override the host-oriented
+    # values in .env with their in-container equivalents.
+    #
+    # Note that MAC_OLLAMA_BASE_URL (tier 0) is deliberately *not* overridden
+    # here: it is a LAN address, which the container routes to just as the host
+    # does. Only OLLAMA_BASE_URL needs rewriting, because `localhost` inside a
+    # container means the container itself.
     environment:
       - NODE_ENV=production
-      - LLM_PROVIDER=ollama
       - OLLAMA_BASE_URL=http://host.docker.internal:11434
-      - OLLAMA_MODEL=llama3.2
+      # A container defaults to UTC regardless of the host. TZ makes the
+      # container's own wall clock local, so the daily-rotated log files roll
+      # over at local midnight rather than at 04:00 — otherwise "yesterday's
+      # log" spans two dates and never matches the day you are looking for.
+      # DISPLAY_TIMEZONE (from .env) separately controls the timestamps inside
+      # human-facing messages; this one is the process clock.
+      - TZ=Asia/Yerevan
       - RATE_LIMIT_MAX=10
       - RATE_LIMIT_WINDOW_MS=60000
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    volumes:
+      # Named volume so rotating JSON logs survive `up --build`. The bare
+      # VOLUME in the Dockerfile creates an anonymous volume that is orphaned
+      # on every rebuild.
+      - pitcher-logs:/app/logs
+      # `data/` is bind-mounted from the host, which is what makes the /admin
+      # review flow work at all. The image still bakes a copy at build time (see
+      # the Dockerfile), so the container runs standalone without this — but a
+      # baked copy is read-only in practice: approving a change would write to a
+      # layer the next `--build` discards, and the scheduled job on the host
+      # would be writing proposals the container could never see.
+      #
+      # Bind-mounting makes host and container agree on one directory, so the
+      # job writes data/proposals/pending.json and /admin reads it.
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/system').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
+
+volumes:
+  pitcher-logs:

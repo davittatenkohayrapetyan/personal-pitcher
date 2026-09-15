@@ -1,0 +1,32 @@
+{
+  "total": 3,
+  "jobPostings": [
+    {
+      "title": "Developer Relations Manager CIS",
+      "externalPath": "/job/Armenia-Remote/Developer-Relations-Manager-CIS_JR2024290",
+      "locationsText": "2 Locations",
+      "postedOn": "Posted 12 Days Ago",
+      "bulletFields": [
+        "JR2024290"
+      ]
+    },
+    {
+      "title": "Research Scientist - New College Grad 2025",
+      "externalPath": "/job/Armenia-Yerevan/Research-Scientist---New-College-Grad-2025_JR1998091-1",
+      "locationsText": "Armenia, Yerevan",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "JR1998091"
+      ]
+    },
+    {
+      "title": "Senior System Software Engineer",
+      "externalPath": "/job/Germany-Munich/Senior-System-Software-Engineer_JR2024318",
+      "locationsText": "5 Locations",
+      "postedOn": "Posted 17 Days Ago",
+      "bulletFields": [
+        "JR2024318"
+      ]
+    }
+  ]
+}

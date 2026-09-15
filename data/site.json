@@ -1,0 +1,54 @@
+{
+  "site": {
+    "name": "Personal Pitcher",
+    "url": "https://davithayrapetyan.dev",
+    "repo": "https://github.com/davittatenkohayrapetyan/personal-pitcher",
+    "tagline": "The site you are on right now — Davit built it, and it is itself a piece of his portfolio.",
+    "assistant": {
+      "name": "DAVO",
+      "expansion": "Davit's Annoyingly Verbose Oracle",
+      "note": "DAVO is the assistant answering on this site. The name is a backronym and a joke at its own expense — 'Davo' is also an ordinary diminutive of Davit. It is a deliberately self-deprecating name for a thing whose job is to talk at length about someone else."
+    },
+    "summary": "Personal Pitcher is an AI pitch site. Visitors ask questions in natural language and get answers generated from curated profile data, with the full request pipeline shown live underneath each answer. It is deliberately built so the engineering is visible rather than hidden: the fallback chain, the circuit breakers and the intent routing are all rendered in the UI as they happen.",
+    "stack": [
+      "Next.js 16 (App Router) with React 19 and TypeScript",
+      "Tailwind CSS v4",
+      "Server-Sent Events for token-by-token streaming",
+      "Docker multi-stage build on Next.js standalone output"
+    ],
+    "how_answers_are_produced": [
+      "Intent classification decides what the question is about.",
+      "Retrieval pulls only the relevant curated sections — this is intent-keyed routing over Markdown/JSON files, not a vector store and not embeddings.",
+      "A language model writes the answer, grounded strictly in the retrieved profile data.",
+      "The answer streams back token by token, with the real workflow trail streamed alongside it."
+    ],
+    "fallback_chain": {
+      "summary": "Four tiers. Each is tried only if the ones above it are unavailable, so the site keeps answering even when its preferred model is not reachable.",
+      "tiers": [
+        "Tier 0 — a local model running on Davit's own Mac at home, reached over his home network. It costs nothing to run, so it answers whenever that machine is awake and online. It is also frequently absent: a laptop sleeps, and it leaves the house.",
+        "Tier 1 — OpenAI, the dependable paid path, used when the home machine is not available.",
+        "Tier 2 — a smaller local Ollama model as a last-resort generator.",
+        "Tier 3 — a regex intent classifier, used only for classification if every model fails."
+      ],
+      "design_notes": [
+        "Tier 0 is gated behind a short reachability probe before every attempt. An absent host does not refuse a connection, it silently drops the packet, so a plain request would stall for roughly twenty seconds. The probe turns 'the Mac is not home' into a sub-second skip.",
+        "Tiers 0 and 1 have separate circuit breakers. A laptop that is away all week must not consume the OpenAI failure budget, and a struggling OpenAI must not stop the site using the Mac once it is back.",
+        "The Mac's breaker is tuned to trip faster and cool down far longer than the OpenAI one, because nothing about 'the Mac went to the office' resolves on a one-minute timescale.",
+        "Circuit breaker state is held in process memory, so each deployed instance discovers recovery on its own probe cycle.",
+        "While a cold model loads, the chat shows a running clock and status copy describing what is actually happening — derived from the real pipeline steps, so it says the Mac is asleep when the Mac is asleep rather than pretending otherwise."
+      ]
+    },
+    "guardrails": [
+      "Answers are grounded in curated profile data; the assistant is instructed not to invent employers, titles, degrees or achievements.",
+      "Off-topic questions are declined before any expensive work happens.",
+      "Per-IP rate limiting stops bursts, and a separate per-IP daily question quota caps sustained cost.",
+      "Request validation on input type and length."
+    ],
+    "observability": [
+      "Every request is logged as structured JSON with its full workflow trail, rotated daily.",
+      "Optional push notifications per question, plus throttled alerts for exceptional events such as a tier going down or recovering."
+    ],
+    "why_it_exists": "It doubles as a working demonstration of the things Davit does professionally: resilient fallback design, circuit breakers, graceful degradation, streaming, observability, and honest user-facing reporting of system state. The pipeline shown under each answer is the real one, not a decoration.",
+    "privacy_note": "This site deliberately publishes how it works but not what it runs on. Credentials, API keys, push notification tokens, network addresses, hostnames, internal file paths and environment variable values are never exposed — not through the assistant, not through the status panel. The public status endpoint reports tier names, model names and breaker states only."
+  }
+}

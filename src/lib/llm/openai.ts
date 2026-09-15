@@ -1,5 +1,6 @@
 import type { LLMProvider } from '@/types';
 import { LLMError } from './errors';
+import { parseOpenAISSE } from './stream';
 
 export class OpenAIProvider implements LLMProvider {
   private apiKey: string;
@@ -14,16 +15,26 @@ export class OpenAIProvider implements LLMProvider {
     this.timeoutMs = parseInt(process.env.OPENAI_TIMEOUT_MS || '30000', 10);
   }
 
-  async generate(prompt: string, systemPrompt?: string): Promise<string> {
+  private buildMessages(prompt: string, systemPrompt?: string) {
     const messages: { role: string; content: string }[] = [];
     if (systemPrompt) {
       messages.push({ role: 'system', content: systemPrompt });
     }
     messages.push({ role: 'user', content: prompt });
+    return messages;
+  }
 
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
-
+  /**
+   * Issues the chat-completions request and normalises every failure mode into
+   * an LLMError, so callers (and `isTransientError`) see one error shape
+   * whether they asked for a streamed or a buffered response.
+   */
+  private async request(
+    prompt: string,
+    systemPrompt: string | undefined,
+    stream: boolean,
+    signal: AbortSignal,
+  ): Promise<Response> {
     let response: Response;
     try {
       response = await fetch(`${this.baseUrl}/chat/completions`, {
@@ -34,13 +45,13 @@ export class OpenAIProvider implements LLMProvider {
         },
         body: JSON.stringify({
           model: this.model,
-          messages,
+          messages: this.buildMessages(prompt, systemPrompt),
           temperature: 0.7,
+          stream,
         }),
-        signal: controller.signal,
+        signal,
       });
     } catch (err) {
-      clearTimeout(timer);
       if (err instanceof Error && err.name === 'AbortError') {
         throw new LLMError(
           `OpenAI request timed out after ${this.timeoutMs}ms`,
@@ -50,7 +61,6 @@ export class OpenAIProvider implements LLMProvider {
       }
       throw new LLMError(`OpenAI network error: ${String(err)}`, 'openai', 'network');
     }
-    clearTimeout(timer);
 
     if (!response.ok) {
       const category = response.status === 429 ? 'quota' : 'http';
@@ -62,7 +72,46 @@ export class OpenAIProvider implements LLMProvider {
       );
     }
 
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || '';
+    return response;
+  }
+
+  async generate(prompt: string, systemPrompt?: string): Promise<string> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
+      const response = await this.request(prompt, systemPrompt, false, controller.signal);
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || '';
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  /**
+   * Streams content deltas.
+   *
+   * The timeout guards time-to-first-byte only, then is cleared: a long answer
+   * legitimately takes longer than OPENAI_TIMEOUT_MS to finish, and aborting a
+   * healthy stream mid-answer would look to the caller exactly like a provider
+   * failure.
+   */
+  async *generateStream(prompt: string, systemPrompt?: string): AsyncGenerator<string> {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+
+    let response: Response;
+    try {
+      response = await this.request(prompt, systemPrompt, true, controller.signal);
+    } catch (err) {
+      clearTimeout(timer);
+      throw err;
+    }
+    clearTimeout(timer);
+
+    if (!response.body) {
+      throw new LLMError('OpenAI returned an empty stream body', 'openai', 'network');
+    }
+
+    yield* parseOpenAISSE(response.body);
   }
 }

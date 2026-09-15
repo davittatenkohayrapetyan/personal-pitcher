@@ -12,6 +12,13 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
+
+# Alpine ships without a timezone database. Node still honours TZ because its
+# Intl/ICU data is self-contained — so notification timestamps and log rotation
+# are already local without this. The shell is what breaks: `date` inside the
+# container reports UTC regardless of TZ, which silently misleads anyone
+# debugging by four hours. ~2MB to make every clock in the image agree.
+RUN apk add --no-cache tzdata
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public

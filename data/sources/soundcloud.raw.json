@@ -1,0 +1,15 @@
+{
+  "source": "soundcloud",
+  "target": "music.json",
+  "records": [],
+  "summary": {
+    "profileUrl": "https://soundcloud.com/shepard-d",
+    "displayName": "Shepard D",
+    "avatarUrl": "https://i1.sndcdn.com/avatars-qymyHsBn7K7Cf09d-go7TWg-t500x500.jpg",
+    "userId": 73443839,
+    "trackListAvailable": false,
+    "trackListUnavailableReason": "SOUNDCLOUD_CLIENT_ID not set (registration is closed; oEmbed profile data only)",
+    "trackCount": 0
+  },
+  "fetchedAt": "2026-09-14T19:28:20.854Z"
+}

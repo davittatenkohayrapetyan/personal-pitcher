@@ -16,6 +16,37 @@ interface Release {
 
 const { music } = musicData;
 
+/**
+ * Streaming platforms, brand-tinted.
+ *
+ * Filtered on presence rather than hard-coded three deep: `music.json` is
+ * written by the refresh job's review flow as well as by hand, so a link that
+ * hasn't been filled in yet should drop out of the row rather than render as a
+ * button to nowhere.
+ */
+const PLATFORMS = [
+  {
+    name: 'Spotify',
+    href: music.links.spotify,
+    className:
+      'bg-emerald-500/15 text-emerald-200 ring-emerald-400/30 hover:bg-emerald-500/25 hover:text-white',
+  },
+  {
+    name: 'Apple Music',
+    href: music.links.appleMusic,
+    className:
+      'bg-rose-500/15 text-rose-200 ring-rose-400/30 hover:bg-rose-500/25 hover:text-white',
+  },
+  {
+    name: 'SoundCloud',
+    href: music.links.soundcloud,
+    className:
+      'bg-orange-500/15 text-orange-200 ring-orange-400/30 hover:bg-orange-500/25 hover:text-white',
+  },
+].filter((platform): platform is { name: string; href: string; className: string } =>
+  Boolean(platform.href),
+);
+
 const subtitleParts = [
   `${music.albums.length} album${music.albums.length === 1 ? '' : 's'}`,
   `${music.eps.length} EP${music.eps.length === 1 ? '' : 's'}`,
@@ -40,23 +71,27 @@ function ReleaseList({ heading, items }: { heading: string; items: Release[] }) 
               <span className="min-w-0 truncate">
                 <span className="font-medium text-white">{item.title}</span>
                 <span className="ml-1.5 text-slate-400">· {item.year}</span>
+              </span>
+              {/* Kept outside the truncating span: on a narrow screen a long
+                  title would otherwise clip the badge away entirely. */}
+              <span className="flex flex-shrink-0 items-center gap-2">
                 {item.latest && (
-                  <span className="ml-2 rounded-full border border-violet-400/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-violet-200">
+                  <span className="rounded-full border border-violet-400/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-violet-200">
                     Latest
                   </span>
                 )}
+                {item.url && (
+                  <svg
+                    className="h-3 w-3 flex-shrink-0 text-slate-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                )}
               </span>
-              {item.url && (
-                <svg
-                  className="h-3 w-3 flex-shrink-0 text-slate-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              )}
             </div>
           );
           return (
@@ -154,22 +189,30 @@ export default function MusicCard() {
             </section>
           )}
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
-            <a
-              href={music.links.spotify}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-200 ring-1 ring-inset ring-emerald-400/30 transition-colors hover:bg-emerald-500/25 hover:text-white"
-            >
-              Listen on Spotify
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
-            <span className="text-xs text-slate-500">
+          <section aria-labelledby="music-platforms" className="pt-2">
+            <h3 id="music-platforms" className="mb-2 text-sm font-semibold text-white">
+              Where to listen
+            </h3>
+            <div className="flex flex-wrap items-center gap-2">
+              {PLATFORMS.map((platform) => (
+                <a
+                  key={platform.name}
+                  href={platform.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold ring-1 ring-inset transition-colors ${platform.className}`}
+                >
+                  {platform.name}
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-slate-500">
               Spotify stats as of {music.stats.asOf}
-            </span>
-          </div>
+            </p>
+          </section>
         </div>
       </DetailsDialog>
     </>

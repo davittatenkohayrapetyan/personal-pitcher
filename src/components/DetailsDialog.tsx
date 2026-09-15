@@ -19,6 +19,7 @@ const FOCUSABLE_SELECTOR =
  * - role="dialog", aria-modal, aria-labelledby + aria-describedby
  * - Closes on ESC and backdrop click
  * - Locks body scroll while open
+ * - Height capped against the backdrop, so the header stays on screen on mobile
  * - Traps focus inside the dialog and restores focus on close
  */
 export default function DetailsDialog({
@@ -94,7 +95,7 @@ export default function DetailsDialog({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden bg-slate-950/80 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -106,9 +107,15 @@ export default function DetailsDialog({
         aria-labelledby={titleId}
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
-        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-slate-400/15 bg-slate-900 shadow-2xl shadow-black/40 sm:rounded-2xl"
+        /* Capped as a percentage of the backdrop, never in `vh`. On mobile `vh`
+           is the *large* viewport (toolbars retracted) while this fixed backdrop
+           is only as tall as the visible one, so a vh-based cap made the panel
+           taller than its container — and with `items-end` the excess overflows
+           off the *top*, taking the close button with it and out of reach.
+           A percentage resolves against the backdrop itself, so it cannot. */
+        className="relative flex max-h-[92%] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-slate-400/15 bg-slate-900 shadow-2xl shadow-black/40 sm:max-h-full sm:rounded-2xl"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-slate-400/10 px-6 py-5 sm:px-8">
+        <div className="flex flex-shrink-0 items-start justify-between gap-3 border-b border-slate-400/10 px-6 py-5 sm:gap-4 sm:px-8">
           <div className="min-w-0">
             <h2 id={titleId} className="text-lg font-semibold text-white sm:text-xl">
               {title}
@@ -123,14 +130,14 @@ export default function DetailsDialog({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-slate-400/15 bg-slate-800/50 text-slate-300 transition-colors hover:bg-slate-700/50 hover:text-white"
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-slate-400/15 bg-slate-800/50 text-slate-300 transition-colors hover:bg-slate-700/50 hover:text-white sm:h-9 sm:w-9"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div className="scrollbar-thin flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-8">{children}</div>
+        <div className="scrollbar-thin flex-1 overflow-y-auto overscroll-contain px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 sm:px-8 sm:pb-8 sm:pt-8">{children}</div>
       </div>
     </div>,
     document.body,

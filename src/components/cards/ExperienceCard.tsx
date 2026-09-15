@@ -12,60 +12,72 @@ interface Role {
   highlights?: string[];
 }
 
+// Dates, projects and technologies are kept in sync with `data/profile.md`,
+// which is what the assistant answers from. They previously disagreed — the
+// card and the chatbot gave different careers for the same person.
 const ROLES: Role[] = [
   {
     company: 'Grid Dynamics',
     title: 'Staff Software Engineer',
     period: 'Jan 2025 — Present',
     description:
-      'Leading modernization of Raymond James wealth-management platform: monolith → resilient microservices, observability, vendor integrations, performance.',
-    highlights: ['Java 17 · Spring Boot · Redis', 'IBM MQ · OracleDB · OpenTelemetry'],
+      'Leading modernization of the Raymond James wealth-management platform: legacy monoliths into resilient microservices, observability, vendor integrations, and caching-led performance work.',
+    highlights: ['Java 17 · Spring Boot · Redis', 'IBM MQ · OracleDB · OpenTelemetry · Splunk'],
   },
   {
     company: 'jambit.am LLC',
     title: 'Principal Java Developer / Architect',
-    period: '2022 — 2024',
+    period: 'Mar 2024 — Jan 2025',
     description:
-      'Architecture leadership across backend platforms; speaker coordination, technical mentorship, and high-load distributed systems work.',
+      'Led development of a governmental mobile driver-license platform — resilient microservices, REST APIs, Angular frontend modules, and enrollment, encryption and document workflows.',
+    highlights: ['Kotlin · Java 21 · Spring Boot', 'Angular · MongoDB · AWS · Docker Swarm'],
   },
   {
     company: 'jambit.am LLC',
     title: 'Senior Software Architect',
-    period: '2020 — 2022',
+    period: 'Mar 2023 — Mar 2024',
     description:
-      'Designed scalable backend services, owned architectural decisions, and mentored engineers across Java/Kotlin teams.',
+      'Led enterprise Java synchronization systems for automotive material verification, owning reliability and architecture improvements.',
+    highlights: ['Java EE · Payara · OracleDB', 'Azure · Swing · Angular'],
   },
   {
     company: 'Talkdesk',
     title: 'Senior Software Engineer',
-    period: '2018 — 2020',
+    period: 'Jul 2021 — Oct 2022',
     description:
-      'Built backend services for a global cloud contact-center platform with a focus on scalability and reliability.',
+      'Designed scalable omnichannel survey microservices and proposed the state-machine-driven orchestration that the team standardized on.',
+    highlights: ['Java 16 · Spring Boot · Redis', 'Kafka · Docker · Jenkins'],
   },
   {
     company: 'Novanoweb Solutions',
     title: 'Senior Software Engineer',
-    period: '2017 — 2018',
-    description: 'Backend engineering and integrations for enterprise web platforms.',
+    period: 'Aug 2020 — Jul 2021',
+    description:
+      'Led the migration from relational databases to Elasticsearch, then optimized aggregation and search performance for e-commerce scale.',
+    highlights: ['Java · Spring Boot · Elasticsearch', 'MariaDB · PostgreSQL'],
   },
   {
     company: 'Synopsys',
     title: 'Senior Software Engineer',
-    period: '2015 — 2017',
-    description: 'Backend systems engineering at scale within Synopsys engineering organization.',
+    period: 'Aug 2015 — Aug 2020',
+    description:
+      'Five years outside the JVM: embedded memory testing and repair systems, silicon production analysis tooling, and performance-sensitive low-level software.',
+    highlights: ['C++ · QT · Verilog'],
   },
   {
     company: 'Inomma',
     title: 'Senior Software Engineer',
-    period: '2014 — 2015',
-    description: 'Full-stack and backend engineering on customer-facing products.',
+    period: 'Apr 2015 — Jul 2015',
+    description: 'Built automated cloud-based competitor pricing scrapers.',
+    highlights: ['Java · Spring Boot · AWS'],
   },
   {
     company: 'Synergy International Systems',
     title: 'Software Engineer',
-    period: '2012 — 2014',
+    period: 'Sep 2011 — Apr 2015',
     description:
-      'Started his professional engineering career building enterprise solutions and integrations.',
+      'Started his professional engineering career enhancing CMS platforms for government organizations and integrating web and desktop systems.',
+    highlights: ['Java EE · JSP · Swing', 'JavaScript · jQuery · MySQL'],
   },
 ];
 
@@ -82,7 +94,7 @@ export default function ExperienceCard() {
         icon={<span aria-hidden="true">💼</span>}
         title="Experience & Education"
         subtitle={`${ROLES.length} roles · 13+ years`}
-        description="Staff Software Engineer at Grid Dynamics. PhD in Engineering, Yerevan State University."
+        description="Staff Engineer at Grid Dynamics. PhD in Engineering. Five of those years were C++ and Verilog, not Java."
         onClick={() => setOpen(true)}
       />
       <DetailsDialog

@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
 * {
   box-sizing: border-box;
-  padding: 3px;
   margin: 0;
 }
 
@@ -16,7 +20,8 @@ html {
 body {
   background: #0b1120;
   color: #f1f5f9;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Consistent, visible keyboard focus across the app */
@@ -36,4 +41,98 @@ body {
 }
 .scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* DAVO's avatar (src/components/DavoAvatar.tsx). The orb is a vertical sprite
+   sheet stepped one tile per frame, not a GIF, so that every avatar on the page
+   can be held on the same frame — see the component for the full reasoning and
+   for how late-mounting avatars are seeked into phase.
+
+   33 tiles, 32 steps: the trailing tile is a copy of frame 0 and is never shown.
+   A percentage background-position resolves against (container - image), so the
+   extra tile is what makes each step land on exactly one tile instead of
+   32/31ths of one. `scripts/generate-davo-avatar.mjs` emits the sheet and
+   `scripts/verify-davo-avatar.mjs` asserts the alignment. */
+@keyframes davo-orb {
+  from {
+    background-position-y: 0%;
+  }
+  to {
+    background-position-y: 100%;
+  }
+}
+.davo-avatar__orb {
+  /* Reduced motion gets the single still and never fetches the sheet: a
+     background-image behind a non-matching media query is not downloaded. */
+  background-image: url('/photos/davo-avatar-still.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .davo-avatar__orb {
+    background-image: url('/photos/davo-avatar-sprite.png');
+    background-size: 100% 3300%;
+    animation: davo-orb 1.92s steps(32) infinite;
+  }
+}
+
+/* The avatar pulses green while a request is in flight — the same emerald the
+   "● Online" badge uses for a live system.
+
+   The green itself is a `mix-blend-mode` overlay rendered only while thinking;
+   see the component for why it is not a `filter` (it used to be, and iOS Safari
+   left it stuck on after the answer had finished). Only the glow and the swell
+   live here, on the wrapper — a filter on the wrapper would have recoloured the
+   box-shadow along with everything else. */
+@keyframes davo-thinking-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px 2px rgba(52, 211, 153, 0.75);
+    transform: scale(1.08);
+  }
+}
+@keyframes davo-thinking-flare {
+  0%, 100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+.davo-avatar--thinking {
+  animation: davo-thinking-glow 1.15s ease-in-out infinite;
+}
+.davo-avatar__flare {
+  background: radial-gradient(circle at 50% 50%, rgba(110, 231, 183, 0.55), transparent 72%);
+  animation: davo-thinking-flare 1.15s ease-in-out infinite;
+}
+
+/* Streaming caret shown at the tail of an in-flight answer */
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.streaming-caret {
+  display: inline-block;
+  width: 0.5ch;
+  animation: caret-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .streaming-caret { animation: none; }
+  /* Hold the green steady rather than dropping it: the colour is the state
+     indicator (the overlay is an element, so it stays regardless), the pulsing
+     is only decoration. */
+  .davo-avatar--thinking {
+    animation: none;
+    box-shadow: 0 0 14px rgba(52, 211, 153, 0.55);
+  }
+  .davo-avatar__flare {
+    animation: none;
+    opacity: 0.5;
+  }
 }

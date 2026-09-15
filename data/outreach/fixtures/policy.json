@@ -1,0 +1,143 @@
+{
+  "note": "The categorical rules in score.ts's applyPolicy (section 7), as cases. Run with `npm run outreach -- --policy-fixtures`. These are the rules that do not depend on a model agreeing with them, so they are the rules worth being able to check on a machine with no Mac on the LAN — and the local-Yerevan override in particular only fires when a model has said `draft`, which is rare enough in a live run that it would otherwise go untested for weeks. Preferences are supplied per case so the drill does not depend on private/job-preferences.md, which is gitignored and holds real salary data.",
+  "preferences": {
+    "minSeniority": "senior",
+    "draftSeniority": ["staff", "principal", "lead"],
+    "remoteMonthlyUsdMin": 7000
+  },
+  "cases": [
+    {
+      "name": "a Yerevan role is never drafted, whatever it scores",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Java Engineer",
+        "officeLocation": "Yerevan",
+        "geoRestriction": ""
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 92, "flags": [] },
+      "expect": { "recommendation": "surface_only", "flags": ["local_role"] }
+    },
+    {
+      "name": "the same role outside Armenia keeps its draft",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Java Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide, contractors welcome"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 92, "flags": [] },
+      "expect": { "recommendation": "draft", "flags": [] }
+    },
+    {
+      "name": "Armenia named in the geo restriction counts as local too",
+      "extracted": {
+        "seniority": "principal",
+        "title": "Principal Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote within Armenia and Georgia"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 88, "flags": [] },
+      "expect": { "recommendation": "surface_only", "flags": ["local_role"] }
+    },
+    {
+      "name": "below the seniority floor is a skip, whatever the model said",
+      "extracted": {
+        "seniority": "mid",
+        "title": "Backend Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 70, "flags": [] },
+      "expect": { "recommendation": "skip", "flags": ["below_seniority"] }
+    },
+    {
+      "name": "unclear seniority is not below the floor",
+      "extracted": {
+        "seniority": "unclear",
+        "title": "Engineer, Platform",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "verdict": {
+        "recommendation": "surface_only",
+        "eligibility": "needs_check",
+        "fit": 60,
+        "flags": []
+      },
+      "expect": { "recommendation": "surface_only", "flags": [] }
+    },
+    {
+      "name": "a draft needs scope the preference doc drafts for",
+      "extracted": {
+        "seniority": "senior",
+        "title": "Senior Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 80, "flags": [] },
+      "expect": { "recommendation": "surface_only", "flags": [] }
+    },
+    {
+      "name": "ineligible is always a skip",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Engineer",
+        "officeLocation": "",
+        "geoRestriction": "US only"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "ineligible", "fit": 40, "flags": [] },
+      "expect": { "recommendation": "skip", "flags": [] }
+    },
+    {
+      "name": "a published range clearly below the band is a skip",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "structured": {
+        "compensationMin": 30000,
+        "compensationMax": 42000,
+        "compensationCurrency": "USD",
+        "compensationPeriod": "1 YEAR"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 75, "flags": [] },
+      "expect": { "recommendation": "skip", "flags": ["below_band"] }
+    },
+    {
+      "name": "a range that overlaps the band is left alone",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "structured": {
+        "compensationMin": 60000,
+        "compensationMax": 140000,
+        "compensationCurrency": "USD",
+        "compensationPeriod": "1 YEAR"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 75, "flags": [] },
+      "expect": { "recommendation": "draft", "flags": [] }
+    },
+    {
+      "name": "a currency this does not understand is not converted or guessed at",
+      "extracted": {
+        "seniority": "staff",
+        "title": "Staff Engineer",
+        "officeLocation": "",
+        "geoRestriction": "Remote, worldwide"
+      },
+      "structured": {
+        "compensationMin": 1000000,
+        "compensationMax": 1400000,
+        "compensationCurrency": "AMD",
+        "compensationPeriod": "month"
+      },
+      "verdict": { "recommendation": "draft", "eligibility": "eligible", "fit": 75, "flags": [] },
+      "expect": { "recommendation": "draft", "flags": [] }
+    }
+  ]
+}

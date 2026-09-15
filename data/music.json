@@ -18,7 +18,11 @@
     "links": {
       "spotify": "https://open.spotify.com/artist/4G26tr9xqGvtZa9B0qboob",
       "spotifyId": "4G26tr9xqGvtZa9B0qboob",
-      "spotifyEmbed": "https://open.spotify.com/embed/artist/4G26tr9xqGvtZa9B0qboob"
+      "spotifyEmbed": "https://open.spotify.com/embed/artist/4G26tr9xqGvtZa9B0qboob",
+      "appleMusic": "https://music.apple.com/us/artist/shepard-d/1576499552",
+      "appleMusicArtistId": "1576499552",
+      "soundcloud": "https://soundcloud.com/shepard-d",
+      "soundcloudUserId": "73443839"
     },
     "albums": [
       {
@@ -97,6 +101,144 @@
         "year": 2023,
         "spotifyId": null,
         "url": null
+      },
+      {
+        "title": "New Story",
+        "year": 2023,
+        "url": "https://music.apple.com/us/album/new-story-single/1677898995",
+        "appleId": 1677898995
+      },
+      {
+        "title": "Elendil",
+        "year": 2023,
+        "url": "https://music.apple.com/us/album/elendil-single/1663650201",
+        "appleId": 1663650201
+      },
+      {
+        "title": "In Search of Purpose",
+        "year": 2023,
+        "url": "https://music.apple.com/us/album/in-search-of-purpose-single/1676409608",
+        "appleId": 1676409608
+      },
+      {
+        "title": "Game We Play",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/game-we-play-single/1622985261",
+        "appleId": 1622985261
+      },
+      {
+        "title": "Gravity Left Behind",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/gravity-left-behind-single/1658725757",
+        "appleId": 1658725757
+      },
+      {
+        "title": "Starfall",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/starfall-single/1647335733",
+        "appleId": 1647335733
+      },
+      {
+        "title": "Recalling",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/recalling-single/1604544842",
+        "appleId": 1604544842
+      },
+      {
+        "title": "Lost & FoUnd",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/lost-found-single/1650836473",
+        "appleId": 1650836473
+      },
+      {
+        "title": "Destiny",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/destiny-single/1623245646",
+        "appleId": 1623245646
+      },
+      {
+        "title": "I'll Come",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/ill-come-single/1623815431",
+        "appleId": 1623815431
+      },
+      {
+        "title": "Her Vibrant Eyes",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/her-vibrant-eyes-single/1612767167",
+        "appleId": 1612767167
+      },
+      {
+        "title": "Cathedral",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/cathedral-single/1621074012",
+        "appleId": 1621074012
+      },
+      {
+        "title": "Fire of Change",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/fire-of-change-single/1655335949",
+        "appleId": 1655335949
+      },
+      {
+        "title": "Lucid Dream",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/lucid-dream-single/1617723641",
+        "appleId": 1617723641
+      },
+      {
+        "title": "I Found Peace",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/i-found-peace-single/1650689566",
+        "appleId": 1650689566
+      },
+      {
+        "title": "Be My Melody",
+        "year": 2022,
+        "url": "https://music.apple.com/us/album/be-my-melody-single/1661356580",
+        "appleId": 1661356580
+      },
+      {
+        "title": "Thank You",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/thank-you-single/1578655566",
+        "appleId": 1578655566
+      },
+      {
+        "title": "Nare",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/nare-single/1590313191",
+        "appleId": 1590313191
+      },
+      {
+        "title": "Shambala",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/shambala-single/1590314206",
+        "appleId": 1590314206
+      },
+      {
+        "title": "Bliss of Ignorance",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/bliss-of-ignorance-single/1596868332",
+        "appleId": 1596868332
+      },
+      {
+        "title": "Imminence",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/imminence-single/1581722649",
+        "appleId": 1581722649
+      },
+      {
+        "title": "Dreamchaser",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/dreamchaser-single/1584063871",
+        "appleId": 1584063871
+      },
+      {
+        "title": "The Hyeland",
+        "year": 2021,
+        "url": "https://music.apple.com/us/album/the-hyeland-single/1600609747",
+        "appleId": 1600609747
       }
     ],
     "playlists": [

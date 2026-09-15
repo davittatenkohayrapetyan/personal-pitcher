@@ -1,0 +1,80 @@
+{
+  "0-legal-notice": "Legal warning - Hey, thanks for using Remotive's API, we appreciate it! Please note that API documentation and access is granted so that developers can share our jobs further. Please do not submit Remotive jobs to third Party websites, including but not limited to: Jooble, Neuvoo, Google Jobs, LinkedIn Jobs. Please link back to the URL found on Remotive AND mention Remotive as a source in order to Remotive to get traffic from your listing. If you don't do that, we'll terminate your API access, sorry! Jobs displayed are delayed by 24 hours, the goal being that jobs are attributed to Remotive on various platforms. Displaying our jobs in order to collect signups/email addresses to show a listing constitutes a breach of our terms of services. We offer a private, paid-for API, please email us at hello(at)remotive(dot)io for more information (starting budget is $5k/mo). Please find out terms of services on https://remotive.com/api-documentation. Please note that there is absolutely no need to request Remotive Job data too frequently. Typically, you only need to GET Remotive job data through this API a couple of times a day (we advise max. 4 times a day). Our data is not changing much faster than that anyway. Note that excessive requests will be blocked. Many thanks (Rodolphe & the Remotive team!)",
+  "job-count": 3,
+  "jobs": [
+    {
+      "id": 1680495,
+      "url": "https://remotive.com/remote-jobs/marketing/remote-office-assistant-1680495",
+      "title": "Remote Office Assistant",
+      "company_name": "Coalition Technologies ",
+      "company_logo": "https://remotive.com/job/1680495/logo",
+      "category": "Marketing",
+      "tags": [
+        "CSS",
+        "excel",
+        "frontend",
+        "git",
+        "html",
+        "illustrator",
+        "magento",
+        "photoshop",
+        "php",
+        "shopify",
+        "wordpress",
+        "MySQL",
+        "startup",
+        "responsive",
+        "themes",
+        "bootstrap",
+        "insurance",
+        "jQuery",
+        "Ajax"
+      ],
+      "job_type": "full_time",
+      "publication_date": "2026-09-11T20:16:48",
+      "candidate_required_location": "Worldwide",
+      "salary": "$31,2k- $52k",
+      "description": "<p class=\"h3\">Coalition Technologies is seeking a reliable, detail-oriented, and highly organized Remote Office Assistant to support administrative, bookkeeping, billing, reporting, data entry, and internal operations tasks. This role is ideal for someone with strong communication skills, discretion, attention to detail, and a willingness to learn and grow within a fast-paced remote work environment.</p>\n<p class=\"h3\">As an Office Assistant, you will help support daily administrative operations, assist with entry-level bookkeeping, organize client documents, support internal reporting, and help maintain accurate company records. This position offers strong growth potential for the right candidate, including opportunities for advancement within the Accounting team or other departments.</p>\n<p class=\"h3\">We are looking for talented and diligent candidates who perform well on our skills assessments. Strong skills test performance may be considered even if a candidate does not meet every preferred experience or educational background requirement.</p>\n<p class=\"h3\"> </p>\n<p class=\"h3\"><strong>Why Join Coalition Technologies?</strong></p>\n<p class=\"h3\">Coalition Technologies is committed to delivering high-quality work for our clients while providing our team with a fun, thriving, innovative, and growth-focused work environment. We offer:</p>\n<ul style=\"\">\n<li style=\"\">100% remote work with a company that has supported remote team members for more than a decade</li>\n<li style=\"\">Competitive profit-sharing bonus plan, with up to 50% of company profits paid to full-time employees each month</li>\n<li style=\"\">Competitive Paid Time Off plan that supports work-life balance</li>\n<li style=\"\">Subsidized gym memberships</li>\n<li style=\"\">Medical, dental, vision, and life insurance packages for eligible US-based team members</li>\n<li style=\"\">International Health Insurance Reimbursement Program for eligible international team members</li>\n<li style=\"\">Device upgrade and learning reimbursement programs</li>\n<li style=\"\">Career development plans with clearly defined goals and rewards</li>\n<li style=\"\">Additional job-specific incentives and bonuses</li>\n</ul>\n<p class=\"h3\"> </p>\n<p class=\"h3\"><strong>Office Assistant Responsibilities</strong></p>\n<p class=\"h3\">As an Office Assistant, your duties will include:</p>\n<ul style=\"\">\n<li style=\"\">Answering phones and emails</li>\n<li style=\"\">Completing entry-level bookkeeping tasks, including recording expenses, organizing receipts, and maintaining transaction records</li>\n<li style=\"\">Resolving billing issues with clients and internal team members</li>\n<li style=\"\">Providing account access, usage reports, data analysis, and other ad hoc support for team members</li>\n<li style=\"\">Supporting quality assurance checks for internal and client-facing reports</li>\n<li style=\"\">Organizing new client contracts, creating invoices, and processing client payments</li>\n<li style=\"\">Contributing to internal database maintenance, upke",
+      "company_logo_url": "https://remotive.com/job/1680495/logo"
+    },
+    {
+      "id": 2091126,
+      "url": "https://remotive.com/remote-jobs/artificial-intelligence/ai-response-evaluator-2091126",
+      "title": "AI Response Evaluator",
+      "company_name": "iMerit Technology",
+      "company_logo": "https://remotive.com/job/2091126/logo",
+      "category": "Artificial Intelligence",
+      "tags": [
+        "AI/ML",
+        "research",
+        "SOLID"
+      ],
+      "job_type": "freelance",
+      "publication_date": "2026-09-11T06:49:00",
+      "candidate_required_location": "France, Japan, Turkey, Vietnam, Mexico, Norway",
+      "salary": "$10K-$20K",
+      "description": "<p>iMerit is looking for detail oriented analysts to evaluate and rank AI generated responses to image based prompts. You will judge answers on accuracy, relevance, clarity, conciseness, safety, localization, and how well they follow the user's instructions, then explain your reasoning in writing.<br>Much of the job comes down to this: look at the image, look at what the model said about it, and decide whether the two actually match.</p>\n<p><strong>What you will do</strong></p>\n<ul class=\"list-disc list-outside leading-3 -mt-2\" style=\"\">\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Interpret conversational context and identify what the user really wanted</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Rate and rank responses against defined quality criteria</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Compare multiple answers and explain in writing why one wins</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Verify factual claims using approved research sources</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Flag tasks that cannot be reliably assessed rather than guessing</p>\n</li>\n</ul>\n<p><strong>What you bring:</strong></p>\n<ul class=\"list-disc list-outside leading-3 -mt-2\" style=\"\">\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Strong critical thinking and sound judgment in ambiguous cases</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Solid research skills and attention to detail</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Excellent reading comprehension</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Self direction and the discipline to hit deadlines without supervision</p>\n</li>\n</ul>\n<p><strong>Good to know</strong></p>\n<ul class=\"list-disc list-outside leading-3 -mt-2\" style=\"\">\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Independent contractor engagement for the length of the project. </p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Fully remote and flexible.</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>You choose your hours as long as volume and deadlines are met.</p>\n</li>\n<li class=\"leading-normal -mb-2\" style=\"\">\n<p>Task volume varies with project demand. </p>\n</li>\n</ul>\n<img src=\"https://remotive.com/job/track/2091126/blank.gif?source=public_api\" alt=\"\"/>",
+      "company_logo_url": "https://remotive.com/job/2091126/logo"
+    },
+    {
+      "id": 2086540,
+      "url": "https://remotive.com/remote-jobs/sales/inside-sales-contractor-2086540",
+      "title": "Inside Sales Contractor",
+      "company_name": "Credit Wellness, LLC",
+      "company_logo": "https://remotive.com/job/2086540/logo",
+      "category": "Sales",
+      "tags": [
+        "CRM",
+        "google sheets",
+        "financial services",
+        "Inside Sales"
+      ],
+      "job_type": "full_time",
+      "publication_date": "2026-09-08T21:47:54",
+      "candidate_required_location": "Worldwide",
+      "salary": "OTE $25k - $35k",
+      "description": "<p dir=\"ltr\" style=\"line-height: 1.38; background-color: #ffffff; margin-top: 0pt; margin-bottom: 0pt; padding: 0pt 0pt 12pt 0pt;\"><span style=\"color: #2d2d2d; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">About Us</span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; background-color: #ffffff; margin-top: 0pt; margin-bottom: 0pt; padding: 0pt 0pt 12pt 0pt;\"><span style=\"color: #2d2d2d; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">We are a financial services start up focusing on helping to improve consumer credit profiles. We are currently seeking KPI driven sales representatives looking to earn up to 45K in their first year while working remotely. We offer comprehensive training and continuous sales coaching to help you meet your financial goals.</span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; background-color: #ffffff; margin-top: 0pt; margin-bottom: 0pt; padding: 0pt 0pt 12pt 0pt;\"><span style=\"color: #2d2d2d; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">During our training period we offer a guaranteed training stipend while our trainees are acclimating to the position (*see weekly pay below). If you are a seasoned sales professional looking for the autonomy of a remote position combined with great compensation, we want to hear from you!</span></p>\n<p class=\"h2\" dir=\"ltr\" style=\"line-height: 1.38; background-color: #ffffff; margin-top: 0pt; margin-bottom: 0pt; padding: 6pt 0pt 4pt 0pt;\"><span style=\"color: #2d2d2d; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">Compensation Structure</span></p>\n<p dir=\"ltr\" style=\"line-height: 1.38; background-color: #ffffff; margin-top: 0pt; margin-bottom: 0pt; padding: 8pt 0pt 12pt 0pt;\"><span style=\"color: #2d2d2d; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">This role is </span><span style=\"color: #2d2d2d; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">100% commission-based</span><span style=\"color: #2d2d2d; background-color: transparent; font-weight: 400; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;\">, which means your earning potential is unlimited. In addition, we regularly offer </span><span style=\"color: #2d2d2d; background-color: transparent; font-weight: bold; font-style: normal; font-variant: normal; text-decoration: none; vertical-al",
+      "company_logo_url": "https://remotive.com/job/2086540/logo"
+    }
+  ]
+}

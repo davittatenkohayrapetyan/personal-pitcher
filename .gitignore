@@ -49,3 +49,37 @@ next-env.d.ts
 
 # Claude Code local settings (personal overrides, not shared with the team)
 .claude/settings.local.json
+
+# Profile refresh proposals (src/lib/refresh/). Per-run output to be reviewed and
+# then either applied or discarded — a workflow artifact, not content. The raw
+# source snapshots in data/sources/ are NOT ignored: they are what makes a later
+# "did the source change or did the model?" question answerable.
+/data/proposals/
+
+# Job outreach (src/lib/outreach/). Per-run state and output, not content.
+# data/outreach/companies.json and candidates.txt are deliberately NOT ignored:
+# the watch list is committed so every change to it shows up in `git diff`, the
+# same "approve, then review the diff" loop the refresh job uses. Listed one
+# file per line rather than as `/data/outreach/*.json` with negations, so that a
+# future store file has to be thought about rather than silently committed.
+/data/outreach/cache/
+/data/outreach/pending.json
+/data/outreach/seen.json
+# The permanent ledger, and the copy every write makes first. Gitignored like
+# the rest, which means it lives in exactly one place on one machine — this is
+# the one file here worth including in whatever backs up data/ (§8.1).
+/data/outreach/applied.json
+/data/outreach/applied.json.bak
+/data/outreach/rejected.json
+/data/outreach/suggestions.json
+/data/outreach/cursor.json
+/data/outreach/company-stats.json
+/data/outreach/handoff.json
+/data/outreach/last-run.json
+
+# Davit's private job preferences (salary floor, seniority thresholds, views on
+# current employment). Outside data/ on purpose: everything in data/ is
+# concatenated into the prompt beside SYSTEM_PROMPT on every visitor question,
+# so a file kept there would be answered honestly to the first visitor who
+# asked. See docs/job-outreach-plan.md §5.
+/private/

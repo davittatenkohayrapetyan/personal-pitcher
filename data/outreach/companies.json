@@ -1,0 +1,23 @@
+[
+  {
+    "name": "NVIDIA",
+    "ats": "workday",
+    "endpoint": "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs",
+    "careersUrl": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite",
+    "workday": {
+      "origin": "https://nvidia.wd5.myworkdayjobs.com",
+      "tenant": "nvidia",
+      "site": "NVIDIAExternalCareerSite"
+    },
+    "addedAt": "2026-09-13",
+    "addedBy": "seed"
+  },
+  {
+    "name": "Align Technology",
+    "ats": "pinpoint",
+    "endpoint": "https://jobs.aligntech.com/postings.json",
+    "careersUrl": "https://jobs.aligntech.com",
+    "addedAt": "2026-09-13",
+    "addedBy": "seed"
+  }
+]

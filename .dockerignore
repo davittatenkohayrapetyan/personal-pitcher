@@ -1,0 +1,23 @@
+node_modules
+.next
+.git
+.gitignore
+logs
+docs
+.env
+.env.*
+!.env.example
+npm-debug.log*
+Dockerfile
+docker-compose.yml
+.dockerignore
+README.md
+CLAUDE.md
+AGENTS.md
+.claude
+tsconfig.tsbuildinfo
+
+# Review artifacts written at runtime into the bind-mounted data/ volume.
+# Excluded from the build context so a pending proposal sitting on the host at
+# build time is not baked into an image layer — the mount supplies the real one.
+data/proposals

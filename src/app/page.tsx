@@ -2,12 +2,14 @@ import AppShell from '@/components/AppShell';
 import ProfileHero from '@/components/ProfileHero';
 import StatsGrid from '@/components/StatsGrid';
 import AssistantPanel from '@/components/AssistantPanel';
+import SystemStatusCard from '@/components/SystemStatusCard';
 import ProjectsCard from '@/components/cards/ProjectsCard';
 import CommunityImpactCard from '@/components/cards/CommunityImpactCard';
 import HobbiesCard from '@/components/cards/HobbiesCard';
 import MusicCard from '@/components/cards/MusicCard';
 import SkillsCard from '@/components/cards/SkillsCard';
 import ExperienceCard from '@/components/cards/ExperienceCard';
+import CaseStudyCard from '@/components/cards/CaseStudyCard';
 
 export default function Home() {
   return (
@@ -37,6 +39,9 @@ export default function Home() {
           aria-label="AI assistant"
         >
           <AssistantPanel />
+          <div className="mt-6">
+            <SystemStatusCard />
+          </div>
         </aside>
 
         {/* ── GROUP 3: Explore cards ── order-3 on mobile; left-col row-2 on desktop */}
@@ -51,6 +56,7 @@ export default function Home() {
             Explore
           </h2>
           <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+            <CaseStudyCard />
             <ExperienceCard />
             <SkillsCard />
             <ProjectsCard />
@@ -59,7 +65,8 @@ export default function Home() {
             <HobbiesCard />
           </div>
           <p className="mt-4 text-sm text-slate-500">
-            Tap any card to see full details, or ask the assistant.
+            Tap any card for the full detail — or ask the assistant and watch the
+            retrieval pipeline resolve underneath the answer.
           </p>
         </section>
 

@@ -1,0 +1,510 @@
+{
+  "source": "appleMusic",
+  "target": "music.json",
+  "records": [
+    {
+      "source": "appleMusic",
+      "key": "amber sun",
+      "facts": {
+        "title": "Amber Sun",
+        "appleName": "Amber Sun - Single",
+        "kind": "single",
+        "year": 2023,
+        "releaseDate": "2023-12-29T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1723638644,
+        "url": "https://music.apple.com/us/album/amber-sun-single/1723638644",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "thank you",
+      "facts": {
+        "title": "Thank You",
+        "appleName": "Thank You - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-07-27T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1578655566,
+        "url": "https://music.apple.com/us/album/thank-you-single/1578655566",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "game we play",
+      "facts": {
+        "title": "Game We Play",
+        "appleName": "Game We Play - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-05-07T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1622985261,
+        "url": "https://music.apple.com/us/album/game-we-play-single/1622985261",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "gravity left behind",
+      "facts": {
+        "title": "Gravity Left Behind",
+        "appleName": "Gravity Left Behind - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-12-04T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1658725757,
+        "url": "https://music.apple.com/us/album/gravity-left-behind-single/1658725757",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "new story",
+      "facts": {
+        "title": "New Story",
+        "appleName": "New Story - Single",
+        "kind": "single",
+        "year": 2023,
+        "releaseDate": "2023-02-25T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1677898995,
+        "url": "https://music.apple.com/us/album/new-story-single/1677898995",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "starfall",
+      "facts": {
+        "title": "Starfall",
+        "appleName": "Starfall - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-09-26T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1647335733,
+        "url": "https://music.apple.com/us/album/starfall-single/1647335733",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "we",
+      "facts": {
+        "title": "We",
+        "appleName": "We",
+        "kind": "album",
+        "year": 2021,
+        "releaseDate": "2021-07-13T07:00:00Z",
+        "trackCount": 8,
+        "appleId": 1576499551,
+        "url": "https://music.apple.com/us/album/we/1576499551",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "elendil",
+      "facts": {
+        "title": "Elendil",
+        "appleName": "Elendil - Single",
+        "kind": "single",
+        "year": 2023,
+        "releaseDate": "2023-01-04T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1663650201,
+        "url": "https://music.apple.com/us/album/elendil-single/1663650201",
+        "genre": "Ambient"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "recalling",
+      "facts": {
+        "title": "Recalling",
+        "appleName": "Recalling - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-01-10T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1604544842,
+        "url": "https://music.apple.com/us/album/recalling-single/1604544842",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "lost & found",
+      "facts": {
+        "title": "Lost & FoUnd",
+        "appleName": "Lost & FoUnd - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-10-18T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1650836473,
+        "url": "https://music.apple.com/us/album/lost-found-single/1650836473",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "nare",
+      "facts": {
+        "title": "Nare",
+        "appleName": "Nare - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-10-12T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1590313191,
+        "url": "https://music.apple.com/us/album/nare-single/1590313191",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "destiny",
+      "facts": {
+        "title": "Destiny",
+        "appleName": "Destiny - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-05-09T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1623245646,
+        "url": "https://music.apple.com/us/album/destiny-single/1623245646",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "in search of purpose",
+      "facts": {
+        "title": "In Search of Purpose",
+        "appleName": "In Search of Purpose - Single",
+        "kind": "single",
+        "year": 2023,
+        "releaseDate": "2023-02-28T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1676409608,
+        "url": "https://music.apple.com/us/album/in-search-of-purpose-single/1676409608",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "revelations",
+      "facts": {
+        "title": "Revelations",
+        "appleName": "Revelations - Single",
+        "kind": "single",
+        "year": 2024,
+        "releaseDate": "2024-08-11T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1762545458,
+        "url": "https://music.apple.com/us/album/revelations-single/1762545458",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "repressed",
+      "facts": {
+        "title": "Repressed",
+        "appleName": "Repressed - EP",
+        "kind": "ep",
+        "year": 2025,
+        "releaseDate": "2025-11-28T08:00:00Z",
+        "trackCount": 6,
+        "appleId": 1853196994,
+        "url": "https://music.apple.com/us/album/repressed-ep/1853196994",
+        "genre": "Alternative"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "shambala",
+      "facts": {
+        "title": "Shambala",
+        "appleName": "Shambala - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-10-12T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1590314206,
+        "url": "https://music.apple.com/us/album/shambala-single/1590314206",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "i'll come",
+      "facts": {
+        "title": "I'll Come",
+        "appleName": "I'll Come - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-05-12T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1623815431,
+        "url": "https://music.apple.com/us/album/ill-come-single/1623815431",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "addictions",
+      "facts": {
+        "title": "Addictions",
+        "appleName": "Addictions - Single",
+        "kind": "single",
+        "year": 2026,
+        "releaseDate": "2026-04-22T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1894779348,
+        "url": "https://music.apple.com/us/album/addictions-single/1894779348",
+        "genre": "Hip-Hop/Rap"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "inner hamster",
+      "facts": {
+        "title": "Inner Hamster",
+        "appleName": "Inner Hamster - Single",
+        "kind": "single",
+        "year": 2024,
+        "releaseDate": "2024-11-04T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1778625498,
+        "url": "https://music.apple.com/us/album/inner-hamster-single/1778625498",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "her vibrant eyes",
+      "facts": {
+        "title": "Her Vibrant Eyes",
+        "appleName": "Her Vibrant Eyes - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-03-03T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1612767167,
+        "url": "https://music.apple.com/us/album/her-vibrant-eyes-single/1612767167",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "bliss of ignorance",
+      "facts": {
+        "title": "Bliss of Ignorance",
+        "appleName": "Bliss of Ignorance - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-11-22T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1596868332,
+        "url": "https://music.apple.com/us/album/bliss-of-ignorance-single/1596868332",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "cathedral",
+      "facts": {
+        "title": "Cathedral",
+        "appleName": "Cathedral - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-04-26T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1621074012,
+        "url": "https://music.apple.com/us/album/cathedral-single/1621074012",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "fire of change",
+      "facts": {
+        "title": "Fire of Change",
+        "appleName": "Fire of Change - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-11-16T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1655335949,
+        "url": "https://music.apple.com/us/album/fire-of-change-single/1655335949",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "hearts reborn",
+      "facts": {
+        "title": "Hearts Reborn",
+        "appleName": "Hearts Reborn - Single",
+        "kind": "single",
+        "year": 2024,
+        "releaseDate": "2024-03-03T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1734190266,
+        "url": "https://music.apple.com/us/album/hearts-reborn-single/1734190266",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "imminence",
+      "facts": {
+        "title": "Imminence",
+        "appleName": "Imminence - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-08-17T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1581722649,
+        "url": "https://music.apple.com/us/album/imminence-single/1581722649",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "lucid dream",
+      "facts": {
+        "title": "Lucid Dream",
+        "appleName": "Lucid Dream - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-04-04T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1617723641,
+        "url": "https://music.apple.com/us/album/lucid-dream-single/1617723641",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "i found peace",
+      "facts": {
+        "title": "I Found Peace",
+        "appleName": "I Found Peace - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-10-18T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1650689566,
+        "url": "https://music.apple.com/us/album/i-found-peace-single/1650689566",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "dreamchaser",
+      "facts": {
+        "title": "Dreamchaser",
+        "appleName": "Dreamchaser - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-09-01T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1584063871,
+        "url": "https://music.apple.com/us/album/dreamchaser-single/1584063871",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "purrifire",
+      "facts": {
+        "title": "Purrifire",
+        "appleName": "Purrifire - Single",
+        "kind": "single",
+        "year": 2023,
+        "releaseDate": "2023-05-27T07:00:00Z",
+        "trackCount": 1,
+        "appleId": 1689948993,
+        "url": "https://music.apple.com/us/album/purrifire-single/1689948993",
+        "genre": "Electronic"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "the hyeland",
+      "facts": {
+        "title": "The Hyeland",
+        "appleName": "The Hyeland - Single",
+        "kind": "single",
+        "year": 2021,
+        "releaseDate": "2021-12-15T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1600609747,
+        "url": "https://music.apple.com/us/album/the-hyeland-single/1600609747",
+        "genre": "Dance"
+      },
+      "untrusted": {}
+    },
+    {
+      "source": "appleMusic",
+      "key": "be my melody",
+      "facts": {
+        "title": "Be My Melody",
+        "appleName": "Be My Melody - Single",
+        "kind": "single",
+        "year": 2022,
+        "releaseDate": "2022-12-19T08:00:00Z",
+        "trackCount": 1,
+        "appleId": 1661356580,
+        "url": "https://music.apple.com/us/album/be-my-melody-single/1661356580",
+        "genre": "Ambient"
+      },
+      "untrusted": {}
+    }
+  ],
+  "summary": {
+    "artistId": "1576499552",
+    "artistName": "Shepard D",
+    "artistUrl": "https://music.apple.com/us/artist/shepard-d/1576499552",
+    "primaryGenre": "Electronic",
+    "releaseCount": 31
+  },
+  "fetchedAt": "2026-09-14T19:28:20.642Z"
+}

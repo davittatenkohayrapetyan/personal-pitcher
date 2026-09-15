@@ -1,0 +1,385 @@
+{
+  "jobs": [
+    {
+      "id": "7458d4e9-da2e-47bd-98cb-adfda43d42b2",
+      "title": "Engineering Manager - EU",
+      "department": "Engineering",
+      "team": "EMEA Engineering",
+      "employmentType": "FullTime",
+      "location": "Remote - European Union",
+      "shouldDisplayCompensationOnJobPostings": true,
+      "secondaryLocations": [
+        {
+          "location": "Spain",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Spain",
+              "addressCountry": "Spain",
+              "addressLocality": "Spain"
+            }
+          }
+        },
+        {
+          "location": "Italy",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Italy",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Germany",
+          "address": {
+            "postalAddress": {
+              "addressCountry": "Germany",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Switzerland",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Switzerland",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Denmark",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Denmark",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Norway",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Norway",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Croatia",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Croatia",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Ireland",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Ireland",
+              "addressCountry": "Ireland",
+              "addressLocality": "Ireland"
+            }
+          }
+        },
+        {
+          "location": "Stockholm",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Stockholm",
+              "addressCountry": "Sweden",
+              "addressLocality": "Stockholm"
+            }
+          }
+        },
+        {
+          "location": "Romania",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Romania",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Austria",
+          "address": {
+            "postalAddress": {
+              "addressCountry": "Austria"
+            }
+          }
+        },
+        {
+          "location": "Barcelona",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Catalonia",
+              "addressCountry": "Spain",
+              "addressLocality": "Barcelona"
+            }
+          }
+        },
+        {
+          "location": "Netherlands",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Netherlands",
+              "addressLocality": "Amsterdam"
+            }
+          }
+        },
+        {
+          "location": "Portugal",
+          "address": {
+            "postalAddress": {
+              "addressCountry": "Portugal"
+            }
+          }
+        },
+        {
+          "location": "France",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "France",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Berlin",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Germany",
+              "addressLocality": "Berlin"
+            }
+          }
+        },
+        {
+          "location": "Sweden",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Sweden",
+              "addressLocality": ""
+            }
+          }
+        },
+        {
+          "location": "Hungary",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "Hungary",
+              "addressCountry": "Hungary",
+              "addressLocality": "Budapest"
+            }
+          }
+        },
+        {
+          "location": "Estonia",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "",
+              "addressCountry": "Estonia",
+              "addressLocality": ""
+            }
+          }
+        }
+      ],
+      "publishedAt": "2024-03-04T14:29:08.532+00:00",
+      "isListed": true,
+      "isRemote": true,
+      "workplaceType": "Remote",
+      "address": {
+        "postalAddress": {
+          "postalCode": "",
+          "addressRegion": "",
+          "addressCountry": "European Union",
+          "addressLocality": ""
+        }
+      },
+      "jobUrl": "https://jobs.ashbyhq.com/ashby/7458d4e9-da2e-47bd-98cb-adfda43d42b2",
+      "applyUrl": "https://jobs.ashbyhq.com/ashby/7458d4e9-da2e-47bd-98cb-adfda43d42b2/application",
+      "descriptionHtml": "<p style=\"min-height:1.5em\">Hi 👋 I’m <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://uk.linkedin.com/in/colinhoweuk\"><u>Colin</u></a>, Director of Engineering, Europe. How do you feel about software engineers writing product specs, making product decisions, and not breaking down projects into individual tickets? If that sounds exciting (even if a bit scary), read on because I’m looking for an engineering manager to help us build a different type of engineering team and culture at Ashby.</p><p style=\"min-height:1.5em\">To start, why do we need to be different? Time and again, I have witnessed engineers knowing what needs to be done yet being unable to get things done because of “the process” or because “more data is needed.” Some of the most effective projects have been <em>skunkworks </em>projects, where engineers have taken total ownership of a problem and driven it to completion. I want to normalize that at Ashby.</p><p style=\"min-height:1.5em\">When we think about how these processes came about, we realize they carry a <em>pessimistic</em> mindset. They box people into smaller roles to minimize the chance of not meeting a certain standard. At Ashby. we’re building an environment that is <em>optimistic </em>about what engineers can own and achieve and embraces the innovative engineers (and frankly, often stays out of their way).</p><p style=\"min-height:1.5em\">To accomplish this, our engineering leaders need to think deeply about individual performance, process, and culture - not running sprint planning or driving product and technical decisions. You’ll focus on building your team, their skills to thrive with the ownership they’re given, and an environment that empowers them to do their best work consistently, with little distraction. For junior EMs we try to stay within 6 direct reports. This enables them to spend time with our teams observing, correcting, praising, and, yes, coding. We like our managers to be hands-on while also making sure they’re not on the critical path.</p><p style=\"min-height:1.5em\">We’ve already gathered an<a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.ashbyhq.com/team\"> <u>experienced, talented, and collaborative team</u></a> of 25+ engineers. You’ll help me manage the growing team of engineers in Europe.</p><p style=\"min-height:1.5em\">In addition to working with engineers you’ll also get to work on projects yourselves. Some examples of work our engineering leaders have done:</p><ul style=\"min-height:1.5em\"><li><p style=\"min-height:1.5em\">Provide feedback on product and technical specs to help engineers identify where to cut scope or improve quality. You don’t make the final decisions, but you’ll influence and coach ICs to reach the right ones.</p></li><li><p style=\"min-height:1.5em\">Grow engineers to the point where they can take large, loosely defined projects, and deliver them with little intervention. They still ask for help when needed - the difference is that they’re dri",
+      "descriptionPlain": "Hi 👋 I’m Colin https://uk.linkedin.com/in/colinhoweuk, Director of Engineering, Europe. How do you feel about software engineers writing product specs, making product decisions, and not breaking down projects into individual tickets? If that sounds exciting (even if a bit scary), read on because I’m looking for an engineering manager to help us build a different type of engineering team and culture at Ashby.\n\nTo start, why do we need to be different? Time and again, I have witnessed engineers knowing what needs to be done yet being unable to get things done because of “the process” or because “more data is needed.” Some of the most effective projects have been skunkworks projects, where engineers have taken total ownership of a problem and driven it to completion. I want to normalize that at Ashby.\n\nWhen we think about how these processes came about, we realize they carry a pessimistic mindset. They box people into smaller roles to minimize the chance of not meeting a certain standard. At Ashby. we’re building an environment that is optimistic about what engineers can own and achieve and embraces the innovative engineers (and frankly, often stays out of their way).\n\nTo accomplish this, our engineering leaders need to think deeply about individual performance, process, and culture - not running sprint planning or driving product and technical decisions. You’ll focus on building your team, their skills to thrive with the ownership they’re given, and an environment that empowers them to do their best work consistently, with little distraction. For junior EMs we try to stay within 6 direct reports. This enables them to spend time with our teams observing, correcting, praising, and, yes, coding. We like our managers to be hands-on while also making sure they’re not on the critical path.\n\nWe’ve already gathered an experienced, talented, and collaborative team https://www.ashbyhq.com/team of 25+ engineers. You’ll help me manage the growing team of engineers in Europe.\n\nIn addition to working with engineers you’ll also get to work on projects yourselves. Some examples of work our engineering leaders have done:\n\n - Provide feedback on product and technical specs to help engineers identify where to cut scope or improve quality. You don’t make the final decisions, but you’ll influence and coach ICs to reach the right ones.\n\n - Grow engineers to the point where they can take large, loosely defined projects, and deliver them with little intervention. They still ask for help when needed - the difference is that they’re driving.\n\n - Jump into our systems and code to debug a customer issue, ship a small bug fix, or improve our developer experience. Engineering leaders at Ashby are great engineers and enjoy keeping their skills up-to-date (while staying off the critical path).\n\n - Improve how we generate and simulate data in demo accounts. It’s a project off the critical path, but it helps you keep up-to-date on our codebase while immensely impacting the busines",
+      "compensation": {
+        "compensationTierSummary": "€110K – €185K • Offers Equity • Offers Bonus",
+        "scrapeableCompensationSalarySummary": "€110K - €185K",
+        "compensationTiers": [
+          {
+            "id": "f1284fac-20e9-4ed0-9a10-776d526a636c",
+            "tierSummary": "€110K – €185K • Offers Equity • Offers Bonus",
+            "title": "EU",
+            "additionalInformation": null,
+            "components": [
+              {
+                "id": "da741ab6-ff38-4fc2-b7b7-c1ccd7260347",
+                "summary": "Offers Equity",
+                "compensationType": "EquityPercentage",
+                "interval": "NONE",
+                "currencyCode": null,
+                "minValue": null,
+                "maxValue": null
+              },
+              {
+                "id": "201b8495-aa7c-417d-923b-94fced49b246",
+                "summary": "€110K – €185K",
+                "compensationType": "Salary",
+                "interval": "1 YEAR",
+                "currencyCode": "EUR",
+                "minValue": 110000,
+                "maxValue": 185000
+              },
+              {
+                "id": "04679796-e0e4-4d9b-a5c0-0cad3ff8ae95",
+                "summary": "Offers Bonus",
+                "compensationType": "Bonus",
+                "interval": "1 YEAR",
+                "currencyCode": "EUR",
+                "minValue": null,
+                "maxValue": null
+              }
+            ]
+          }
+        ],
+        "summaryComponents": [
+          {
+            "compensationType": "EquityPercentage",
+            "interval": "NONE",
+            "currencyCode": null,
+            "minValue": null,
+            "maxValue": null
+          },
+          {
+            "compensationType": "Salary",
+            "interval": "1 YEAR",
+            "currencyCode": "EUR",
+            "minValue": 110000,
+            "maxValue": 185000
+          },
+          {
+            "compensationType": "Bonus",
+            "interval": "1 YEAR",
+            "currencyCode": "EUR",
+            "minValue": null,
+            "maxValue": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "1fc309c8-da20-4ff2-84c7-8b863ece2b0a",
+      "title": "Software Engineer, Developer Platform",
+      "department": "Engineering",
+      "team": "Engineering",
+      "employmentType": "FullTime",
+      "location": "San Francisco, California",
+      "shouldDisplayCompensationOnJobPostings": false,
+      "secondaryLocations": [
+        {
+          "location": "New York, New York",
+          "address": {
+            "postalAddress": {
+              "addressRegion": "New York",
+              "addressCountry": "United States",
+              "addressLocality": "New York"
+            }
+          }
+        }
+      ],
+      "publishedAt": "2026-08-24T14:44:49.699+00:00",
+      "isListed": true,
+      "isRemote": true,
+      "workplaceType": "Hybrid",
+      "address": {
+        "postalAddress": {
+          "addressRegion": "California",
+          "addressCountry": "United States",
+          "addressLocality": "San Francisco"
+        }
+      },
+      "jobUrl": "https://jobs.ashbyhq.com/Notion/1fc309c8-da20-4ff2-84c7-8b863ece2b0a",
+      "applyUrl": "https://jobs.ashbyhq.com/Notion/1fc309c8-da20-4ff2-84c7-8b863ece2b0a/application",
+      "descriptionHtml": "<h1>Who We Are</h1><p style=\"min-height:1.5em\">Notion is the collaborative AI workspace where teams and agents <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.youtube.com/watch?v=vkpYpWfEK5s\">think together</a>. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.</p><p style=\"min-height:1.5em\"></p><p style=\"min-height:1.5em\">Notinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.</p><p style=\"min-height:1.5em\"></p><h1>About the Role:</h1><p style=\"min-height:1.5em\">As a <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.notion.com/product/dev\">Developer Platform</a> engineer, you will directly contribute to the foundational pieces that make Notion extensible and connected. You will build tools, APIs, and platform experiences that help customers connect Notion to the world — bringing their apps, data, and workflows into one workspace. Your work will make it easier for developers, admins, and builders to create reliable integrations and automations on top of Notion.<br /></p><p style=\"min-height:1.5em\">You will be a key player in building the robust technical foundation that allows Notion to achieve the connected workspace vision. Your work will include both internal platform contributions that accelerate other Notion engineering teams and end-user-facing functionality that enables toolmaking ubiquity. You will be presented with challenging technical problems, as Notion’s product needs are complex. You’ll play a key role in identifying and executing against technical investments that ensure the long-term quality, reliability, and performance of Notion’s platform as we scale.<br /></p><p style=\"min-height:1.5em\">This role can be based in either San Francisco or New York City. We work from our offices on Mondays, Tuesdays and Thursdays (our Anchor Days) because we do our best thinking and building together in person. We’re looking for someone who’s excited to work alongside the team during those days. </p><p style=\"min-height:1.5em\"></p><h1>What You'll Achieve:</h1><ul style=\"min-height:1.5em\"><li><p style=\"min-height:1.5em\">You’ll work with a team of engineers and cross-functional partners across product, design, data science, and user research to define a product strategy and drive execution through conception, research, implementation, and maintenance.</p></li><li><p",
+      "descriptionPlain": "WHO WE ARE\n\nNotion is the collaborative AI workspace where teams and agents think together https://www.youtube.com/watch?v=vkpYpWfEK5s. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.\n\n\n\nNotinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.\n\n\n\n\nABOUT THE ROLE:\n\nAs a Developer Platform https://www.notion.com/product/dev engineer, you will directly contribute to the foundational pieces that make Notion extensible and connected. You will build tools, APIs, and platform experiences that help customers connect Notion to the world — bringing their apps, data, and workflows into one workspace. Your work will make it easier for developers, admins, and builders to create reliable integrations and automations on top of Notion.\n\n\nYou will be a key player in building the robust technical foundation that allows Notion to achieve the connected workspace vision. Your work will include both internal platform contributions that accelerate other Notion engineering teams and end-user-facing functionality that enables toolmaking ubiquity. You will be presented with challenging technical problems, as Notion’s product needs are complex. You’ll play a key role in identifying and executing against technical investments that ensure the long-term quality, reliability, and performance of Notion’s platform as we scale.\n\n\nThis role can be based in either San Francisco or New York City. We work from our offices on Mondays, Tuesdays and Thursdays (our Anchor Days) because we do our best thinking and building together in person. We’re looking for someone who’s excited to work alongside the team during those days. \n\n\n\n\nWHAT YOU'LL ACHIEVE:\n\n - You’ll work with a team of engineers and cross-functional partners across product, design, data science, and user research to define a product strategy and drive execution through conception, research, implementation, and maintenance.\n\n - You’ll evolve Developer Platform capabilities across APIs, MCP tools, and integration infrastructure that help customers automate workflows, customize Notion, and connect Notion to the tools and data they use every day.\n\n - You’ll contribute to the overall performance, reliability, and robustness of the Notion product, ensuring it scales elegantly across many dimensions.\n\n - You’ll partner with engineering leaders to identify and execute against high-leverage tec",
+      "compensation": {
+        "compensationTierSummary": null,
+        "scrapeableCompensationSalarySummary": null,
+        "compensationTiers": [],
+        "summaryComponents": []
+      }
+    },
+    {
+      "id": "05e14247-17c4-4e98-9a13-53828a4e2f13",
+      "title": "Business Development Representative, New York",
+      "department": "Early Career",
+      "team": "Early Career",
+      "employmentType": "FullTime",
+      "location": "New York, New York",
+      "shouldDisplayCompensationOnJobPostings": false,
+      "secondaryLocations": [],
+      "publishedAt": "2026-04-02T21:00:55.755+00:00",
+      "isListed": true,
+      "isRemote": true,
+      "workplaceType": "Hybrid",
+      "address": {
+        "postalAddress": {
+          "addressRegion": "New York",
+          "addressCountry": "United States",
+          "addressLocality": "New York"
+        }
+      },
+      "jobUrl": "https://jobs.ashbyhq.com/Notion/05e14247-17c4-4e98-9a13-53828a4e2f13",
+      "applyUrl": "https://jobs.ashbyhq.com/Notion/05e14247-17c4-4e98-9a13-53828a4e2f13/application",
+      "descriptionHtml": "<h1>Who We Are</h1><p style=\"min-height:1.5em\">Notion is the collaborative AI workspace where teams and agents <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.youtube.com/watch?v=vkpYpWfEK5s\">think together</a>. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.</p><p style=\"min-height:1.5em\"></p><p style=\"min-height:1.5em\">Notinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.</p><p style=\"min-height:1.5em\"></p><h1>About The Role</h1><p style=\"min-height:1.5em\">Notion is rebuilding its go-to-market motion around a workflow-first, builder-led model—and the BDR is at the front of it. As a Business Development Rep, you'll be the force that turns the right accounts into the right conversations. You'll partner closely with Solutions Consultants to identify and target companies that are ready to rethink how they work—and your job is to get them in the room. This isn't generic pipeline work: you're qualifying for workflow-first, build-ready opportunities that set SCs up to win. If you're competitive, curious, and energized by outbound that actually means something, this is the role for you.</p><div style=\"min-height:1.2em;margin-top:0;margin-bottom:0\"> </div><h1>What You'll Achieve</h1><ul style=\"min-height:1.5em\"><li><p style=\"min-height:1.5em\">Generate qualified, workflow-first pipeline by identifying and targeting high-potential accounts in your assigned book, partnering with your sellers on account and outbound strategy</p></li><li><p style=\"min-height:1.5em\">Run multi-channel outbound campaigns—email, phone, LinkedIn, and events—to create urgency and secure first meetings with the right decision-makers</p></li><li><p style=\"min-height:1.5em\">Conduct initial qualification to ensure meetings handed to sellers are \"ready to build,\" not just \"ready to talk\"—validating ICP, intent, and workflow fit before the handoff</p></li><li><p style=\"min-height:1.5em\">Document and deliver clean handoff packets in Salesforce with ICP signals, pain points, workflow hypothesis, and stakeholder context so sellers can hit the ground running</p></li><li><p style=\"min-height:1.5em\">Leverage GTM System tooling and intent data to sharpen targeting, prioritize accounts by signal strength, and increase the quality and consistency of your outbound motion</p></li></ul><div style=\"min-height:1.2em;margin-top:0;margi",
+      "descriptionPlain": "WHO WE ARE\n\nNotion is the collaborative AI workspace where teams and agents think together https://www.youtube.com/watch?v=vkpYpWfEK5s. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.\n\n\n\nNotinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.\n\n\n\n\nABOUT THE ROLE\n\nNotion is rebuilding its go-to-market motion around a workflow-first, builder-led model—and the BDR is at the front of it. As a Business Development Rep, you'll be the force that turns the right accounts into the right conversations. You'll partner closely with Solutions Consultants to identify and target companies that are ready to rethink how they work—and your job is to get them in the room. This isn't generic pipeline work: you're qualifying for workflow-first, build-ready opportunities that set SCs up to win. If you're competitive, curious, and energized by outbound that actually means something, this is the role for you.\n\n \n\n\nWHAT YOU'LL ACHIEVE\n\n - Generate qualified, workflow-first pipeline by identifying and targeting high-potential accounts in your assigned book, partnering with your sellers on account and outbound strategy\n\n - Run multi-channel outbound campaigns—email, phone, LinkedIn, and events—to create urgency and secure first meetings with the right decision-makers\n\n - Conduct initial qualification to ensure meetings handed to sellers are \"ready to build,\" not just \"ready to talk\"—validating ICP, intent, and workflow fit before the handoff\n\n - Document and deliver clean handoff packets in Salesforce with ICP signals, pain points, workflow hypothesis, and stakeholder context so sellers can hit the ground running\n\n - Leverage GTM System tooling and intent data to sharpen targeting, prioritize accounts by signal strength, and increase the quality and consistency of your outbound motion\n\n \n\n\nSKILLS YOU'LL NEED TO BRING\n\n - Proven track record in outbound pipeline generation, with hands-on experience in cold prospecting across phone, email, and social channels\n\n - Strong written and verbal communication skills with the ability to craft compelling, persona-specific outreach that earns a response\n\n - Sharp qualification instincts—able to quickly assess ICP fit, identify urgency, and set solutions condsultants up for high-quality first conversations\n\n - Passion for AI/ML and understanding of API-first or consumption-based business models\n\n",
+      "compensation": {
+        "compensationTierSummary": null,
+        "scrapeableCompensationSalarySummary": null,
+        "compensationTiers": [],
+        "summaryComponents": []
+      }
+    },
+    {
+      "id": "b21fef72-4864-4a3e-a627-91557a0f8a36",
+      "title": "Business Development Representative, San Francisco",
+      "department": "Early Career",
+      "team": "Early Career",
+      "employmentType": "FullTime",
+      "location": "San Francisco, California",
+      "shouldDisplayCompensationOnJobPostings": false,
+      "secondaryLocations": [],
+      "publishedAt": "2026-04-01T23:05:05.541+00:00",
+      "isListed": true,
+      "isRemote": true,
+      "workplaceType": "Hybrid",
+      "address": {
+        "postalAddress": {
+          "addressRegion": "California",
+          "addressCountry": "United States",
+          "addressLocality": "San Francisco"
+        }
+      },
+      "jobUrl": "https://jobs.ashbyhq.com/Notion/b21fef72-4864-4a3e-a627-91557a0f8a36",
+      "applyUrl": "https://jobs.ashbyhq.com/Notion/b21fef72-4864-4a3e-a627-91557a0f8a36/application",
+      "descriptionHtml": "<h1>Who We Are</h1><p style=\"min-height:1.5em\">Notion is the collaborative AI workspace where teams and agents <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.youtube.com/watch?v=vkpYpWfEK5s\">think together</a>. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.</p><p style=\"min-height:1.5em\"></p><p style=\"min-height:1.5em\">Notinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.</p><p style=\"min-height:1.5em\"></p><h1>About The Role</h1><p style=\"min-height:1.5em\">Notion is rebuilding its go-to-market motion around a workflow-first, builder-led model—and the BDR is at the front of it. As a Business Development Rep, you'll be the force that turns the right accounts into the right conversations. You'll partner closely with Solutions Consultants to identify and target companies that are ready to rethink how they work—and your job is to get them in the room. This isn't generic pipeline work: you're qualifying for workflow-first, build-ready opportunities that set SCs up to win. If you're competitive, curious, and energized by outbound that actually means something, this is the role for you.</p><div style=\"min-height:1.2em;margin-top:0;margin-bottom:0\"> </div><h1>What You'll Achieve</h1><ul style=\"min-height:1.5em\"><li><p style=\"min-height:1.5em\">Generate qualified, workflow-first pipeline by identifying and targeting high-potential accounts in your assigned book, partnering with your sellers on account and outbound strategy</p></li><li><p style=\"min-height:1.5em\">Run multi-channel outbound campaigns—email, phone, LinkedIn, and events—to create urgency and secure first meetings with the right decision-makers</p></li><li><p style=\"min-height:1.5em\">Conduct initial qualification to ensure meetings handed to sellers are \"ready to build,\" not just \"ready to talk\"—validating ICP, intent, and workflow fit before the handoff</p></li><li><p style=\"min-height:1.5em\">Document and deliver clean handoff packets in Salesforce with ICP signals, pain points, workflow hypothesis, and stakeholder context so sellers can hit the ground running</p></li><li><p style=\"min-height:1.5em\">Leverage GTM System tooling and intent data to sharpen targeting, prioritize accounts by signal strength, and increase the quality and consistency of your outbound motion</p></li></ul><div style=\"min-height:1.2em;margin-top:0;margi",
+      "descriptionPlain": "WHO WE ARE\n\nNotion is the collaborative AI workspace where teams and agents think together https://www.youtube.com/watch?v=vkpYpWfEK5s. We're building one place where your knowledge, projects, meetings, and AI tools live side by side, so work is faster, clearer, and less fragmented. Millions of individuals, small teams, and large companies run their work on Notion.\n\n\n\nNotinos (our employees) are customer zero in bringing this future of work to life. We care about craft, building things that last, and the belief that great work is still fundamentally human. Our goal isn’t to ship the next feature. Each and every team of Notinos is working to set the standard for how humans work together in the AI era. From building a business’s system of record to making and managing AI agents to automating away the busy work, we care deeply about giving our customers more time for their life’s work.\n\n\n\n\nABOUT THE ROLE\n\nNotion is rebuilding its go-to-market motion around a workflow-first, builder-led model—and the BDR is at the front of it. As a Business Development Rep, you'll be the force that turns the right accounts into the right conversations. You'll partner closely with Solutions Consultants to identify and target companies that are ready to rethink how they work—and your job is to get them in the room. This isn't generic pipeline work: you're qualifying for workflow-first, build-ready opportunities that set SCs up to win. If you're competitive, curious, and energized by outbound that actually means something, this is the role for you.\n\n \n\n\nWHAT YOU'LL ACHIEVE\n\n - Generate qualified, workflow-first pipeline by identifying and targeting high-potential accounts in your assigned book, partnering with your sellers on account and outbound strategy\n\n - Run multi-channel outbound campaigns—email, phone, LinkedIn, and events—to create urgency and secure first meetings with the right decision-makers\n\n - Conduct initial qualification to ensure meetings handed to sellers are \"ready to build,\" not just \"ready to talk\"—validating ICP, intent, and workflow fit before the handoff\n\n - Document and deliver clean handoff packets in Salesforce with ICP signals, pain points, workflow hypothesis, and stakeholder context so sellers can hit the ground running\n\n - Leverage GTM System tooling and intent data to sharpen targeting, prioritize accounts by signal strength, and increase the quality and consistency of your outbound motion\n\n \n\n\nSKILLS YOU'LL NEED TO BRING\n\n - Proven track record in outbound pipeline generation, with hands-on experience in cold prospecting across phone, email, and social channels\n\n - Strong written and verbal communication skills with the ability to craft compelling, persona-specific outreach that earns a response\n\n - Sharp qualification instincts—able to quickly assess ICP fit, identify urgency, and set solutions condsultants up for high-quality first conversations\n\n - Passion for AI/ML and understanding of API-first or consumption-based business models\n\n",
+      "compensation": {
+        "compensationTierSummary": null,
+        "scrapeableCompensationSalarySummary": null,
+        "compensationTiers": [],
+        "summaryComponents": []
+      }
+    }
+  ],
+  "apiVersion": 1
+}
