@@ -56,7 +56,9 @@ that survive a change of language.
 Examples of work Davit personally led rather than contributed to:
 
 - Leading the modernization of the Raymond James wealth-management platform
-  from legacy monoliths to resilient microservices (Grid Dynamics, 2025–).
+  from legacy monoliths to resilient microservices, with full on- and
+  off-business-hours ownership from testing through delivery
+  (Grid Dynamics, 2025–).
 - Leading development of a governmental mobile driver-license platform,
   including enrollment, encryption and document workflows (jambit, 2024).
 - Leading enterprise Java synchronization systems for automotive material
@@ -100,6 +102,21 @@ Highlights:
 - Implemented resiliency patterns preventing cascading failures
 - Designed fallback strategies and observability improvements
 - Led integration analysis for third-party financial data providers
+
+Measured outcomes:
+- Sustains peaks of around 100,000 requests per minute
+- p50 latency around 80 ms; p95 held under 500 ms
+- Optimized at every level rather than in one place: database access,
+  parallelized calls to vendor APIs, and caching strategy
+- Introduced local near-caches with resilient cluster-wide updating, so a node
+  refresh never takes the cluster down with it
+- Worked directly with the data vendor to add delivery mechanisms beyond the
+  request/response APIs — bulk files shipped daily outside business hours and
+  processed ahead of demand — which took the largest data sets off the hot path
+  entirely. This was as much coordination as engineering: agreeing the format
+  and the schedule with the vendor, then implementing both ends.
+- Held full ownership of the platform on and off business hours, beginning
+  during testing and delivery rather than after handover
 
 ---
 

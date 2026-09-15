@@ -300,6 +300,8 @@ The preference doc's own three-way split maps directly onto `recommendation`: `d
   > *This application was found and prepared by DAVO, the AI assistant on davithayrapetyan.dev, and reviewed and approved by Davit before sending.*
 
   That is both honest and, for the kind of role Davit wants, a demonstration — the system that applied is itself the portfolio piece. It also inoculates against the "did a bot send this?" reaction by answering it first.
+- **Tone: friendly, professional, confident — and those three words are load-bearing in both directions.** Confident means claims are stated plainly and once: "I led the modernization of a wealth-management platform" rather than "I believe I could bring value to". It is the opposite of *needy*, which is the failure mode that costs a reply — no "I would love the opportunity", no "I hope to hear from you", no thanking someone in advance for their time. Friendly means a person wrote it: contractions are fine, a plain first sentence is better than a formal one, and the reader is a colleague rather than a gatekeeper. Professional is the bound on the other two: no jokes, no exclamation marks, and no familiarity with someone he has never met.
+  Confidence also has an upper bound, and it is *evidence*. Every claim is either traceable to `data/profile.md` or absent — which rules out the whole superlative register on its own, because "world-class", "expert" and "perfect fit" are not facts about anyone and cannot be traced to anything. A number that is in the profile is worth more than any adjective: **p95 under 500 ms at 100,000 requests a minute** is a sentence a hiring manager can check, and "highly performant systems" is one they have read four hundred times.
 - Tone examples come from existing `data/` prose, reusing the `toneExamples()` trick in `refresh/propose.ts`.
 
 ---
@@ -889,6 +891,8 @@ System prompt, in substance: *you are reading one job posting and filling a form
 
 **Stage C — draft.** Input: `ExtractedPosting`, `FitVerdict`, `Preferences`, `data/profile.md`, and three tone examples. Output is plain text, not JSON — a letter is prose. The disclosure line is appended by code afterwards, never asked for, so it cannot be reworded.
 
+The tone is **friendly, professional, confident** (§7), and the prompt states all three positively as well as naming what they exclude. Telling a model only what not to do produces prose that is correct and lifeless: "do not oversell" alone yields a letter that never makes a claim at all, which reads as a lack of conviction rather than as modesty. The three adjectives are what it should aim at; the prohibitions are the guard rails.
+
 ### 17.6 Reuse, verified against the current tree
 
 Import these rather than reimplementing. Every symbol below was checked to exist on 2026-09-14:
@@ -1327,6 +1331,18 @@ makes that week more informative rather than less.
   two of them will notice. Nothing that must not vary depends on the
   temperature — grounding is enforced after the call, by the sanitiser and by
   the prompt's "the profile is the only permitted source".
+- **The disclosure line's wording differs from §7's draft of it.** §7 proposes
+  *"This application was found and prepared by DAVO, the AI assistant on
+  davithayrapetyan.dev, and reviewed and approved by Davit before sending."* The
+  shipped line is first person, names Personal Pitcher rather than DAVO, and
+  says the hardware is his own. Three reasons, and the first is the one that
+  matters: the rest of the letter is written in the first person, and a closing
+  sentence that switches to the third to describe its own author reads as
+  machine-generated at exactly the moment it is claiming not to be. Naming the
+  *system* rather than the site's assistant persona is also more accurate —
+  DAVO answers visitors, Personal Pitcher is the thing that found the role — and
+  "on my own hardware" is the detail that makes it a piece of work rather than
+  an apology for using a tool.
 - **§16's fifth open question is answered: the disclosure line ships.** It is
   `OUTREACH_DISCLOSURE` in `config.ts`, appended **by code** in `draft.ts` and
   never asked of the model, exactly as §7 and §17.5 require — a model asked to
