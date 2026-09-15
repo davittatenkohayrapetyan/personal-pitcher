@@ -5,9 +5,22 @@
   --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
+/* These are *defaults*, so they belong in the base layer — and in Tailwind v4
+   that is load-bearing rather than tidy. Every utility lives in the `utilities`
+   layer, an unlayered rule beats every layered one regardless of specificity,
+   and `*` matches everything. Unlayered, the `margin: 0` below therefore won
+   against every `m-*`, `mt-*` and `space-y-*` class in the app: measured, not
+   inferred — /admin was rendering uncentred with its cards touching, because
+   `mx-auto` and `mb-4` were computing to 0.
+
+   Tailwind's own preflight already sets both of these, so this block is close
+   to redundant; it is kept rather than deleted so that the intent survives if
+   preflight is ever disabled. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
 }
 
 html {
