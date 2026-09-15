@@ -19,5 +19,37 @@
     "careersUrl": "https://jobs.aligntech.com",
     "addedAt": "2026-09-13",
     "addedBy": "seed"
+  },
+  {
+    "name": "SuperAnnotate",
+    "ats": "lever",
+    "endpoint": "https://api.lever.co/v0/postings/superannotate?mode=json",
+    "careersUrl": "https://jobs.lever.co/superannotate",
+    "addedAt": "2026-09-15",
+    "addedBy": "approved"
+  },
+  {
+    "name": "Neo4j",
+    "ats": "greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/neo4j/jobs?content=true",
+    "careersUrl": "https://job-boards.greenhouse.io/neo4j",
+    "addedAt": "2026-09-15",
+    "addedBy": "approved"
+  },
+  {
+    "name": "JetBrains",
+    "ats": "greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/jetbrains/jobs?content=true",
+    "careersUrl": "https://job-boards.eu.greenhouse.io/jetbrains",
+    "addedAt": "2026-09-15",
+    "addedBy": "approved"
+  },
+  {
+    "name": "GitLab",
+    "ats": "greenhouse",
+    "endpoint": "https://boards-api.greenhouse.io/v1/boards/gitlab/jobs?content=true",
+    "careersUrl": "https://job-boards.greenhouse.io/gitlab",
+    "addedAt": "2026-09-15",
+    "addedBy": "approved"
   }
 ]
