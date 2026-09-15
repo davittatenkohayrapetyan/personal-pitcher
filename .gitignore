@@ -76,6 +76,10 @@ next-env.d.ts
 /data/outreach/company-stats.json
 /data/outreach/handoff.json
 /data/outreach/last-run.json
+/data/outreach/last-discovery.json
+# What the 07:00 job has already tried. Machine-written and expiring, unlike
+# candidates.txt beside it, which is a person's list and is committed.
+/data/outreach/candidate-state.json
 
 # Davit's private job preferences (salary floor, seniority thresholds, views on
 # current employment). Outside data/ on purpose: everything in data/ is

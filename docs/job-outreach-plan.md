@@ -1284,6 +1284,137 @@ Three consequences worth writing down:
   been left as it stands because it is right about the *shape* of the signal;
   this note is the correction to how to read it.
 
+**Phase 5, built 2026-09-15.**
+
+- **The discovery job calls no model at all, and §9's "why it fits" sentence is
+  composed from the verification result.** §9 asks for two or three sentences
+  "grounded in that company's *actual current postings*, not in the model's
+  background knowledge of the brand", which presumes a model writes them. Four
+  things point the other way, and they all point at §9's own heading —
+  *verification is the point, not the summary*. A sentence built from the
+  numbers the run just measured (postings returned, how many pass the geo
+  filter, how many name Armenia, and up to three real titles) is grounded by
+  construction, so the one failure mode §9 names cannot occur. A model call here
+  would mean handing an *unverified* third party's posting text to the Mac — the
+  exact input stage A's whole sanitiser apparatus exists to survive, for a job
+  that has no need to read posting prose at all. The window is thirty minutes
+  and a Mac call is 45–90 seconds against up to twenty-five candidates, so the
+  summary would be competing with the verification for the budget. And it
+  removes the interaction §11 warns about: this job can no longer trip
+  `macBreaker` at 07:00 and make the 08:00 run skip tier 0 without probing.
+- **§9's candidate tiers 1–3 cannot resolve an address, and that was measured
+  rather than reasoned about.** The plan says a company in the aggregator
+  results is "a candidate with evidence already attached … this is free, the
+  fetch already happened". The evidence is attached; the *address* is not. Every
+  URL the four feeds publish points back at the feed —
+  `himalayas.app/companies/…`, `arbeitnow.com/jobs/companies/…`,
+  `remoteok.com/remote-jobs/…`, `remotive.com/remote-jobs/…` — and not one of
+  them carries the employer's own site or an ATS link. Fetching them anyway was
+  tried against the live feeds: **twenty-six candidates, twenty-six failures.**
+  Himalayas returns 403 to our User-Agent, and an Arbeitnow posting page is
+  220 kB of application shell with no marker in it. So the three cheap tiers
+  degrade to what they can honestly be: a list of *names*, reported to whoever
+  reads the morning's output, filtered to the ones §9's second tier is actually
+  about — a company whose postings named Armenia, or one already in the review
+  queue. A feed row whose URL is *not* the feed's own is still fetched, because
+  that one is a real lead. The alternative was twenty-five requests to strangers
+  every morning to learn the same nothing, which is a politeness bug (§6) as
+  well as a wasted budget.
+- **§9's fourth tier — "named candidates, resolved by search" — is not built,
+  and `candidates.txt` takes a URL instead.** One open-web query per candidate
+  needs a search credential, and there is none in this repo; inventing an
+  environment variable for a provider nobody has chosen would be a documented
+  setting that nothing honours, which `config.ts` argues against in its own
+  header. The substitute is the line format `Name https://company/careers`, and
+  a bare name is annotated `needs a URL` rather than guessed at — guessing a
+  company's domain from its name is the same mistake as guessing its ATS, one
+  layer down, and §1.2 records what that cost the first time. This is the one
+  gap worth closing later: with a search key, tiers 1–4 all collapse into the
+  same single query, and the `unresolved` list in the discovery report is
+  already the input to it.
+- **`CompanySuggestion` carries the Workday triple, and `company_add` was wrong
+  without it.** Phase 4's approval route built a `WatchedCompany` from the
+  suggestion's name, ATS, endpoint and careers URL — every field a Greenhouse,
+  Lever, Ashby or Pinpoint company needs, and one short for Workday, whose
+  adapter builds detail and public URLs from `{origin, tenant, site}`. A Workday
+  company approved through that route would have thrown on the first morning it
+  was read. It could not be caught before phase 5, because nothing produced a
+  suggestion. It is carried through rather than re-derived in the route, which
+  is the same "store what was verified" rule `endpoint` follows.
+- **A candidate is verified by calling the adapter, not by checking for a 200.**
+  §9 says "call the resulting endpoint and require ≥1 parseable posting back",
+  and *parseable* is doing the work: a 200 proves a server answered, not that
+  `fetchAshby` can find `payload.jobs` in the answer. Running the real adapter
+  through `validatePostings` means a company is added on the evidence of the
+  exact code path that will read it every morning afterwards. One consequence is
+  worth naming: `fetchWorkday` filters server-side on
+  `OUTREACH_WORKDAY_SEARCH_TERMS`, so a Workday board with nothing matching
+  `Armenia` or `Yerevan` verifies as *empty* and is discarded. That is the right
+  answer rather than a false negative — it is precisely what the 08:00 run would
+  see from that company every morning — and the candidate is tried again in a
+  month.
+- **Detection returns a ranked list and lets the endpoint decide.** A careers
+  page can carry an analytics reference to one ATS and its real board on
+  another, and an aggregator's page carries the employer's apply link beside a
+  sidebar of other companies' boards. Committing to the first marker found is
+  exactly the detector that works on two boards and fails on the third, so
+  `detect.ts` proposes every endpoint it can construct, best first, and
+  `verify.ts` calls them in order. Two guards are armed only when the page
+  belongs to a third party: the slug has to resemble the company name (the name
+  is used to *reject*, never to build), and Pinpoint's origin fallback is
+  opt-in, since `{careers-origin}/postings.json` is right on Align's own page
+  and produces `remotive.com/postings.json` anywhere else. `--detect-fixtures`
+  is twelve saved page shapes, each one a case that broke or would break the
+  obvious rule; two of them are the same Pinpoint HTML with `trusted` flipped.
+- **Slugs keep the case the page wrote them in.** `mill.com/careers` redirects
+  to `job-boards.greenhouse.io/Mill`. Greenhouse was checked and answers to both
+  `mill` and `Mill`, but that is one board of five, and a slug retyped in a
+  different case is a guess at an endpoint rather than the one that was on the
+  page.
+- **`stoppedBy` has two values §12 does not name: `candidates` and `backlog`.**
+  Same argument as `cap` in phase 2 — reporting them as `exhausted` would tell a
+  week's reader that the candidate list had run dry, when in fact the attempt
+  cap was the binding constraint, or that there was nothing to do, when in fact
+  ten unreviewed cards were waiting and the *person* was the constraint. The
+  backlog stop is not in §9 and is new: the bottleneck in this half of the
+  system is a human reading cards over coffee, and an eleventh card is not read
+  sooner for having been verified.
+- **Two of the three hygiene rules are computed and reported, not carded.** The
+  cap is carded, with `displaces` naming the quietest company, because
+  `CompanySuggestion` already has the field and phase 4's card already renders
+  it. Staleness and re-detection are not: they are proposals to *remove* or
+  *re-check* a company, and the only view that exists offers "Add to watch list"
+  and "Reject". Shipping them through it would put a card reading "add this
+  company you already watch" in front of a person at 08:00. So they are log
+  events (`outreach_company_stale`, `outreach_company_redetect_suggested`) and
+  lines in the discovery report, which is what §9's "surfaced, not acted on"
+  asks for. The card types for them want a view phase 4 did not build.
+- **A candidate's failure expires; a human's rejection does not.**
+  `rejected.json` is permanent, and a company said no to is never re-proposed.
+  What the *network* said is a fact with a shelf life — companies launch careers
+  pages and migrate between ATS platforms — so `candidate-state.json` suppresses
+  a conclusive failure for thirty days and a transient one (a timeout, a DNS
+  hiccup, the deadline arriving first) for no time at all. A scheduled job that
+  consumed its own input on a bad network morning would lose the input.
+- **`candidates.txt` is answered even when the answer is "we already knew".** A
+  name already on the watch list, already suggested, or already rejected is
+  commented out in place with which of those it was. A line silently skipped
+  every morning looks exactly like a line nothing has got to yet, and the file
+  is a log as much as an input (§17.2).
+- **The adapter table moved to `sources/registry.ts`.** It lived in `index.ts`,
+  and both jobs need it now. Two copies would drift silently in the direction
+  that matters most: a new ATS adapter added to the run loop and not to
+  discovery would mean the 07:00 job quietly refusing to propose any company on
+  the one board the system had just learned to read.
+- **Still open after this phase.** The two morning tasks are written as `.cmd`
+  wrappers but **not registered** in Task Scheduler — §18.3's commands are
+  correct, and the settings to match are `InteractiveToken`,
+  `StartWhenAvailable`, `ExecutionTimeLimit PT2H`, read from the existing
+  refresh task rather than assumed. And §16's first open question is now the
+  binding constraint on this job rather than a nicety: with two companies on the
+  watch list and no way to resolve a name, the ten to fifteen seed companies it
+  asks for are what the 07:00 run needs in order to earn its half hour.
+
 **Phase 3, built 2026-09-14.**
 
 - **`applyTarget` fails the record for an email and empties the field for a

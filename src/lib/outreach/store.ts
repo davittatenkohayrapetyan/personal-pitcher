@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import type {
   CompanySuggestion,
   Cursor,
+  DiscoveryRun,
   Handoff,
   OutreachRejection,
   OutreachRun,
@@ -14,6 +15,7 @@ import type {
 import {
   COMPANIES_FILE,
   CURSOR_FILE,
+  DISCOVERY_REPORT_FILE,
   HANDOFF_FILE,
   OUTREACH_DIR,
   PENDING_FILE,
@@ -318,6 +320,47 @@ export function removeSuggestion(id: string): CompanySuggestion[] {
 }
 
 /**
+ * Adds this morning's proposals without disturbing the ones already there.
+ *
+ * Appends rather than overwrites, for the same reason `pending.json` does: a
+ * suggestion is a card a person has not got to yet, and a run that replaced the
+ * file would silently discard Tuesday's proposal because Wednesday found a
+ * different company. A suggestion already present is left exactly as it was —
+ * re-verifying it would spend a request to rewrite a card that is already on
+ * the screen.
+ */
+export function appendSuggestions(additions: CompanySuggestion[]): CompanySuggestion[] {
+  const existing = readSuggestions();
+  const byId = new Map(existing.map((entry) => [entry.id, entry]));
+  let changed = false;
+
+  for (const suggestion of additions) {
+    if (byId.has(suggestion.id)) continue;
+    byId.set(suggestion.id, suggestion);
+    changed = true;
+  }
+
+  const merged = [...byId.values()];
+  if (changed) writeJsonFile(SUGGESTIONS_FILE, merged);
+  return merged;
+}
+
+/**
+ * The companies a human has said no to, keyed as §17.2 keys a suggestion.
+ *
+ * Permanent, unlike the discovery job's own memory of what it tried: a company
+ * rejected once must not be re-proposed monthly (§9), and that is a decision
+ * rather than a fact about the network.
+ */
+export function rejectedCompanyKeys(): Set<string> {
+  return new Set(
+    readRejections()
+      .filter((entry) => entry.kind === 'company')
+      .map((entry) => entry.id),
+  );
+}
+
+/**
  * Appends an approved company to the **committed** watch list.
  *
  * This is the one write in the whole system that lands in a file `git` tracks,
@@ -392,4 +435,17 @@ export function writeRunReport(run: OutreachRun): string {
   fs.mkdirSync(OUTREACH_DIR, { recursive: true });
   writeJsonFile(RUN_REPORT_FILE, run);
   return RUN_REPORT_FILE;
+}
+
+/**
+ * The 07:00 job's report, in its own file.
+ *
+ * Two jobs, two reports, and neither overwrites the other's: they run half an
+ * hour apart and the first one's output is still the answer to "why was the
+ * morning quiet?" long after the second has finished.
+ */
+export function writeDiscoveryReport(run: DiscoveryRun): string {
+  fs.mkdirSync(OUTREACH_DIR, { recursive: true });
+  writeJsonFile(DISCOVERY_REPORT_FILE, run);
+  return DISCOVERY_REPORT_FILE;
 }

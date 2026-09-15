@@ -1,0 +1,171 @@
+{
+  "_comment": [
+    "Saved careers-page shapes for `npm run outreach:companies -- --detect-fixtures`.",
+    "Trimmed to the markup that decides the answer: a real careers page is",
+    "hundreds of kilobytes of layout around one script tag or one anchor, and the",
+    "layout is not what detection reads. Every case is a shape that broke, or",
+    "would break, a detector written from the obvious rule — see the drill's own",
+    "comment in scripts/company-discovery.ts.",
+    "`trusted` mirrors `allowOriginFallback`: true only when the URL is one a",
+    "person wrote down as the company's own careers page."
+  ],
+  "cases": [
+    {
+      "name": "greenhouse embed script (the board is not in a link)",
+      "pageUrl": "https://www.figma.com/careers/",
+      "companyName": "Figma",
+      "trusted": true,
+      "html": "<div id=\"grnhse_app\"></div><script src=\"https://boards.greenhouse.io/embed/job_board/js?for=figma\"></script>",
+      "expect": {
+        "ats": "greenhouse",
+        "marker": "greenhouse-embed",
+        "endpoint": "https://boards-api.greenhouse.io/v1/boards/figma/jobs?content=true",
+        "count": 1
+      }
+    },
+    {
+      "name": "greenhouse board URL alone, no page fetched",
+      "pageUrl": "https://job-boards.greenhouse.io/deel/jobs/4562119",
+      "companyName": "Deel",
+      "html": "",
+      "expect": {
+        "ats": "greenhouse",
+        "marker": "greenhouse-board",
+        "endpoint": "https://boards-api.greenhouse.io/v1/boards/deel/jobs?content=true"
+      }
+    },
+    {
+      "name": "greenhouse EU-resident board host (the card's link must stay on it)",
+      "pageUrl": "https://www.jetbrains.com/careers/jobs/",
+      "companyName": "JetBrains",
+      "trusted": true,
+      "html": "<a href=\"https://job-boards.eu.greenhouse.io/jetbrains/jobs/4881348101\">Senior Backend Engineer</a>",
+      "expect": {
+        "ats": "greenhouse",
+        "marker": "greenhouse-board",
+        "endpoint": "https://boards-api.greenhouse.io/v1/boards/jetbrains/jobs?content=true"
+      }
+    },
+    {
+      "name": "lever board linked from a company careers page",
+      "pageUrl": "https://krisp.ai/careers/",
+      "companyName": "Krisp",
+      "trusted": true,
+      "html": "<section><h2>Open roles</h2><a href=\"https://jobs.lever.co/krisp/8f2b1c40-1e77-4a0a-bd2e-77e2f0a1b111\">Senior Backend Engineer</a></section>",
+      "expect": {
+        "ats": "lever",
+        "marker": "lever-board",
+        "endpoint": "https://api.lever.co/v0/postings/krisp?mode=json"
+      }
+    },
+    {
+      "name": "ashby board in an iframe",
+      "pageUrl": "https://www.notion.so/careers",
+      "companyName": "Notion",
+      "trusted": true,
+      "html": "<iframe title=\"Open roles\" src=\"https://jobs.ashbyhq.com/notion?embed=js\"></iframe>",
+      "expect": {
+        "ats": "ashby",
+        "marker": "ashby-board",
+        "endpoint": "https://api.ashbyhq.com/posting-api/job-board/notion?includeCompensation=true"
+      }
+    },
+    {
+      "name": "workday public URL with a locale segment (the locale is not the site)",
+      "pageUrl": "https://www.nvidia.com/en-us/about-nvidia/careers/",
+      "companyName": "NVIDIA",
+      "trusted": true,
+      "html": "<a class=\"cta\" href=\"https://nvidia.wd5.myworkdayjobs.com/en-US/NVIDIAExternalCareerSite\">Search all openings</a>",
+      "expect": {
+        "ats": "workday",
+        "marker": "workday-url",
+        "endpoint": "https://nvidia.wd5.myworkdayjobs.com/wday/cxs/nvidia/NVIDIAExternalCareerSite/jobs",
+        "count": 1
+      }
+    },
+    {
+      "name": "workday cxs endpoint in page script — must not also detect site \"wday\"",
+      "pageUrl": "https://careers.exampleco.com/",
+      "companyName": "Example Co",
+      "trusted": true,
+      "html": "<script>const JOBS=\"https://exampleco.wd1.myworkdayjobs.com/wday/cxs/exampleco/ExampleCareers/jobs\";</script>",
+      "expect": {
+        "ats": "workday",
+        "marker": "workday-cxs",
+        "endpoint": "https://exampleco.wd1.myworkdayjobs.com/wday/cxs/exampleco/ExampleCareers/jobs",
+        "count": 1
+      }
+    },
+    {
+      "name": "pinpoint named only by its asset host, on the company's own page",
+      "pageUrl": "https://jobs.aligntech.com/",
+      "companyName": "Align Technology",
+      "trusted": true,
+      "html": "<link rel=\"stylesheet\" href=\"https://assets.pinpointhq.com/careers/application-8c1f.css\"><footer>Careers powered by Pinpoint</footer>",
+      "expect": {
+        "ats": "pinpoint",
+        "marker": "pinpoint-hosted",
+        "endpoint": "https://jobs.aligntech.com/postings.json"
+      }
+    },
+    {
+      "name": "the same pinpoint markup on somebody else's page — origin is not ours to take",
+      "pageUrl": "https://remotive.com/remote-jobs/software-dev/senior-java-engineer-1934472",
+      "companyName": "Align Technology",
+      "trusted": false,
+      "html": "<link rel=\"stylesheet\" href=\"https://assets.pinpointhq.com/careers/application-8c1f.css\">",
+      "expect": {
+        "ats": null
+      }
+    },
+    {
+      "name": "aggregator posting page: the apply link is ours, the sidebar is not",
+      "pageUrl": "https://remoteok.com/remote-jobs/1092233-senior-platform-engineer",
+      "companyName": "Acme Robotics",
+      "trusted": false,
+      "html": "<a class=\"apply\" href=\"https://jobs.lever.co/acmerobotics/3c7a11de-0a71-4ee9-9f1b-2b9f0b6d0b02\">Apply</a><aside><a href=\"https://boards.greenhouse.io/othercompany/jobs/5512090\">Staff Engineer at Other Company</a></aside>",
+      "expect": {
+        "ats": "lever",
+        "marker": "lever-board",
+        "endpoint": "https://api.lever.co/v0/postings/acmerobotics?mode=json",
+        "count": 1
+      }
+    },
+    {
+      "name": "smartrecruiters — recognised, and not something we can read",
+      "pageUrl": "https://www.examplebank.com/careers",
+      "companyName": "Example Bank",
+      "trusted": true,
+      "html": "<a href=\"https://careers.smartrecruiters.com/ExampleBank\">See our openings</a>",
+      "expect": {
+        "ats": null,
+        "unsupported": [
+          "smartrecruiters"
+        ]
+      }
+    },
+    {
+      "name": "eightfold — a valid AtsId with no adapter, which is still not a proposal",
+      "pageUrl": "https://careers.exampletelecom.com/",
+      "companyName": "Example Telecom",
+      "trusted": true,
+      "html": "<script src=\"https://exampletelecom.eightfold.ai/careers/embed.js\"></script>",
+      "expect": {
+        "ats": null,
+        "unsupported": [
+          "eightfold"
+        ]
+      }
+    },
+    {
+      "name": "a careers page rendered entirely in JavaScript — no marker to find",
+      "pageUrl": "https://www.examplestartup.io/careers",
+      "companyName": "Example Startup",
+      "trusted": true,
+      "html": "<div id=\"root\"></div><script src=\"/_next/static/chunks/main-9f2c1.js\" defer></script><noscript>Please enable JavaScript.</noscript>",
+      "expect": {
+        "ats": null
+      }
+    }
+  ]
+}

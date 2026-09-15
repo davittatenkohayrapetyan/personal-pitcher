@@ -50,17 +50,8 @@ import {
   type SeenEntry,
 } from './store';
 import { validatePostings } from './sources/validate';
-import { fetchWorkday, hydrateWorkday, WorkdayBlockedError } from './sources/workday';
-import { fetchPinpoint } from './sources/pinpoint';
-import { fetchGreenhouse } from './sources/greenhouse';
-import { fetchLever } from './sources/lever';
-import { fetchAshby } from './sources/ashby';
-import {
-  fetchArbeitnow,
-  fetchHimalayas,
-  fetchRemoteOk,
-  fetchRemotive,
-} from './sources/aggregators';
+import { hydrateWorkday, WorkdayBlockedError } from './sources/workday';
+import { ATS_ADAPTERS, AGGREGATOR_ADAPTERS, type Fetcher } from './sources/registry';
 import { logger } from '../logger';
 import { isPushoverConfigured, sendAlert } from '../pushover';
 
@@ -111,25 +102,7 @@ import { isPushoverConfigured, sendAlert } from '../pushover';
  * throws.
  */
 
-type Fetcher = (ctx: FetchContext) => Promise<RawPosting[]>;
 type LogFn = (event: string, fields: Record<string, unknown>) => void;
-
-/** Called once per company on the watch list. */
-const ATS_ADAPTERS: Partial<Record<SourceId, Fetcher>> = {
-  workday: fetchWorkday,
-  pinpoint: fetchPinpoint,
-  greenhouse: fetchGreenhouse,
-  lever: fetchLever,
-  ashby: fetchAshby,
-};
-
-/** Called once for everyone. */
-const AGGREGATOR_ADAPTERS: Partial<Record<SourceId, Fetcher>> = {
-  remotive: fetchRemotive,
-  remoteok: fetchRemoteOk,
-  arbeitnow: fetchArbeitnow,
-  himalayas: fetchHimalayas,
-};
 
 export interface OutreachOptions {
   /** Skip every model stage. Phases 1 and 2 have none, so this only affects the report. */

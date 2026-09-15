@@ -127,7 +127,34 @@ explicit.** A directory scan over `data/` would pull in any future file without
 anyone deciding to, which is precisely how the preference doc would end up in a
 visitor's answer.
 
-## 10. UI changes
+## 10. Scheduled job drills (no server, no model, no network)
+
+The outreach jobs have no test framework either, but they do have five
+pure-function drills over saved responses. They need nothing running — not the
+dev server, not the Mac — so run whichever ones the change touched, and all five
+before calling a phase done:
+
+```bash
+npm run outreach -- --geo-fixtures            # 15 cases, the Yerevan filter
+npm run outreach -- --posting-fixtures        # 8 cases, incl. the injection one
+npm run outreach -- --policy-fixtures         # 10 cases, the categorical rules
+npm run outreach -- --source-fixtures         # 9 adapters over real responses
+npm run outreach:companies -- --detect-fixtures  # 12 careers-page shapes
+```
+
+Each prints `N/N passed` and exits 1 on any mismatch. They exist for bugs the
+type checker cannot see: an adapter written from a board's documentation rather
+than its output, a geo rule that drops the one role worth having, a detector
+that works on two ATS boards and fails on the third.
+
+Two live-ish checks, both safe to run repeatedly:
+
+```bash
+npm run outreach -- --no-model --explain      # adapters, geo filter, budget loop
+npm run outreach:companies -- --no-feeds      # candidates.txt, nothing else
+```
+
+## 11. UI changes
 
 Delegate to the `ui-checker` agent rather than eyeballing the diff — it boots the server, asks a real question in a browser, and checks desktop and mobile.
 

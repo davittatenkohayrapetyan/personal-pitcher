@@ -232,6 +232,12 @@ export async function POST(request: Request) {
       // Align's ATS all returned 404 (§1.2).
       endpoint: suggestion.endpoint,
       careersUrl: suggestion.careersUrl,
+      // Carried through rather than re-derived. A Workday adapter builds its
+      // detail and public URLs from these three, and a company approved without
+      // them is a watch-list entry that throws on the first morning it is read.
+      // They were parsed out of the URL the ATS marker was found in, which is
+      // the same "store what was verified" rule as `endpoint` above.
+      workday: suggestion.workday,
       addedAt: new Date().toISOString().slice(0, 10),
       addedBy: 'approved',
     };

@@ -183,19 +183,28 @@ A daily scheduled run writes **one** pending proposal and sends a Pushover notif
 
 ## Scheduled job outreach (`src/lib/outreach/`)
 
-`npm run outreach` finds roles workable from Yerevan and — from phase 3 — scores
-and drafts applications for them. Design, phase table and per-phase definition
-of done live in `docs/job-outreach-plan.md`. **Phases 0 to 4 are built**: the
-typed preference loader, all nine source adapters (Workday, Pinpoint,
-Greenhouse, Lever, Ashby, Remotive, RemoteOK, Arbeitnow, Himalayas), the
-deterministic geo filter, `seen.json` dedupe, the budgeted run loop, stage A
-extraction, the outreach sanitiser, stage B scoring, the review queue in
-`data/outreach/pending.json`, and the `/admin` outreach tab with its three
-decisions and the applied ledger behind them. No drafting, no browser and no
-sending code exists yet — `approve_send` writes a `dryRun` ledger row and
-refuses outright if `OUTREACH_DRY_RUN` is off. Flags: `--explain`, `--source=`, `--company=`, `--max=`, `--deadline=`,
-`--no-model`, `--no-cache`, `--geo-fixtures`, `--posting-fixtures`,
-`--policy-fixtures`, `--source-fixtures`.
+Two scheduled jobs, half an hour apart. `npm run outreach` (08:00) finds roles
+workable from Yerevan and scores them; `npm run outreach:companies` (07:00) asks
+the other question — which employers should be on the watch list at all — and
+proposes verified additions to it. Design, phase table and per-phase definition
+of done live in `docs/job-outreach-plan.md`; §23 records every place the build
+disagreed with it, and should be read before changing anything here.
+
+**Phases 0 to 5 are built**: the typed preference loader, all nine source
+adapters (Workday, Pinpoint, Greenhouse, Lever, Ashby, Remotive, RemoteOK,
+Arbeitnow, Himalayas), the deterministic geo filter, `seen.json` dedupe, the
+budgeted run loop, stage A extraction, the outreach sanitiser, stage B scoring,
+the review queue in `data/outreach/pending.json`, the `/admin` outreach tab with
+its three decisions and the applied ledger behind them, and the 07:00 discovery
+job with ATS detection, endpoint verification and the watch-list hygiene rules.
+No drafting, no browser and no sending code exists yet — `approve_send` writes a
+`dryRun` ledger row and refuses outright if `OUTREACH_DRY_RUN` is off.
+
+Flags on `outreach`: `--explain`, `--source=`, `--company=`, `--max=`,
+`--deadline=`, `--no-model`, `--no-cache`, `--geo-fixtures`,
+`--posting-fixtures`, `--policy-fixtures`, `--source-fixtures`. On
+`outreach:companies`: `--no-feeds`, `--max-candidates=`, `--deadline=`,
+`--no-cache`, `--detect-fixtures`.
 
 - **`private/job-preferences.md` must never reach the visitor prompt.** Salary
   floor, seniority thresholds and views on current employment live outside
@@ -223,9 +232,12 @@ refuses outright if `OUTREACH_DRY_RUN` is off. Flags: `--explain`, `--source=`, 
 - **The run is bounded by a wall-clock deadline, not a duration** (`budget.ts`).
   Task Scheduler catches up a missed 08:00 start, so a run beginning at 08:40
   must still be over before the working day rather than getting a full hour.
-  Five queue-worthy postings or `OUTREACH_MAX_POSTINGS_PER_RUN` also end it, and
-  `stoppedBy` names which — `deadline` every morning for a week means the watch
-  list has gone quiet, `matches` before 08:20 means the filters are too loose.
+  Ten queue-worthy postings or `OUTREACH_MAX_POSTINGS_PER_RUN` also end it, and
+  `stoppedBy` names which. Read it alongside the queue *gain*, not on its own:
+  since the cap went to ten, `deadline` is the ordinary outcome rather than a
+  signal — the first full scored run reached three queue-worthy postings out of
+  42 in 58 minutes — so a week of quiet mornings shows up as `queued: 0`, and
+  that is the number that says the watch list needs growing (§23).
 - **The source cursor rotates, and it advances past a unit even when the run
   stopped inside one.** A unit is a whole board fetched from the top, with no
   offset to resume from, so a cursor pointing back at a half-read board re-reads
@@ -286,6 +298,38 @@ refuses outright if `OUTREACH_DRY_RUN` is off. Flags: `--explain`, `--source=`, 
   means it lives in exactly one place on one machine and is the one file here
   worth including in whatever backs up `data/`. Losing `seen.json` costs a day
   of duplicate noise; losing this means re-applying to everyone ever contacted.
+- **The 07:00 job never guesses an ATS, and never proposes one it has not
+  called.** `detect.ts` reads the ATS off a *marker* in the careers page — an
+  embed script, a board URL, an asset host — and returns every endpoint it can
+  construct, ranked; `verify.ts` then calls them with the same adapter the 08:00
+  run would use and requires at least one posting that adapter can parse. Three
+  name-based guesses at Align's ATS returned 404 while the plan was being
+  written, and the answer came from one grep of the page. A watch-list entry that
+  quietly returns nothing is worse than a short list, because every morning pays
+  for it and nobody notices. `--detect-fixtures` is the drill, and it is twelve
+  shapes that break the obvious rule rather than twelve happy paths.
+- **The discovery job calls no model.** The card's "why it fits" sentence is
+  composed from what verification measured — postings returned, how many pass
+  the geo filter, how many name Armenia, and three real titles — so it is
+  grounded by construction rather than by asking a model not to recite what it
+  knows about a brand. It also means this job cannot trip `macBreaker` at 07:00
+  and leave the 08:00 run skipping tier 0. See §23.
+- **The aggregator feeds cannot tell us where a company's careers page is**, and
+  this was measured: every URL the four feeds publish points back at the feed,
+  and fetching those pages failed 26 times out of 26. So §9's cheap candidate
+  tiers degrade to a list of *names* in the discovery report, and
+  `data/outreach/candidates.txt` — committed, one `Name https://careers/url` per
+  line — is the path that actually produces cards. A resolved line is commented
+  out in place with its outcome, so the file is both input and log.
+- **`companies.json` and `candidates.txt` are the only committed files under
+  `data/outreach/`**, so every change to the watch list arrives as a `git diff`.
+  Approving a suggestion in `/admin` appends to the first; the counters that move
+  every morning live in a gitignored sidecar precisely so that file changes only
+  when the list does.
+- **Nothing removes a company from the watch list.** §9's staleness and
+  re-detection rules compute, log and report; the edit is a human's, in the
+  committed file. A quiet quarter at a company Davit cares about is not a reason
+  to stop watching it.
 - **Every adapter exports its normaliser separately from its fetch**, and
   `npm run outreach -- --source-fixtures` runs all nine over real captured
   responses in `data/outreach/fixtures/`. This is the closest thing to a unit

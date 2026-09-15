@@ -511,7 +511,9 @@ function CompaniesView({
   if (suggestions.length === 0) {
     return (
       <p className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-8 text-center text-sm text-slate-400">
-        No company suggestions. The 07:00 discovery job that produces them arrives in phase 5.
+        No company suggestions. The 07:00 discovery job proposes one or two on the mornings it
+        can verify them, and says nothing on the mornings it cannot — which is the expected
+        state once the watch list is healthy.
       </p>
     );
   }

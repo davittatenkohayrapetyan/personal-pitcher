@@ -1,0 +1,84 @@
+# Companies to look at, one per line. Read by the 07:00 discovery job.
+#
+# This is the intended path for "someone mentioned company X at a meetup": drop
+# the name here with the URL of its careers page, and the next morning's run
+# detects its ATS, calls the resulting endpoint, and — only if that endpoint
+# returns a posting it can actually parse — brings it back as a suggestion card
+# in /admin with the endpoint already proven. No manual ATS archaeology.
+#
+# Format:
+#
+#   Company Name https://company.example/careers
+#
+# The URL is what makes a line actionable. Section 9 of the plan resolves a bare
+# name with one open-web search, and there is no search credential in this repo
+# — so a name on its own is annotated and skipped rather than guessed at.
+# Guessing a company's domain from its name is the same mistake as guessing its
+# ATS, one layer down, and section 1.2 records what that cost the first time.
+# The careers URL is one search away by hand, and the run does everything after
+# it.
+#
+# The file is also a log. Once a line has been resolved it is commented out in
+# place with the outcome and the date, so "did anything ever come of that?" is
+# answerable a month later:
+#
+#   # Example Co https://example.com/careers — verified (greenhouse) 2026-09-15
+#   # Other Co https://other.example/jobs — rejected (no-marker) 2026-09-15
+#
+# A rejected line can be brought back by deleting the "#". A line is only ever
+# commented out when the answer will be the same tomorrow: a network failure or
+# a run that hit 07:30 first leaves it alone.
+#
+# This file is committed, like companies.json and unlike everything else in
+# data/outreach/, so a name added here shows up in git diff — and so does what
+# became of it.
+
+# ─── Seeded 2026-09-15, in answer to §16's first open question ────────────────
+# Two buckets, and they are different bets. Strike anything here you would not
+# work for — a line deleted before 07:00 is never verified, and a card you
+# reject in /admin is never proposed again.
+#
+# International companies with engineering in Yerevan. The bet is the local
+# office: a Yerevan role is the family §7 refuses to auto-draft, and the best
+# match this system has found so far was one of them.
+# Picsart https://picsart.com/careers/ — rejected (no-marker) 2026-09-15
+# Krisp https://krisp.ai/careers/ — rejected (no-marker) 2026-09-15
+# ServiceTitan https://www.servicetitan.com/careers — rejected (no-marker) 2026-09-15
+# SuperAnnotate https://www.superannotate.com/careers — verified (lever) 2026-09-15
+# Synopsys https://careers.synopsys.com/ — rejected (no-marker) 2026-09-15
+# Renderforest https://www.renderforest.com/careers — rejected (no-marker) 2026-09-15
+# Sololearn https://www.sololearn.com/en/careers/ — rejected (no-marker) 2026-09-15
+# EPAM https://www.epam.com/careers — rejected (page-unreachable) 2026-09-15
+# Digitain https://www.digitain.com/careers/ — rejected (page-unreachable) 2026-09-15
+#
+# Remote-first product companies with a Java-heavy stack, where a contract from
+# Yerevan is an ordinary arrangement rather than an exception.
+# Elastic https://www.elastic.co/careers — rejected (no-marker) 2026-09-15
+# Confluent https://careers.confluent.io/ — rejected (page-unreachable) 2026-09-15
+# Neo4j https://neo4j.com/careers/ — verified (greenhouse) 2026-09-15
+# JetBrains https://www.jetbrains.com/careers/jobs/ — rejected (no-marker) 2026-09-15
+# Camunda https://camunda.com/careers/ — rejected (no-marker) 2026-09-15
+# Canonical https://canonical.com/careers — verified (greenhouse) 2026-09-15
+# GitLab https://about.gitlab.com/jobs/ — rejected (no-marker) 2026-09-15
+# Grafana Labs https://grafana.com/careers/ — verified (greenhouse) 2026-09-15
+# MongoDB https://www.mongodb.com/company/careers — rejected (no-marker) 2026-09-15
+# SonarSource https://www.sonarsource.com/company/careers/ — verified (lever) 2026-09-15
+#
+# ─── Resolved by hand, 2026-09-15 ────────────────────────────────────────────
+# The five lines above them came back `no-marker`: their careers pages load the
+# board client-side, so a plain fetch sees an application shell and nothing
+# else. That is what phase 7's sandboxed browser is for (§9 step 1 allows
+# either). Until it lands, the board URL goes in directly — which is the manual
+# half of §9's fourth tier, the one query this design has no credential for.
+#
+# Each board below was confirmed by its *own postings* pointing back at the
+# company's domain, never by the token resembling the name. That distinction is
+# not pedantry: `boards-api.greenhouse.io/v1/boards/krisp`,
+# `.../servicetitan`, `.../synopsys`, `.../camunda` and `.../confluent` were all
+# tried and all returned 404 — the same three-guesses-three-404s result §1.2
+# records for Align. Verification still has the last word on every one of them.
+# Picsart https://boards.greenhouse.io/picsart — verified (greenhouse) 2026-09-15
+# Elastic https://boards.greenhouse.io/elastic — verified (greenhouse) 2026-09-15
+# JetBrains https://job-boards.eu.greenhouse.io/jetbrains — verified (greenhouse) 2026-09-15
+# GitLab https://job-boards.greenhouse.io/gitlab — verified (greenhouse) 2026-09-15
+# MongoDB https://boards.greenhouse.io/mongodb — verified (greenhouse) 2026-09-15

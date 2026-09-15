@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "refresh:profile": "tsx --env-file-if-exists=.env scripts/refresh-profile.ts",
-    "outreach": "tsx --env-file-if-exists=.env scripts/job-outreach.ts"
+    "outreach": "tsx --env-file-if-exists=.env scripts/job-outreach.ts",
+    "outreach:companies": "tsx --env-file-if-exists=.env scripts/company-discovery.ts"
   },
   "dependencies": {
     "next": "16.2.6",

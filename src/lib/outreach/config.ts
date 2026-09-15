@@ -5,7 +5,7 @@ import type { SourceId } from './types';
  * Environment parsing for the outreach jobs, in one place so the scripts and
  * the library never disagree about a default.
  *
- * Only the variables phases 0 to 2 actually honour are read here. §15 of
+ * Only the variables the built phases actually honour are read here. §15 of
  * `docs/job-outreach-plan.md` lists the full set; each one arrives with the
  * phase that obeys it, because a documented variable the code ignores is worse
  * than an undocumented one — it gets set, and then it gets trusted.
@@ -74,6 +74,26 @@ export const APPLIED_FILE = path.join(OUTREACH_DIR, 'applied.json');
 export const APPLIED_BACKUP_FILE = path.join(OUTREACH_DIR, 'applied.json.bak');
 /** The 07:00 job's proposals, reviewed in the same tab. */
 export const SUGGESTIONS_FILE = path.join(OUTREACH_DIR, 'suggestions.json');
+/**
+ * Hand-seeded candidates for the 07:00 job — committed, and both input and log.
+ *
+ * One company per line, `#` for a comment. A line that has been resolved is
+ * commented out in place with what happened to it (§17.2), so the file answers
+ * "did anything ever come of that company someone mentioned?" without a
+ * separate store.
+ */
+export const CANDIDATES_FILE = path.join(OUTREACH_DIR, 'candidates.txt');
+/**
+ * What the discovery job has already tried, keyed by company.
+ *
+ * Gitignored, and not merged into `candidates.txt` on purpose: most candidates
+ * are derived from the feeds every morning rather than typed by a person, and
+ * without a memory of the attempt the job spends its whole budget re-probing
+ * the same twenty companies that had no detectable ATS yesterday.
+ */
+export const CANDIDATE_STATE_FILE = path.join(OUTREACH_DIR, 'candidate-state.json');
+/** The 07:00 job's report. Overwritten per run, for the same reason as `last-run.json`. */
+export const DISCOVERY_REPORT_FILE = path.join(OUTREACH_DIR, 'last-discovery.json');
 /** One pending form handoff, written by the API and read by the host (§17.1). */
 export const HANDOFF_FILE = path.join(OUTREACH_DIR, 'handoff.json');
 
@@ -186,6 +206,80 @@ export function runBudgetMs(): number {
 export function stopAfterMatches(): number {
   const parsed = parseInt(env('OUTREACH_STOP_AFTER_MATCHES') ?? '', 10);
   return Number.isFinite(parsed) ? parsed : 10;
+}
+
+// ─── The 07:00 discovery window (§9) ───────────────────────────────
+
+/**
+ * When the discovery run stops, as a local wall clock in `DISPLAY_TIMEZONE`.
+ *
+ * Half an hour before the opportunity run opens, and the gap is load-bearing
+ * rather than tidy: Ollama serialises, so two jobs sharing the Mac would queue
+ * against each other and each would report the other's latency as its own lost
+ * budget. This job holds to 07:30 so that the 08:00 one starts on an idle
+ * machine.
+ */
+export function discoveryDeadline(): string {
+  return env('DISCOVERY_RUN_DEADLINE') ?? '07:30';
+}
+
+/** Belt and braces for a discovery run started by hand, same as `runBudgetMs`. */
+export function discoveryBudgetMs(): number {
+  const parsed = parseInt(env('DISCOVERY_RUN_BUDGET_MS') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 1_800_000;
+}
+
+/**
+ * Verified candidates after which the discovery run stops.
+ *
+ * Two, because the constraint is not the machine's — it is a person reading
+ * cards over coffee. Two well-evidenced additions a day is sixty a month, which
+ * `maxCompanies()` would stop long before, and a run that proposed ten would
+ * simply mean nine of them were reviewed carelessly.
+ */
+export function maxSuggestions(): number {
+  const parsed = parseInt(env('DISCOVERY_MAX_SUGGESTIONS') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 2;
+}
+
+/**
+ * Candidates the run may *attempt* in one morning — not how many it proposes.
+ *
+ * Every attempt is at least one HTTP request to a third party that has not
+ * asked to hear from us, so this is the number that bounds the job's footprint
+ * on the open web. Most attempts fail: that is the design working, since a
+ * candidate whose endpoint cannot be read is one §9 wants discarded silently
+ * rather than proposed.
+ */
+export function maxCandidates(): number {
+  const parsed = parseInt(env('DISCOVERY_MAX_CANDIDATES') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 25;
+}
+
+/**
+ * The watch list's ceiling (§9's hygiene rules).
+ *
+ * Above it a new suggestion has to displace an existing entry, and the card
+ * says which one. The number is a statement about the 08:00 run rather than
+ * about storage: every company on the list is one HTTP call at the front of
+ * every morning, and a list long enough to fill the hour by itself would never
+ * reach an aggregator.
+ */
+export function maxCompanies(): number {
+  const parsed = parseInt(env('OUTREACH_MAX_COMPANIES') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 120;
+}
+
+/**
+ * Days without an eligible posting before a company is *proposed* for removal.
+ *
+ * Proposed, never removed. A quiet quarter at a company Davit cares about is
+ * not a reason to stop watching it, so this number decides what a report says
+ * and nothing else.
+ */
+export function staleCompanyDays(): number {
+  const parsed = parseInt(env('OUTREACH_STALE_COMPANY_DAYS') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 90;
 }
 
 /** How long a cached feed stays fresh. 90 minutes covers 07:00 handing to 08:00. */

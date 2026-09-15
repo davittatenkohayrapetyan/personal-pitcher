@@ -9,10 +9,11 @@
  * accept anything carrying `untrusted`, and the compiler enforces what a
  * convention would only ask for.
  *
- * Phases 0 to 4 are built. `Draft` now has a producer, and it is a person: the
+ * Phases 0 to 5 are built. `Draft` has a producer, and it is a person: the
  * review tab writes the subject and body by hand, because stage C is phase 6.
  * `send_failed` is still absent — nothing can fail to send until something can
- * send.
+ * send. `CompanySuggestion` and the `Discovery*` shapes below now have one too:
+ * the 07:00 job that fills `suggestions.json`.
  */
 
 /** An applicant tracking system we can call directly. §1 of the plan. */
@@ -554,18 +555,27 @@ export interface OutreachRejection {
 /**
  * The 07:00 job's output — `data/outreach/suggestions.json`.
  *
- * Declared here in phase 4 because the review tab is what consumes it, and a
- * view is a producer of the shape it renders. The job that fills the file
- * arrives in phase 5; until then the third view renders its empty state, which
- * is the honest thing for it to say.
+ * Declared in phase 4 because the review tab is what consumes it, and a view is
+ * a producer of the shape it renders. Phase 5 fills the file: every field below
+ * is something `verify.ts` proved by calling the endpoint, which is why the
+ * card can show the endpoint in full and the posting counts beside it.
  */
 export interface CompanySuggestion {
+  /** `sha256(folded name)`, so a rejection stays keyed to the company for ever. */
   id: string;
   name: string;
   careersUrl: string;
   ats: AtsId;
   /** Shown in full on the card: it is the thing that was actually verified. */
   endpoint: string;
+  /**
+   * Workday only, and it has to travel with the suggestion rather than being
+   * re-derived on approval: the adapter builds detail and public URLs from
+   * these three, and they were parsed out of the URL the marker was found in.
+   * Rebuilding them in the approval route would be exactly the reassembly
+   * `endpoint` is stored whole to avoid.
+   */
+  workday?: { origin: string; tenant: string; site: string };
   verifiedAt: string;
   postingCount: number;
   eligibleCount: number;
@@ -574,6 +584,96 @@ export interface CompanySuggestion {
   why: string;
   /** Set when the watch list is at its cap and this would displace someone. */
   displaces?: string;
+}
+
+// ─── The 07:00 discovery run (§9) ───────────────────────────────────
+
+/**
+ * Why the discovery run ended.
+ *
+ * §12 names three of these. `candidates` and `backlog` are here for the same
+ * reason `cap` joined `StopReason` in phase 2: reporting them as `exhausted`
+ * would tell whoever reads a week of mornings that the candidate list had run
+ * dry, when in fact the run stopped with names still in the queue. They mean
+ * opposite things — `exhausted` says generate more candidates, `candidates`
+ * says the attempt budget is the binding constraint, and `backlog` says the
+ * person is.
+ */
+export type DiscoveryStopReason =
+  | 'suggestions'
+  | 'deadline'
+  | 'budget'
+  | 'candidates'
+  | 'backlog'
+  | 'exhausted';
+
+/** One candidate the run discarded, with the reason §12 counts. */
+export interface DiscoveryRejection {
+  company: string;
+  origin: string;
+  /** A stable slug from `verify.ts`, never a sentence. */
+  reason: string;
+  detail?: string;
+}
+
+/**
+ * A watch-list company §9's hygiene rules have something to say about.
+ *
+ * Surfaced, never acted on. A quiet quarter at a company Davit cares about is
+ * not a reason to stop watching it, so this is a line in a report and a log
+ * event — there is no code path anywhere that removes a company.
+ */
+export interface CompanyHygiene {
+  company: string;
+  /** `stale` — nothing eligible in OUTREACH_STALE_COMPANY_DAYS. `redetect` — three unreadable runs. */
+  kind: 'stale' | 'redetect';
+  lastEligibleAt?: string;
+  eligibleSeen?: number;
+  consecutiveFailures?: number;
+}
+
+/**
+ * What the 07:00 job did — `data/outreach/last-discovery.json`.
+ *
+ * Separate from `OutreachRun` rather than a variant of it, because the two jobs
+ * answer different questions and a shared shape would have to carry both sets
+ * of counters with half of them always zero. §9: "It asks a different question
+ * and deserves its own answer."
+ */
+export interface DiscoveryRun {
+  startedAt: string;
+  finishedAt: string;
+  durationMs: number;
+  stoppedBy: DiscoveryStopReason;
+  /** The aggregator reads, which double as this run's gift to the 08:00 one. */
+  feeds: OutreachOutcome[];
+  /** Candidates generated, after everything already known was filtered out. */
+  considered: number;
+  /** Of those, how many were actually put through verification. */
+  attempted: number;
+  /** New suggestions written this run. A run that verifies nothing is normal (§9). */
+  suggested: CompanySuggestion[];
+  /** Everything waiting in `suggestions.json` afterwards, including earlier mornings'. */
+  pending: number;
+  rejections: DiscoveryRejection[];
+  /**
+   * Companies seen today with no address to check them at, best first.
+   *
+   * §9's first two candidate tiers assume a company in the aggregator results
+   * is a candidate with its evidence attached, and the evidence is — but the
+   * *address* is not. Every URL the four feeds publish points back at the feed,
+   * so a name from them cannot be verified without one open-web query, which
+   * §9's fourth tier is about and which this repo has no credential for. So the
+   * tier degrades honestly: these are names worth a look, offered to whoever
+   * reads the morning's report, and a line in `candidates.txt` with a careers
+   * URL turns any of them into a verified card tomorrow. See §23.
+   */
+  unresolved: { company: string; origin: string; note: string }[];
+  /** How many there were before the report bounded the list. */
+  unresolvedTotal: number;
+  hygiene: CompanyHygiene[];
+  watchlistSize: number;
+  reportPath: string | null;
 }
 
 /** One pending form handoff — written by the API, read by the host (§17.1). */
