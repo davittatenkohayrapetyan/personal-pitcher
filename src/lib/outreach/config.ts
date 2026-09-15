@@ -257,6 +257,27 @@ export function maxCandidates(): number {
 }
 
 /**
+ * Unreviewed suggestions after which the discovery run stops proposing.
+ *
+ * A guard against unbounded growth in a file a person reads, not a statement
+ * about how often they read it. The first version of this was a constant of 10
+ * justified as "a fact about attention rather than a tuning knob", and that was
+ * wrong in the way constants usually are: it assumed the review happens daily,
+ * so a few days away stalled the job that is *least* able to catch up later —
+ * the 08:00 run re-reads its sources every morning and loses nothing, while a
+ * company the feeds mentioned on Tuesday is gone by Friday.
+ *
+ * Thirty is two weeks of total neglect at `DISCOVERY_MAX_SUGGESTIONS` a day,
+ * which is longer than any absence this system is built around, and still
+ * bounded — the point of the guard is that the tab cannot grow forever, and it
+ * still cannot.
+ */
+export function maxPendingSuggestions(): number {
+  const parsed = parseInt(env('DISCOVERY_MAX_PENDING') ?? '', 10);
+  return Number.isFinite(parsed) ? parsed : 30;
+}
+
+/**
  * The watch list's ceiling (§9's hygiene rules).
  *
  * Above it a new suggestion has to displace an existing entry, and the card

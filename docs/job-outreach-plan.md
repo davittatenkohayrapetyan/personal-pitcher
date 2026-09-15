@@ -1376,9 +1376,15 @@ Three consequences worth writing down:
   week's reader that the candidate list had run dry, when in fact the attempt
   cap was the binding constraint, or that there was nothing to do, when in fact
   ten unreviewed cards were waiting and the *person* was the constraint. The
-  backlog stop is not in §9 and is new: the bottleneck in this half of the
-  system is a human reading cards over coffee, and an eleventh card is not read
-  sooner for having been verified.
+  backlog stop is not in §9 and is new: the tab a person reads is not allowed to
+  grow without bound. **Corrected 2026-09-15, same day:** the bound was a
+  constant of 10, justified as "a fact about attention rather than a tuning
+  knob", and it was wrong in the way constants usually are — it assumed the
+  review happens daily, so three days away stalled the one job that cannot
+  catch up afterwards. The 08:00 run re-reads its sources every morning and
+  loses nothing by being ignored; a company the feeds mentioned on Tuesday is
+  simply gone by Friday. It is now `DISCOVERY_MAX_PENDING`, default 30 — two
+  weeks of total neglect at two a day, and still bounded.
 - **Two of the three hygiene rules are computed and reported, not carded.** The
   cap is carded, with `displaces` naming the quietest company, because
   `CompanySuggestion` already has the field and phase 4's card already renders

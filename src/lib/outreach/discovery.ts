@@ -15,6 +15,7 @@ import {
   isAggregator,
   maxCandidates,
   maxCompanies,
+  maxPendingSuggestions,
   maxSuggestions,
   requestedSources,
   staleCompanyDays,
@@ -107,18 +108,6 @@ export interface DiscoveryOptions {
   /** `--no-cache`: refetch every feed. */
   noCache?: boolean;
 }
-
-/**
- * Pending suggestions after which a run stops proposing.
- *
- * The bottleneck in this half of the system is a person reading cards over
- * coffee, not the network. Once ten unreviewed companies are waiting, verifying
- * an eleventh adds nothing a human will look at this week — and the cards would
- * keep accumulating for as long as the review was postponed, which is how the
- * tab becomes something to scroll past. A constant rather than a setting,
- * because it is a fact about attention rather than a tuning knob.
- */
-const MAX_PENDING_SUGGESTIONS = 10;
 
 /** URLs kept per candidate. Each one is a potential page fetch; three is plenty. */
 const MAX_URLS = 3;
@@ -535,12 +524,16 @@ export async function runDiscovery(options: DiscoveryOptions = {}): Promise<Disc
   let attempted = 0;
   let stopped: DiscoveryStopReason | null = null;
 
-  // The person is the bottleneck, not the network. Ten unreviewed cards is
-  // already more than a week of coffee, and an eleventh is not read sooner for
-  // having been verified.
-  if (pendingSuggestions.length >= MAX_PENDING_SUGGESTIONS) {
+  // The tab is not allowed to grow without bound, but the bound is generous:
+  // a candidate this job declines to verify today is one the feeds may not
+  // mention again, and being away for three days is not a reason to lose it.
+  // See `maxPendingSuggestions`.
+  if (pendingSuggestions.length >= maxPendingSuggestions()) {
     stopped = 'backlog';
-    log('outreach_discovery_backlog', { pending: pendingSuggestions.length });
+    log('outreach_discovery_backlog', {
+      pending: pendingSuggestions.length,
+      cap: maxPendingSuggestions(),
+    });
   }
 
   const capacity = maxCompanies() - watchlist.length;
