@@ -17,12 +17,416 @@
         "stars": 0,
         "forks": 0,
         "createdAt": "2026-05-11T21:47:29Z",
-        "pushedAt": "2026-09-10T13:38:35Z",
+        "pushedAt": "2026-09-15T06:19:21Z",
         "homepage": null
       },
       "untrusted": {
         "description": "",
         "readme": "Personal Pitcher 🎯 A personal AI pitch website for Davit Hayrapetyan. Visitors can ask questions about Davit's professional background, projects, community contributions, and personal interests — powered by OpenAI with an automatic Ollama (Llama) fallback. Features - 🎨 **Clean portfolio UI** — Hero section, photo cards, and Q&A timeline - 🤖 **AI-powered answers** — OpenAI primary with automatic Ollama/Llama fallback - 🔁 **Circuit breaker** — Automatically skips OpenAI when it is down/overloaded, then probes for recovery - 🛡️ **Request validation** — Input length, type checks - ⏱️ **IP-based rate limiting** — 10 requests per minute per IP - 🧠 **Intent classification** — Routes questions to relevant profile sections - 📚 **RAG-style retrieval** — Pulls context from curated markdown/JSON profile files - 🚧 **Guardrails** — Only answers questions about Davit Hayrapetyan - 📝 **JSON request logging** — Every request/response is logged as JSON to a daily-rotated file (`logs/app-YYYY-MM-DD.log`) plus stdout - 📱 **Pushover notifications** — Optional per-iteration push to your phone (time, question, success/failure, duration, LLMs used) Quick Start Prerequisites - Node.js 20+ - Ollama installed and running with `llama3` model (used as fallback) Local Development Open http://localhost:3000. Docker Compose (with Ollama) Using OpenAI (Recommended) Set in `.env.local`: When `OPENAI_API_KEY` is present, every request is first sent to OpenAI. If OpenAI fails for any reason, the system automatically falls back to Ollama — no user-visible error. If `OPENAI_API_KEY` is not set, all requests go directly to Ollama. LLM Provider Strategy The system uses an **OpenAI-first, Ollama-fallback** strategy with a circuit breaker: 1. **Primary** — If `OPENAI_API_KEY` is configured and the circuit breaker is closed, OpenAI is called first. 2. **Fallback** — If OpenAI fails (network error, timeout, quota/rate limit, or any server error), the request is transparently retried against Ollama. "
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/music-visualizer",
+      "facts": {
+        "name": "music-visualizer",
+        "url": "https://github.com/davittatenkohayrapetyan/music-visualizer",
+        "defaultBranch": "main",
+        "primaryLanguage": null,
+        "languages": [],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2026-06-15T18:04:37Z",
+        "pushedAt": "2026-06-15T18:25:59Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "music-visualizer"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/java-algorithms-playground",
+      "facts": {
+        "name": "java-algorithms-playground",
+        "url": "https://github.com/davittatenkohayrapetyan/java-algorithms-playground",
+        "defaultBranch": "main",
+        "primaryLanguage": null,
+        "languages": [],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2026-04-03T12:23:38Z",
+        "pushedAt": "2026-04-03T12:30:11Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Java algorithms playground built with the latest stable Java. Contains clean, testable implementations of classic problems and data structures, starting with an LFU cache in two variants: a simple single-threaded version and a concurrent thread-safe version, with benchmarks and unit tests.",
+        "readme": "java-algorithms-playground Java algorithms playground built with the latest stable Java. Contains clean, testable implementations of classic problems and data structures, starting with an LFU cache in two variants: a simple single-threaded version and a concurrent thread-safe version, with benchmarks and unit tests."
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/amarot",
+      "facts": {
+        "name": "amarot",
+        "url": "https://github.com/davittatenkohayrapetyan/amarot",
+        "defaultBranch": "main",
+        "primaryLanguage": null,
+        "languages": [],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2026-03-13T17:02:59Z",
+        "pushedAt": "2026-03-19T19:13:39Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Modern content-first storefront for Amarot healthy snacks: products, prices, blog, wholesale form, contact, admin CMS, newsletter, SEO, and social sharing, with scalable foundations for future e-commerce and delivery.",
+        "readme": "amarot Modern content-first storefront for Amarot healthy snacks: products, prices, blog, wholesale form, contact, admin CMS, newsletter, SEO, and social sharing, with scalable foundations for future e-commerce and delivery."
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/devfest-armenia-2025",
+      "facts": {
+        "name": "devfest-armenia-2025",
+        "url": "https://github.com/davittatenkohayrapetyan/devfest-armenia-2025",
+        "defaultBranch": "main",
+        "primaryLanguage": "HTML",
+        "languages": [
+          "HTML"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-10-19T14:23:16Z",
+        "pushedAt": "2026-02-01T09:02:02Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Single-page PWA for DevFest Armenia 2025 (Dec 20, Woods Center). Uses Google DevFest/GDG branding, responsive layout, offline cache, dark mode. Embeds Sessionize agenda/sessions/speakers via scripts. Includes sections for Partners and Organizers, meta/OG tags, and deploy-ready Docker setup.",
+        "readme": "DevFest Armenia 2025 Single-page PWA for DevFest Armenia 2025 (December 20, Woods Center). Built with Vite, TypeScript, and Tailwind CSS. Post-Event Update The site has been updated to reflect the post-event state with a thank-you message, event photos gallery, and opportunities to partner or volunteer with GDG Yerevan for future events. Features - ✅ Progressive Web App (PWA) with offline support - ✅ Responsive design with dark mode support - ✅ Google DevFest/GDG branding and color scheme - ✅ SEO optimized with Open Graph tags - ✅ Environment-driven base path for WordPress subfolder deployment - ✅ Service worker with proper scope configuration - ✅ Sitemap and robots.txt included - ✅ Docker deployment ready - ✅ GitHub Actions CI/CD pipeline - ✅ Photo gallery with Google Photos integration - ✅ Dependency-free image carousel with autoplay, keyboard navigation, and swipe support Sections 1. **Hero** - Thank you message for attending DevFest Armenia 2025 2. **Photo Gallery** - Event photos fetched from Google Photos album 3. **About** - Information about DevFest Armenia 4. **Agenda** - Schedule with Sessionize GridSmart embed 5. **Sessions** - Detailed sessions with Sessionize Sessions embed 6. **Workshops** - Hands-on workshop sessions (JSON-configurable) 7. **Speakers** - Speaker profiles from session data 8. **Partners** - Partner logos grid with partnership CTA 9. **Volunteers** - Volunteer opportunities with GDG Yerevan 10. **Organizers** - GDG Yerevan team members Development Prerequisites - Node.js 20 or higher - npm Installation Development Server The app will be available at http://localhost:5173/ Build for Production Static files will be exported to the `/dist` directory. Build with Custom Base Path For WordPress subfolder deployment (default is `/devfest2025/`): The default base path is set to `/devfest2025/` in `vite.config.ts`. To change it, either: 1. Set the environment variable: 2. Or create a `.env` file: For root deployment: WordPress Deployment The bui"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/spring-ai-poc",
+      "facts": {
+        "name": "spring-ai-poc",
+        "url": "https://github.com/davittatenkohayrapetyan/spring-ai-poc",
+        "defaultBranch": "main",
+        "primaryLanguage": "Java",
+        "languages": [
+          "Java"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-11-02T13:00:07Z",
+        "pushedAt": "2025-11-03T08:19:25Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Spring Boot REST service using Spring AI + Claude to query the public SpaceX API (https://docs.spacexdata.com/ ) from natural-language prompts. Exposes REST endpoints and @Tool methods; includes an MCP tool server so agents can call SpaceX data. Docker/Docker Compose for local run.",
+        "readme": "SpaceX AI - Spring Boot REST Service A Spring Boot 3.4 REST service that uses Spring AI with OpenAI to query the public SpaceX API (https://docs.spacexdata.com/) through natural language prompts. The service exposes REST endpoints and includes an MCP (Model Context Protocol) tool server for AI agents. Features - 🚀 Spring Boot 3.4 with Java 17 - 🤖 Spring AI integration with OpenAI (default model: gpt-4o-mini) - 📡 SpaceX API Client for launches, rockets, ships, and launchpads - 💬 Natural Language Interface via `/ask` endpoint - 🔌 MCP Tool Server for AI agent integration - 🐳 Docker & Docker Compose support - ✅ Unit Tests Architecture Prerequisites - Java 17 or higher - Maven 3.8+ - Docker & Docker Compose (optional, for containerized deployment) - OpenAI API Key (get one from https://platform.openai.com/) Quick Start 1. Clone the Repository 2. Set Up Environment Variables Create a `.env` file from the template: Edit `.env` and add your OpenAI API key: 3. Run with Maven 4. Run with Docker Compose API Endpoints Quick Test You can run the included test script to try out the API: Health Check Response: Ask Endpoint (Natural Language Queries) Send natural language questions about SpaceX to get AI-powered responses: Example response: Configuration Application properties (`src/main/resources/application.yml`): SpaceX API Integration The application provides a REST client that fetches data from the public SpaceX API (https://api.spacexdata.com/v4). - Launches: all, upcoming, past, latest, next, by ID - Rockets: all or by ID - Ships: all or by ID - Launchpads: all or by ID MCP Tool Server Run the MCP server separately if needed: The server communicates via JSON-RPC over stdin/stdout. Project Structure Technologies Used - Spring Boot 3.4 - Spring AI 1.0.3 - OpenAI (gpt-4o-mini) - Spring WebFlux - Jackson - JUnit 5, MockWebServer - Maven, Docker Troubleshooting - Verify OPENAI_API_KEY is exported and valid - Check connectivity to SpaceX API: `curl https://api.spacexdata.com"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/hotel-contract-parser",
+      "facts": {
+        "name": "hotel-contract-parser",
+        "url": "https://github.com/davittatenkohayrapetyan/hotel-contract-parser",
+        "defaultBranch": "main",
+        "primaryLanguage": "Java",
+        "languages": [
+          "Java"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-10-16T17:33:32Z",
+        "pushedAt": "2025-10-16T20:01:09Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Java CLI to parse hotel–vendor contracts (PDF). Extracts hotel overview, room descriptions, and board basis page-by-page. Works with native and scanned PDFs (OCR). Writes a .docx report with per-page text and a summary table. Dockerized; can use a small local LLM to improve field tagging.",
+        "readme": "hotel-contract-parser Java CLI to parse hotel-vendor contracts (PDF). Extracts basic metadata and page count from PDF files, generating a DOCX report. Features - Opens and parses PDF files using Apache PDFBox - Iterates through all pages and reports page count - Generates DOCX output using Apache POI - Falls back to OCR (Tess4J/Tesseract) when native text extraction is incomplete - Command-line interface using picocli - Dockerized for easy deployment - Java 17 compatible Requirements - Java 17 or higher - Maven 3.6 or higher (for building) Building Build the project using Maven: This creates a shaded JAR in `cli/target/cli.jar` that includes all dependencies. Usage Command Line Parse a PDF file and generate a DOCX report: Additional options: Example: Show help: Docker Build the Docker image: Run with Docker: Show help: Project Structure - `core/` - Core parsing library using PDFBox and POI - `cli/` - Command-line interface using picocli - `docs/` - Sample PDF files - `.github/workflows/` - GitHub Actions CI/CD configuration Dependencies - **PDFBox 3.0.3** - PDF parsing and manipulation - **Apache POI 5.3.0** - DOCX generation - **picocli 4.7.6** - Command-line interface - **SLF4J 2.0.16** - Logging facade - **JUnit Jupiter 5.10.3** - Testing framework CI/CD GitHub Actions automatically builds and tests the project on every push and pull request using: License This project is open source and available under standard terms."
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/menu-flutter-ai",
+      "facts": {
+        "name": "menu-flutter-ai",
+        "url": "https://github.com/davittatenkohayrapetyan/menu-flutter-ai",
+        "defaultBranch": "main",
+        "primaryLanguage": null,
+        "languages": [],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-10-16T06:04:13Z",
+        "pushedAt": "2025-10-16T06:22:24Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Flutter app (Android/iOS) to snap or pick menu photos, parse dishes via an OpenAI-backed API, edit items, request detailed descriptions & estimated nutrition, and optionally generate dish images. Clean architecture, offline cache, and a minimal Node API stub included for secure OpenAI calls.",
+        "readme": "menu-flutter-ai Flutter app (Android/iOS) to snap or pick menu photos, parse dishes via an OpenAI-backed API, edit items, request detailed descriptions &amp; estimated nutrition, and optionally generate dish images. Clean architecture, offline cache, and a minimal Node API stub included for secure OpenAI calls."
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/menu-pwa-ai",
+      "facts": {
+        "name": "menu-pwa-ai",
+        "url": "https://github.com/davittatenkohayrapetyan/menu-pwa-ai",
+        "defaultBranch": "main",
+        "primaryLanguage": "TypeScript",
+        "languages": [
+          "TypeScript"
+        ],
+        "topics": [],
+        "stars": 1,
+        "forks": 0,
+        "createdAt": "2025-09-24T10:04:31Z",
+        "pushedAt": "2025-10-02T15:23:33Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "AI-powered PWA that scans restaurant menus via camera, extracts dishes with descriptions, and lets users edit items. Backend enriches entries with detailed descriptions, estimated nutrition, and generated images using OpenAI. Includes offline support, JWT auth, and Dockerized deployment.",
+        "readme": "menu-pwa-ai AI-powered PWA that scans restaurant menus via camera, extracts dishes with descriptions, and lets users edit items. Backend enriches entries with detailed descriptions, estimated nutrition, and generated images using OpenAI. Includes offline support, JWT auth, and Dockerized deployment. Features - 📷 Camera capture for menu photos - 🤖 AI-powered menu text extraction and parsing - ✏️ Interactive menu items editing - 🔄 Offline support with Dexie IndexedDB - 📱 Progressive Web App (PWA) capabilities - 🎨 Modern UI with Tailwind CSS and shadcn/ui - 🗄️ SQLite database with Prisma ORM - 🐳 Docker containerization support Getting Started Prerequisites - Node.js 18+ - npm or yarn - Docker (optional) Installation 1. Clone the repository: 2. Install dependencies: 3. Set up environment variables: 4. Initialize the database: 5. Run the development server: Open http://localhost:3000 with your browser to see the result. Docker Development Build and run with Docker Compose: Core Workflow 1. **Capture Menu Photo**: Use camera to take a photo of a restaurant menu 2. **Parse Menu**: Call `/api/parse-menu` to extract text and identify dishes 3. **Edit Items List**: Review and modify the extracted menu items 4. **AI Enrichment**: Enhance items with detailed descriptions, nutrition info, and generated images Tech Stack - **Frontend**: Next.js 15 with App Router, TypeScript, Tailwind CSS - **UI Components**: shadcn/ui - **Database**: Prisma with SQLite - **Offline Storage**: Dexie (IndexedDB wrapper) - **PWA**: Service Worker and Web App Manifest - **AI**: OpenAI API for text processing and image generation - **Deployment**: Docker & Docker Compose"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/spring-proxy-beans",
+      "facts": {
+        "name": "spring-proxy-beans",
+        "url": "https://github.com/davittatenkohayrapetyan/spring-proxy-beans",
+        "defaultBranch": "main",
+        "primaryLanguage": "Java",
+        "languages": [
+          "Java"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-09-26T13:36:54Z",
+        "pushedAt": "2025-09-26T14:45:09Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Demo Spring Boot web app showing how a singleton service interacts with a proxied @RequestScope bean. Includes endpoints to set and retrieve request-specific data, illustrating how Spring’s IoC container manages scope proxies safely across concurrent requests.",
+        "readme": "spring-proxy-beans Demo Spring Boot web app showing how a singleton service interacts with a proxied @RequestScope bean. Includes endpoints to set and retrieve request-specific data, illustrating how Spring's IoC container manages scope proxies safely across concurrent requests. Features - **Singleton Service**: `DataService` is a single instance that serves all requests - **Request-Scoped Bean**: `RequestScopedDataHolder` with `@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)` - **Proxy Mode**: Spring creates a proxy that routes method calls to the correct request-specific instance - **Request Isolation**: Data set in one HTTP request is not visible in another HTTP request - **Thread Safety**: The proxy ensures thread-safe access to request-specific data API Endpoints - `POST /api/data` - Set data for the current request - Body: `{\"data\": \"your-data-here\"}` - Returns: Confirmation message - `GET /api/data` - Get data from the current request - Returns: Data info with timestamp if set, or \"No data set\" message Running the Application Demo Script Run the included demo script to see request isolation in action: Testing How It Works 1. **Spring Proxy Creation**: When `DataService` is created, Spring injects a proxy instance of `RequestScopedDataHolder` 2. **Request Handling**: Each HTTP request creates a new instance of `RequestScopedDataHolder` 3. **Proxy Routing**: The proxy routes method calls to the correct request-specific instance 4. **Automatic Cleanup**: Request-scoped instances are automatically cleaned up after request completion 5. **Isolation**: Data from one request never leaks to another request, ensuring proper isolation This pattern is useful for: - Request-specific caching - User session data - Request correlation IDs - Any data that should be isolated per HTTP request"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/calendar-bot",
+      "facts": {
+        "name": "calendar-bot",
+        "url": "https://github.com/davittatenkohayrapetyan/calendar-bot",
+        "defaultBranch": "main",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2025-09-11T11:18:09Z",
+        "pushedAt": "2025-09-11T15:32:17Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Calendar bot for telegram",
+        "readme": "Calendar Bot A Telegram bot that parses natural language text into calendar events and generates .ics files for easy calendar integration. Features - **Multi-language Support**: Parses events in English, Armenian, and Russian with enhanced patterns - **OpenAI Integration**: Falls back to OpenAI GPT for complex parsing and handling of typos - **Natural Language Processing**: Extracts event details from casual text in multiple languages - **Telegram Integration**: Works as a Telegram bot with simple commands - **Calendar Export**: Generates .ics files compatible with all major calendar applications - **Google Calendar Integration**: (Planned) Direct integration with Google Calendar via OAuth Commands - `/start` - Show welcome message and usage instructions - `/event ` - Parse text and create calendar event - `/addevent ` - Alternative command for creating events - Reply to any message with `/event` to parse that message as an event Examples Tech Stack - **Kotlin** - Main programming language - **Ktor** - Web framework for HTTP server - **TelegramBots** - Telegram Bot API integration - **Regex + Natural Language Processing** - Text parsing engine - **Google Calendar API** - (Planned) Calendar integration - **Docker** - Containerization Installation Prerequisites - Java 17+ - Gradle 8.4+ - Telegram Bot Token (from @BotFather) Local Development 1. Clone the repository: 2. Set environment variables: 3. Build and run: Docker Deployment 1. Build Docker image: 2. Run container: Configuration Environment Variables - `TELEGRAM_BOT_TOKEN` - Required. Your Telegram bot token from @BotFather - `OPENAI_API_KEY` - Optional. Your OpenAI API key for enhanced multilingual parsing - `PORT` - Optional. Server port (default: 8080) - `GOOGLE_CALENDAR_CLIENT_ID` - Optional. For Google Calendar integration - `GOOGLE_CALENDAR_CLIENT_SECRET` - Optional. For Google Calendar integration Getting a Telegram Bot Token 1. Start a chat with @BotFather 2. Send `/newbot` 3. Follow the instructions to "
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/SampleKMPApplication",
+      "facts": {
+        "name": "SampleKMPApplication",
+        "url": "https://github.com/davittatenkohayrapetyan/SampleKMPApplication",
+        "defaultBranch": "master",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-09-26T06:10:16Z",
+        "pushedAt": "2024-10-24T06:57:42Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": ""
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/TextReaderApp",
+      "facts": {
+        "name": "TextReaderApp",
+        "url": "https://github.com/davittatenkohayrapetyan/TextReaderApp",
+        "defaultBranch": "master",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-09-12T06:50:03Z",
+        "pushedAt": "2024-09-19T10:31:50Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": ""
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/scratch-game",
+      "facts": {
+        "name": "scratch-game",
+        "url": "https://github.com/davittatenkohayrapetyan/scratch-game",
+        "defaultBranch": "master",
+        "primaryLanguage": "Java",
+        "languages": [
+          "Java"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-09-01T14:10:08Z",
+        "pushedAt": "2024-09-06T10:30:52Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "Scratch Game This is a Java-based scratch game where the player places a bet, and a 2D matrix of symbols is generated based on probabilities. The game determines if the player wins or loses based on specific symbol combinations. Bonus symbols are applied if there are any winning combinations in the matrix. Features - **Standard Symbols**: Winning or losing is determined based on combinations of standard symbols. - **Bonus Symbols**: Applied when there is a winning combination in the matrix, modifying the final reward. - **Configurable**: Game configurations are loaded from a `config.json` file, allowing you to define custom symbol probabilities, winning combinations, and bonus symbols. Project Structure - **src/main/java**: - : Contains data classes like , , , and . - : Contains the core logic for the game such as , , , and . - : The main entry point for running the application. - **resources**: - : The configuration file that defines the symbols, probabilities, and winning combinations. Prerequisites - Java 8 or higher - Maven 3.x or higher Building the Project This project uses Maven for building and dependency management. Follow the steps below to build and package the project: 1. Clone the repository: 2. Navigate to the project directory: 3. Build the project: This command will compile the code, run the tests, and create a package in the target folder. 4. Package the project: This will generate the executable JAR file in the target folder. The JAR file will contain all the necessary dependencies. Running the Game After building the project, you can run the game from the command line. You need to specify the configuration file and the betting amount as arguments. Example command to run the game: Command Line Arguments - : The path to the file that defines the game setup. - : The amount of money the player is betting on the game. Running Tests To run the test cases, use the following Maven command: This will execute the unit tests and validate the functionality of"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/WeatherMonitoringService",
+      "facts": {
+        "name": "WeatherMonitoringService",
+        "url": "https://github.com/davittatenkohayrapetyan/WeatherMonitoringService",
+        "defaultBranch": "master",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-08-29T15:51:43Z",
+        "pushedAt": "2024-09-01T12:29:08Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "Weather Monitoring System This project is a weather monitoring system composed of multiple services: `small-warehouse`, `big-warehouse`, `failing-warehouse`, and a `central-monitoring-service`. These services communicate via Apache Kafka and are managed using Docker Compose. Project Structure - **common module**: Contains shared utilities, data structures, and custom serializers/deserializers. - **warehouse-service module**: Represents warehouses with sensors that send data to the Kafka broker. - **central-monitoring-service module**: Monitors the data received from warehouses and generates warnings if necessary. Sub-modules This project is organized into several sub-modules, each of which has its own `README.md` file for detailed information: - **Common Module**: Shared utilities, data structures, and custom serializers/deserializers. - **Warehouse Service Module**: Handles the threshold for individual warehouses, including sensor data handling and communication with the Kafka broker. - **Central Monitoring Service Module**: Monitors the data received from various warehouses, aggregates information, and generates warnings. Docker Compose Setup The `docker-compose.yml` file is used to spin up the entire project, including multiple warehouse services and a central monitoring service. The setup includes: - **Zookeeper**: Manages the Kafka broker. - **Kafka**: Serves as the message broker for communication between services. - **small-warehouse**: A warehouse service listening on ports `3344` and `3355`. - **big-warehouse**: A larger warehouse service listening on ports `3366` and `3377`. - **failing-warehouse**: A warehouse service meant to simulate failure, listening on port `3344`. - **central-monitoring-service**: Aggregates data from all warehouses and monitors for issues. How to Use Step 1: Build and Start Services First, ensure you have Docker and Docker Compose installed on your machine. Then, navigate to the project directory and run: This command will build th"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/NeighborHarmony",
+      "facts": {
+        "name": "NeighborHarmony",
+        "url": "https://github.com/davittatenkohayrapetyan/NeighborHarmony",
+        "defaultBranch": "master",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-06-10T10:27:33Z",
+        "pushedAt": "2024-08-06T14:09:20Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "NeighborHarmony NeighborHarmony is a Kotlin-based desktop application designed to handle noisy neighbors by playing random MP3 files from a specified directory at configurable times and intervals. The application provides a user interface to start and stop playback, and a settings dialog to configure playback parameters, which are saved to a properties file. Important Disclaimer Please consider using this approach only as a last resort. Before resorting to this solution, try all other possible approaches: - Talking to your neighbors - Calling the police - Discussing the issue with other neighbors Be prepared to talk to your neighbors if they become upset by the noise. Make sure to use the configuration that fits your needs and complies with your local laws. > \"The path of the righteous man is beset on all sides by the inequities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of the darkness. For he is truly his brother’s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who attempt to poison and destroy my brothers. And you will know I am the Lord when I lay my vengeance upon you.\" — Pulp Fiction Features - Plays random MP3 files from a specified directory. - Configurable playback start and end times. - Configurable number of tracks to play, play count, and intervals between tracks. - User interface with start, stop, and settings buttons. - Settings are saved to a properties file and can be modified within the application. Prerequisites - Java 17+ must be installed on your system. Setup 1. **Install Java:** - **Windows:** Download and install the latest JDK from the Oracle JDK website. - **Linux:** Open a terminal and run the following command: - **macOS:** Install Homebrew if you haven't already: Then install Java 17: 2. **Download the NeighborHarmony Application:** Download the ZIP file containing the appli"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/nakama-rpc",
+      "facts": {
+        "name": "nakama-rpc",
+        "url": "https://github.com/davittatenkohayrapetyan/nakama-rpc",
+        "defaultBranch": "main",
+        "primaryLanguage": "Go",
+        "languages": [
+          "Go"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-06-14T10:12:17Z",
+        "pushedAt": "2024-06-14T10:17:18Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "Nakama RPC Function Implementation",
+        "readme": "Nakama RPC Function Implementation This project implements a Nakama RPC function using Go, fulfilling the requirements specified by the task description. The function accepts a payload with type, version, and hash parameters, reads a corresponding file from the disk, saves data to a database, calculates the file content hash, and responds with type, version, hash, and content. Prerequisites - Docker - Docker Compose Setup 1. **Clone the repository:** 2. **Build the Docker image:** 3. **Run the application:** Files Description Dockerfile This file defines the Docker image for running the Go application. Dockerfile.tests This file defines the Docker image for running tests on the Go application. docker-compose.yml This file sets up the Docker Compose environment to run the application and its dependencies, including Nakama, PostgreSQL, and PGAdmin. main.go This is the main file containing the RPC function implementation. The function reads the specified file, saves data to the database, calculates the hash, and returns the appropriate response. main_e2e_test.go This file contains end-to-end tests for the implemented RPC function, ensuring the correctness and robustness of the functionality. Running Tests Tests are run automatically when the ` ` service is started with Docker Compose. To run the tests, simply execute: Accessing the Database using PGAdmin 1. **Run the PGAdmin Docker container** (assuming you have PGAdmin included in your `docker-compose.yml`): 2. **Open PGAdmin in your web browser**: Navigate to `http://localhost:8080` (or the port specified in your `docker-compose.yml` for PGAdmin). 3. **Login to PGAdmin**: Use the credentials specified in your `docker-compose.yml`. Typically, you might have: - **Email**: `admin@admin.com` - **Password**: `admin` 4. **Add a New Server in PGAdmin**: - **Name**: Choose a name for your database server connection. - **Host name/address**: `postgres` (as specified in your `docker-compose.yml`). - **Port**: `5432` (default P"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/RedisMap",
+      "facts": {
+        "name": "RedisMap",
+        "url": "https://github.com/davittatenkohayrapetyan/RedisMap",
+        "defaultBranch": "main",
+        "primaryLanguage": "Kotlin",
+        "languages": [
+          "Kotlin"
+        ],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2024-06-03T08:13:40Z",
+        "pushedAt": "2024-06-03T10:42:35Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "",
+        "readme": "RedisMap"
+      }
+    },
+    {
+      "source": "github",
+      "key": "https://github.com/davittatenkohayrapetyan/ModernMobileApplication",
+      "facts": {
+        "name": "ModernMobileApplication",
+        "url": "https://github.com/davittatenkohayrapetyan/ModernMobileApplication",
+        "defaultBranch": "main",
+        "primaryLanguage": null,
+        "languages": [],
+        "topics": [],
+        "stars": 0,
+        "forks": 0,
+        "createdAt": "2023-09-13T15:38:44Z",
+        "pushedAt": "2023-09-13T15:38:45Z",
+        "homepage": null
+      },
+      "untrusted": {
+        "description": "A git repository for experimentations and development of test application.",
+        "readme": "ModernMobileApplication A git repository for experimentations and development of test application."
       }
     }
   ],
@@ -30,8 +434,8 @@
     "user": "davittatenkohayrapetyan",
     "publicRepos": 19,
     "authenticated": false,
-    "skippedUnchanged": 18,
-    "processed": 1
+    "skippedUnchanged": 0,
+    "processed": 19
   },
-  "fetchedAt": "2026-09-15T05:55:59.597Z"
+  "fetchedAt": "2026-09-15T19:00:14.629Z"
 }
