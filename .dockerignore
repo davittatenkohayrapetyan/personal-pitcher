@@ -17,6 +17,21 @@ AGENTS.md
 .claude
 tsconfig.tsbuildinfo
 
+# §5's private preference doc, which holds real salary figures.
+#
+# Excluded because Next.js **output file tracing** copies it into
+# `.next/standalone/` all by itself: `preferences.ts` calls
+# `fs.readFileSync(PREFERENCES_FILE)`, the tracer resolves that path statically,
+# and the file rides along into the standalone bundle that the Dockerfile's
+# runner stage copies wholesale. The Dockerfile's own COPY lines never name
+# `private/`, which is why the leak was invisible to reading them — and why §23
+# recorded, wrongly, that the deployed container has no preference doc.
+#
+# Keeping it out of the build context is what actually stops it. Nothing breaks:
+# `loadPreferences()` already tolerates the file being absent, returns defaults,
+# and sets `present: false`, which the admin route surfaces on the card.
+private
+
 # Review artifacts written at runtime into the bind-mounted data/ volume.
 # Excluded from the build context so a pending proposal sitting on the host at
 # build time is not baked into an image layer — the mount supplies the real one.
