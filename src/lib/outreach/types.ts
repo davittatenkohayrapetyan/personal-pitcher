@@ -16,6 +16,10 @@
  * the 07:00 job that fills `suggestions.json`.
  */
 
+// Type-only, and `rubric.ts` imports `ExtractedPosting` from here the same
+// way. Both edges are erased at compile time, so there is no runtime cycle.
+import type { RubricScore } from './rubric';
+
 /** An applicant tracking system we can call directly. §1 of the plan. */
 export type AtsId = 'workday' | 'pinpoint' | 'greenhouse' | 'lever' | 'ashby' | 'eightfold';
 
@@ -470,6 +474,14 @@ export interface QueuedOpportunity {
    */
   draft: Draft | null;
   /**
+   * How `draft` was arrived at, when the best-of-N loop wrote it (§7).
+   *
+   * Null for a hand-typed draft and for one written by the single-shot button,
+   * which is the honest answer in both cases: there were no other candidates,
+   * so there is nothing to explain.
+   */
+  draftRecord: DraftRecord | null;
+  /**
    * `awaiting_form` is a handoff a human has to finish and confirm — it is
    * deliberately *not* counted as applied and *not* released back into the
    * queue, because guessing either way is worse than asking (§8.1).
@@ -498,6 +510,93 @@ export interface Draft {
   /** `human` until stage C exists. Never invented — this is an audit field. */
   model: string;
   draftedAt: string;
+}
+
+/**
+ * One attempt at a letter, and what the deterministic rubric made of it.
+ *
+ * Kept — all of them, winners and losers alike — because "why is this the
+ * letter?" has to be answerable after the fact, and because the scores are the
+ * only way to tell whether the drafting loop is earning its minutes. A loop
+ * whose third candidate never once beats its first is a loop that should be
+ * `OUTREACH_DRAFT_CANDIDATES=1`, and without the losing scores on record there
+ * is no way to notice that.
+ *
+ * `body` is stored **without** the disclosure line. The line is appended by
+ * code when a candidate becomes the `Draft` (§7, §23), and storing it on every
+ * candidate would mean six copies of a fixed sentence in `pending.json` and a
+ * rubric reading its own appended text back as the model's prose.
+ */
+export interface DraftCandidate {
+  /** `evidence-2`, `problem-1r1`. Stable within one record; referenced by `chosenId`. */
+  id: string;
+  /** Which opening move this candidate was asked for. See `draftLoop.ts`. */
+  variant: string;
+  subject: string;
+  body: string;
+  score: RubricScore;
+  /** `candidate` | `revision-1` | `revision-2`. */
+  stage: string;
+  /** `mac_ollama:gemma4:26b`. An audit field: never invented. */
+  model: string;
+  durationMs: number;
+}
+
+/**
+ * Everything the drafting loop did for one opportunity.
+ *
+ * The `Draft` on the queue entry stays the one thing that would be sent (§3's
+ * third rule); this sits beside it and explains where it came from.
+ */
+export interface DraftRecord {
+  /** Every candidate, in the order produced. Never pruned to the winner. */
+  candidates: DraftCandidate[];
+  /**
+   * The candidate ids offered to Davit as a choice, when the loop ran more than
+   * one tone variant. Empty when it ran one, in which case the rubric's pick
+   * stands unopposed.
+   */
+  offered: string[];
+  /** The candidate whose text is in `draft`. */
+  chosenId: string;
+  /** `rubric` until a person picks; `human` afterwards, and never back again. */
+  chosenBy: 'rubric' | 'human';
+  /** What the one model critic said. Kept because it explains the revisions. */
+  critique: string;
+  startedAt: string;
+  durationMs: number;
+}
+
+/**
+ * A choice Davit made between two letters, for the same posting, in different
+ * registers — `data/outreach/tone-preferences.json`.
+ *
+ * This is the one input in the whole drafting stage that is genuinely his
+ * rather than derived: `toneExamples()` is his prose about projects, the profile
+ * is his facts, and neither is a letter. A picked letter is a letter he would
+ * have sent, which is the thing no rubric and no critic can supply.
+ *
+ * It is a log, not a model. Nothing is trained, nothing is fitted; the most
+ * recent picks are handed to later draft prompts as register reference, and the
+ * running tally is reported so that "he has picked the same variant nine times"
+ * can become a reason to stop paying for the second one.
+ */
+export interface TonePreference {
+  /**
+   * The queue entry this choice was made on. The row's identity, not decoration:
+   * changing your mind about the same card must replace the earlier row rather
+   * than adding a second one, or the tally counts a reversal as two votes.
+   */
+  cardId: string;
+  at: string;
+  company: string;
+  title: string;
+  chosenVariant: string;
+  rejectedVariant: string;
+  chosenScore: number;
+  rejectedScore: number;
+  /** The letter he picked, disclosure line excluded. Fed forward as voice. */
+  body: string;
 }
 
 // ─── The ledger and the decisions ────────────────────────────────────────

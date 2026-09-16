@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type {
   AppliedApplication,
@@ -111,6 +111,20 @@ function KeyFacts({ item }: { item: QueuedOpportunity }) {
   );
 }
 
+/**
+ * How often to ask the server whether the draft has landed, while one is being
+ * written. Cheap: a few JSON files read per poll, against a call that takes over
+ * a minute.
+ */
+const DRAFT_POLL_MS = 4_000;
+
+/**
+ * How long to keep asking before admitting we do not know. Comfortably past
+ * `draftTimeoutMs()`, which caps a drafting call ten seconds below the
+ * visitor-facing timeout.
+ */
+const DRAFT_POLL_CEILING_MS = 4 * 60_000;
+
 export default function OutreachBoard({ initial }: { initial: Snapshot }) {
   const router = useRouter();
   const [data, setData] = useState(initial);
@@ -122,6 +136,8 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
   const [showRejected, setShowRejected] = useState(false);
   const [filters, setFilters] = useState<QueueFilters>(NO_FILTERS);
   const [sort, setSort] = useState<SortKey>('fit');
+  /** Set while a draft is being written, so the visibility listener knows to look. */
+  const drafting = useRef(false);
 
   const now = Date.now();
   const queue = useMemo(
@@ -136,6 +152,43 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
   // header and the tab badge count: a filter narrows what you are looking at,
   // not how much is waiting for a decision.
   const visible = useMemo(() => visibleQueue(queue, filters, sort), [queue, filters, sort]);
+
+  /**
+   * Reads the current server state without deciding anything.
+   *
+   * `GET` returns the same snapshot shape every `POST` responds with, so the
+   * result drops straight into `data`.
+   */
+  const refetch = useCallback(async (): Promise<Snapshot | null> => {
+    try {
+      const response = await fetch('/api/admin/outreach', { cache: 'no-store' });
+      if (!response.ok) return null;
+      const fresh = (await response.json()) as Snapshot;
+      setData(fresh);
+      return fresh;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  /**
+   * Re-reads the queue when the tab comes back to the foreground **while a draft
+   * is being written**.
+   *
+   * This is the phone case, and it is the ordinary one rather than an edge: a
+   * draft takes over a minute, nobody watches a spinner for that long, the
+   * screen locks or they switch apps, and iOS kills the in-flight request. The
+   * work still finishes on the Mac and is still written to the queue — the
+   * browser just never hears about it. Coming back to the tab is exactly the
+   * moment to find out.
+   */
+  useEffect(() => {
+    function onVisible() {
+      if (document.visibilityState === 'visible' && drafting.current) void refetch();
+    }
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [refetch]);
 
   async function act(action: string, payload: Record<string, unknown>, key: string) {
     setBusy(key);
@@ -167,6 +220,124 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
       return false;
     } finally {
       setBusy(null);
+    }
+  }
+
+  /**
+   * Writes a draft, and does not depend on the request surviving to deliver it.
+   *
+   * `act()` is right for every other action on this board: they are writes that
+   * take milliseconds, so the response is back before anything can interrupt it.
+   * Drafting is not like them. It is **one model call on the Mac, measured at 46
+   * to 90 seconds**, and a minute-long `fetch` is fragile in a way a fast one is
+   * not — the screen locks, the tab is backgrounded, iOS reclaims the request, a
+   * proxy gives up, the page is reloaded by someone who has waited long enough.
+   * Every one of those loses the response. **None of them loses the draft**,
+   * which was written to `pending.json` by a process that never knew the browser
+   * had gone.
+   *
+   * That was the observed failure: the letter was drafted in 72.5 seconds and
+   * recorded, the form stayed empty, and reloading the page produced it. The
+   * server did its job; the delivery was what broke.
+   *
+   * So there are two ways to learn the answer and the first one to arrive wins:
+   * the POST's own response, or a poll that notices `draftedAt` has changed.
+   * Crucially, **the POST failing does not end the operation** — it is the
+   * likeliest thing to fail and the least informative when it does, so the poll
+   * keeps going until the draft appears or the ceiling is reached.
+   */
+  async function generateDraft(item: QueuedOpportunity) {
+    const key = `${item.id}:draft`;
+    // Identity of "the draft that was there before", so an unchanged card is
+    // told apart from a new letter that happens to look similar.
+    const before = item.draft?.draftedAt ?? '';
+
+    setBusy(key);
+    setError(null);
+    setNotice(null);
+    drafting.current = true;
+
+    let settled = false;
+
+    const applyLanded = (fresh: Snapshot | null): boolean => {
+      const updated = fresh?.opportunities.find((entry) => entry.id === item.id);
+      if (!updated || (updated.draft?.draftedAt ?? '') === before) return false;
+      // Delete the buffer rather than blanking it: `draftFor` falls back with
+      // `??`, and `''` is not nullish, so blanking hides the letter behind an
+      // empty box until a reload. §23 records what that cost the first time.
+      forgetEdits(item.id);
+      setNotice('Drafted. Read it before you approve it — it is a first attempt, not a send.');
+      return true;
+    };
+
+    const post = (async () => {
+      try {
+        const response = await fetch('/api/admin/outreach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'generate_draft', id: item.id }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) return { failed: result.error ?? 'Something went wrong' };
+        return { snapshot: result as Snapshot, notice: result.notice as string | undefined };
+      } catch {
+        // Not reported. The request dying is the expected way for this to end on
+        // a phone, and it says nothing about whether the draft was written.
+        return {};
+      }
+    })();
+
+    const poll = (async () => {
+      const deadline = Date.now() + DRAFT_POLL_CEILING_MS;
+      while (!settled && Date.now() < deadline) {
+        await new Promise((resolve) => setTimeout(resolve, DRAFT_POLL_MS));
+        if (settled) return null;
+        const fresh = await refetch();
+        const updated = fresh?.opportunities.find((entry) => entry.id === item.id);
+        if (updated && (updated.draft?.draftedAt ?? '') !== before) return fresh;
+      }
+      return null;
+    })();
+
+    try {
+      const outcome = await Promise.race([
+        post.then((value) => ({ from: 'post' as const, value })),
+        poll.then((value) => ({ from: 'poll' as const, value })),
+      ]);
+
+      if (outcome.from === 'poll') {
+        settled = true;
+        applyLanded(outcome.value);
+        return;
+      }
+
+      const { snapshot, notice: serverNotice, failed } = outcome.value;
+
+      if (snapshot) {
+        settled = true;
+        setData(snapshot);
+        applyLanded(snapshot);
+        // A server notice outranks ours: it knows things the browser does not,
+        // such as the letter having been written without the preference doc.
+        if (serverNotice) setNotice(serverNotice);
+        return;
+      }
+
+      // The POST came back with a real refusal, or died. Either way the draft
+      // may still land, so wait for the poll rather than calling it over.
+      const landed = await poll;
+      settled = true;
+
+      if (applyLanded(landed)) return;
+      setError(
+        failed ??
+          'The draft did not arrive. It may still be running on the Mac — reload in a minute to check.',
+      );
+    } finally {
+      settled = true;
+      drafting.current = false;
+      setBusy(null);
+      router.refresh();
     }
   }
 
@@ -291,6 +462,7 @@ export default function OutreachBoard({ initial }: { initial: Snapshot }) {
             forgetEdits={forgetEdits}
             act={act}
             setNotice={setNotice}
+            generateDraft={generateDraft}
           />
         </>
       )}
@@ -553,6 +725,7 @@ function QueueView({
   forgetEdits,
   act,
   setNotice,
+  generateDraft,
 }: {
   queue: QueuedOpportunity[];
   /** True when the toolbar is hiding cards, so an empty list can say which empty it is. */
@@ -563,6 +736,7 @@ function QueueView({
   forgetEdits: (id: string) => void;
   act: (action: string, payload: Record<string, unknown>, key: string) => Promise<boolean>;
   setNotice: (value: string | null) => void;
+  generateDraft: (item: QueuedOpportunity) => Promise<void>;
 }) {
   if (queue.length === 0) {
     return (
@@ -646,6 +820,15 @@ function QueueView({
             {/* 4. Key facts, or "not stated". Never guessed. */}
             <KeyFacts item={item} />
 
+            {/* 5a. Two registers, when the loop wrote both. Above the box it fills. */}
+            <RegisterPick
+              item={item}
+              busy={busy}
+              act={act}
+              onChosen={setNotice}
+              forgetEdits={forgetEdits}
+            />
+
             {/* 5. The message. Editing is the common case, not the exception. */}
             <div className="mt-4 space-y-2">
               <input
@@ -665,16 +848,7 @@ function QueueView({
               />
               <div className="flex flex-wrap items-center gap-2">
                 <button
-                  onClick={async () => {
-                    const written = await act('generate_draft', { id: item.id }, `${item.id}:draft`);
-                    if (written) {
-                      // The edit buffer has to be dropped, or the box keeps
-                      // showing whatever was in it and the new draft is
-                      // invisible until a reload.
-                      forgetEdits(item.id);
-                      setNotice('Drafted. Read it before you approve it — it is a first attempt, not a send.');
-                    }
-                  }}
+                  onClick={() => generateDraft(item)}
                   disabled={busy !== null || !item.extracted}
                   title={
                     item.extracted
@@ -707,10 +881,27 @@ function QueueView({
                   item.draft && (
                     <span className="text-xs text-slate-500">
                       saved {formatDate(item.draft.draftedAt)} · {item.draft.model}
+                      {/*
+                        "N candidates" sitting directly under two rendered
+                        panels read as a miscount — both numbers were right and
+                        they counted different things, which is worse than one
+                        being wrong. "tried" says plainly that it is the loop's
+                        total rather than what is on screen.
+                      */}
+                      {item.draftRecord
+                        ? ` · ${item.draftRecord.candidates.length} tried · this one ${
+                            item.draftRecord.candidates.find(
+                              (candidate) => candidate.id === item.draftRecord?.chosenId,
+                            )?.score.total ?? '?'
+                          }/100`
+                        : ''}
                     </span>
                   )
                 )}
               </div>
+
+              {/* The longer loop, which cannot run in this request. §17.1. */}
+              {item.extracted && <LoopCommand item={item} onCopy={setNotice} />}
             </div>
 
             {/* 6. The three decisions, together and equally weighted. */}
@@ -779,6 +970,195 @@ function QueueView({
         );
       })}
     </ul>
+  );
+}
+
+/**
+ * The two registers, side by side, when the loop produced both.
+ *
+ * Davit asked to be shown two letters and pick one rather than be handed the
+ * winner of an argument he did not see, and the pick is the one input to the
+ * drafting stage that is genuinely his — `toneExamples()` is his prose about
+ * projects and `data/profile.md` is his facts, and neither is a letter.
+ *
+ * Stacked rather than columned, and that is a 375px decision rather than a
+ * stylistic one: two 200-word letters side by side on a phone are two columns
+ * of about nine characters each. `sm:` is where they go horizontal.
+ *
+ * **The letters are clamped, and that is also a 375px decision.** Measured in a
+ * real browser: unclamped, one card with two ~180-word letters is **2559px at
+ * 375px — three and a third viewport-heights**, against a median of 940px for
+ * every other card. You scroll past two full screens of letter before reaching
+ * the message box and the three decisions. Nothing was broken and nothing was
+ * clipped; the controls were simply a very long way below the content. Clamped
+ * to eight lines with a toggle, the comparison still does its job — eight lines
+ * is the opening and most of the argument, which is what you are choosing
+ * between — and the card comes back within reach of its own buttons. The
+ * desktop layout, which measured well at 1501px with the two panels
+ * equal-height, is unchanged.
+ *
+ * The rubric's score is shown on each, and the loop's own pick is marked — but
+ * neither is presented as the answer. The whole reason this control exists is
+ * that the rubric cannot tell which of two clean, on-topic letters sounds like
+ * him, so a card that pre-selected one would be asking a question it had
+ * already answered.
+ */
+function RegisterPick({
+  item,
+  busy,
+  act,
+  onChosen,
+  forgetEdits,
+}: {
+  item: QueuedOpportunity;
+  busy: string | null;
+  act: (action: string, payload: Record<string, unknown>, key: string) => Promise<boolean>;
+  onChosen: (message: string) => void;
+  forgetEdits: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+
+  const record = item.draftRecord;
+  if (!record || record.offered.length < 2) return null;
+
+  const offered = record.offered
+    .map((id) => record.candidates.find((candidate) => candidate.id === id))
+    .filter((candidate): candidate is NonNullable<typeof candidate> => Boolean(candidate));
+
+  if (offered.length < 2) return null;
+
+  return (
+    <div className="mt-4 rounded-lg border border-violet-400/20 bg-violet-500/[0.04] p-3">
+      <p className="text-xs font-semibold text-violet-200">
+        Two registers. Pick the one that sounds like you.
+      </p>
+      <p className="mt-1 text-xs text-slate-400">
+        {record.chosenBy === 'human'
+          ? 'You picked one of these. Picking again replaces it.'
+          : 'Neither is selected yet — the box below holds the rubric’s pick until you choose.'}
+      </p>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {offered.map((candidate) => (
+          <div
+            key={candidate.id}
+            className={`flex flex-col rounded-lg border p-3 ${
+              record.chosenId === candidate.id && record.chosenBy === 'human'
+                ? 'border-emerald-400/40 bg-emerald-500/[0.06]'
+                : 'border-white/10 bg-slate-900/40'
+            }`}
+          >
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
+              <Chip tone="violet">{VARIANT_LABELS[candidate.variant] ?? candidate.variant}</Chip>
+              <Chip>{candidate.score.total}/100</Chip>
+              <Chip>{candidate.score.words}w</Chip>
+              {candidate.score.blockers.length > 0 && (
+                <Chip tone="amber">
+                  {candidate.score.blockers.length}{' '}
+                  {candidate.score.blockers.length === 1 ? 'blocker' : 'blockers'}
+                </Chip>
+              )}
+              {record.chosenId === candidate.id && record.chosenBy === 'rubric' && (
+                <span className="text-xs text-slate-500">rubric’s pick</span>
+              )}
+            </div>
+
+            <p className="mb-1 text-xs font-medium text-slate-300">{candidate.subject}</p>
+            <p
+              className={`mb-2 flex-1 whitespace-pre-wrap text-xs leading-relaxed text-slate-400 ${
+                expanded[candidate.id] ? '' : 'line-clamp-8'
+              }`}
+            >
+              {candidate.body}
+            </p>
+            <button
+              onClick={() =>
+                setExpanded((current) => ({ ...current, [candidate.id]: !current[candidate.id] }))
+              }
+              aria-expanded={Boolean(expanded[candidate.id])}
+              className="mb-3 self-start text-xs text-slate-500 underline-offset-2 hover:text-slate-300 hover:underline"
+            >
+              {expanded[candidate.id] ? 'Show less' : 'Show the whole letter'}
+            </button>
+
+            <button
+              onClick={async () => {
+                const saved = await act(
+                  'choose_draft',
+                  { id: item.id, candidateId: candidate.id },
+                  `${item.id}:${candidate.id}`,
+                );
+                if (saved) {
+                  // The same fix, for the same reason, as the one on `Generate
+                  // draft` above: `draftFor` falls back to the stored draft with
+                  // `??`, so a stale edit buffer keeps showing whatever was in
+                  // it and the letter just chosen is invisible until a reload —
+                  // and Save or Approve underneath would then post the stale
+                  // text over the pick. §23 records what this cost the first
+                  // time it was missed.
+                  forgetEdits(item.id);
+                  onChosen('Saved. Edit it below before you approve it.');
+                }
+              }}
+              disabled={busy !== null}
+              className="rounded-lg border border-violet-400/30 px-3 py-1.5 text-xs font-semibold text-violet-200 hover:bg-violet-500/10 disabled:opacity-40"
+            >
+              {busy === `${item.id}:${candidate.id}` ? 'Saving…' : 'Use this one'}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Labels for `DRAFT_VARIANTS`, kept here so the card does not import the prompt module. */
+const VARIANT_LABELS: Record<string, string> = {
+  evidence: 'Evidence first',
+  problem: 'Problem first',
+  neutral: 'Default',
+};
+
+/**
+ * The command that runs the best-of-N loop, to be copied and run on the host.
+ *
+ * §17.1's established pattern, and the same one `Prepare form` already uses:
+ * the API cannot run this. It is up to eleven model calls and seven to ten
+ * minutes of the Mac, and §23 records what a *single* 90-second call in the
+ * website's process can do to the visitor-facing circuit breaker. So the button
+ * that exists is the one-shot draft, and the longer loop is a command.
+ */
+function LoopCommand({ item, onCopy }: { item: QueuedOpportunity; onCopy: (message: string) => void }) {
+  const command = `npm run outreach:draft -- --id=${item.id}`;
+
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2">
+      <code className="min-w-0 flex-1 break-all font-mono text-xs text-slate-400">{command}</code>
+      <button
+        onClick={() => {
+          // `navigator.clipboard` is undefined over plain HTTP on a LAN address,
+          // which is exactly how this page is reached. Saying so beats a button
+          // that silently does nothing.
+          // Checked with an `if` rather than `?.`, because optional chaining
+          // short-circuits the *whole* member chain: with no `navigator.clipboard`
+          // the `.then`/`.catch` never run either, so the button silently did
+          // nothing in exactly the case the fallback was written for — plain
+          // HTTP on a LAN address, which is how this page is reached.
+          if (!navigator.clipboard) {
+            onCopy(`Copy is unavailable over plain HTTP. Run on the host:  ${command}`);
+            return;
+          }
+
+          navigator.clipboard
+            .writeText(command)
+            .then(() => onCopy('Command copied. Run it on the host — it takes minutes, not seconds.'))
+            .catch(() => onCopy(`Copy failed. Run on the host:  ${command}`));
+        }}
+        className="rounded-lg border border-white/10 px-2.5 py-1 text-xs text-slate-300 hover:bg-white/5"
+      >
+        Copy
+      </button>
+    </div>
   );
 }
 

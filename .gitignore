@@ -80,6 +80,9 @@ next-env.d.ts
 # What the 07:00 job has already tried. Machine-written and expiring, unlike
 # candidates.txt beside it, which is a person's list and is committed.
 /data/outreach/candidate-state.json
+# Which of two registers Davit picked, and the letters he picked. Derived from
+# his decisions rather than authored, and it carries whole drafted letters.
+/data/outreach/tone-preferences.json
 
 # Davit's private job preferences (salary floor, seniority thresholds, views on
 # current employment). Outside data/ on purpose: everything in data/ is

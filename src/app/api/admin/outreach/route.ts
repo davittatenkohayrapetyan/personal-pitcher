@@ -14,6 +14,7 @@ import {
   removeSuggestion,
   writeHandoff,
   clearRejections,
+  appendTonePreference,
 } from '@/lib/outreach/store';
 import {
   appendApplied,
@@ -30,7 +31,7 @@ import {
   sanitizeEditedField,
 } from '@/lib/outreach/sanitize';
 import { dryRun, maxSendsPerDay } from '@/lib/outreach/config';
-import { draftMessage } from '@/lib/outreach/draft';
+import { draftMessage, finaliseDraft } from '@/lib/outreach/draft';
 import { loadPreferences } from '@/lib/outreach/preferences';
 import { logger } from '@/lib/logger';
 
@@ -112,6 +113,7 @@ type Action =
   | 'unreject'
   | 'save_draft'
   | 'generate_draft'
+  | 'choose_draft'
   | 'company_add'
   | 'company_reject'
   | 'confirm_submitted'
@@ -122,6 +124,8 @@ interface DecisionBody {
   id?: unknown;
   edits?: { subject?: unknown; body?: unknown };
   days?: unknown;
+  /** `choose_draft`: which candidate in the record Davit picked. */
+  candidateId?: unknown;
   appliedAt?: unknown;
   channel?: unknown;
   entry?: Partial<AppliedApplication>;
@@ -336,7 +340,11 @@ export async function POST(request: Request) {
     // A card can disappear during a 90-second call — a second tab deciding it,
     // or the 08:00 run pruning an expiry. Saying "drafted" about a card that no
     // longer exists sends the reviewer looking for something that is not there.
-    if (!patchPending(id, { draft: result.draft })) {
+    // `draftRecord: null` for the same reason `save_draft` clears it: this is a
+    // new, single-shot letter, and leaving the loop's record beside it would
+    // leave the A/B picker offering two candidates that no longer correspond to
+    // anything on the card. Clicking one would revert the letter just drafted.
+    if (!patchPending(id, { draft: result.draft, draftRecord: null })) {
       return fail('That card left the queue while the draft was being written.', 409);
     }
 
@@ -345,6 +353,77 @@ export async function POST(request: Request) {
         ? undefined
         : 'Drafted without your preference doc — private/job-preferences.md is not readable from here, ' +
             'so the letter had no target roles, stack or notes to steer by.',
+    );
+  }
+
+  if (body.action === 'choose_draft') {
+    // Davit picking between two registers, which is the one input to the
+    // drafting stage that is genuinely his. `toneExamples()` is his prose about
+    // projects and `data/profile.md` is his facts; neither is a letter, and
+    // there are no example letters to learn a register from. A letter he picked
+    // over a named alternative is the closest thing that exists.
+    const record = item.draftRecord;
+    if (!record) return fail('This card was not written by the drafting loop, so there is nothing to choose between.', 409);
+
+    const candidateId = typeof body.candidateId === 'string' ? body.candidateId : null;
+    const chosen = record.candidates.find((candidate) => candidate.id === candidateId);
+    if (!chosen) return fail('That candidate is not in this card’s record.', 409);
+
+    // The rejected one is the *other* offered candidate, not merely the
+    // next-best of everything: the record holds every attempt, and "he rejected
+    // candidate evidence-2" is only true of a letter he was actually shown.
+    // Only a candidate that was actually *offered* can have beaten another one.
+    // The record holds every attempt, so without this check picking a losing
+    // candidate through the API would write "chose X over Y" about a pair Davit
+    // was never shown — a row that reads identically to a real one in a file
+    // whose whole value is that its rows are real.
+    const wasOffered = record.offered.includes(chosen.id);
+    const rejectedId = wasOffered
+      ? record.offered.find((offeredId) => offeredId !== chosen.id)
+      : undefined;
+    const rejected = record.candidates.find((candidate) => candidate.id === rejectedId);
+
+    if (!patchPending(id, {
+      draft: finaliseDraft(chosen.subject, chosen.body, item.extracted, chosen.model),
+      draftRecord: { ...record, chosenId: chosen.id, chosenBy: 'human' },
+    })) {
+      return fail('That card left the queue.', 409);
+    }
+
+    // Recorded only when there was a genuine alternative. A "choice" between a
+    // letter and nothing teaches nothing about register, and writing it down
+    // would put a tally in `tone-preferences.json` that means something
+    // different from every other row in the file.
+    if (rejected) {
+      appendTonePreference({
+        cardId: item.id,
+        at: new Date().toISOString(),
+        company: item.company,
+        title: item.title,
+        chosenVariant: chosen.variant,
+        rejectedVariant: rejected.variant,
+        chosenScore: chosen.score.total,
+        rejectedScore: rejected.score.total,
+        body: chosen.body,
+      });
+      logger.info('outreach_tone_chosen', {
+        job: 'outreach',
+        company: item.company,
+        chosen: chosen.variant,
+        rejected: rejected.variant,
+        chosenScore: chosen.score.total,
+        rejectedScore: rejected.score.total,
+        // Worth watching: when the rubric's pick and Davit's pick keep
+        // disagreeing, the rubric is measuring the wrong thing, and that is a
+        // bug in `rubric.ts` rather than a quirk of his taste.
+        agreedWithRubric: record.chosenId === chosen.id,
+      });
+    }
+
+    return ok(
+      rejected
+        ? 'Saved, and the choice is recorded — later letters get it as register reference.'
+        : 'Saved.',
     );
   }
 
@@ -362,6 +441,12 @@ export async function POST(request: Request) {
         model: 'human',
         draftedAt: new Date().toISOString(),
       },
+      // The record explains where `draft` came from, so it must not outlive the
+      // draft it explains. Without this, hand-editing a looped letter left the
+      // A/B picker on screen offering two candidates for a letter that is no
+      // longer on the card — and clicking "Use this one" would silently discard
+      // the edit that was just saved.
+      draftRecord: null,
     });
     return ok();
   }

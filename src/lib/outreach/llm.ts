@@ -8,7 +8,7 @@ import {
   getMacModelName,
 } from '../llm/macOllama';
 import { macBreaker } from '../llm/circuitBreaker';
-import { allowPaidFallback, draftTimeoutMs, outreachTimeoutMs, stageModel } from './config';
+import { allowPaidFallback, draftNumCtx, draftTimeoutMs, outreachTimeoutMs, stageModel } from './config';
 import { logger } from '../logger';
 
 /**
@@ -91,7 +91,17 @@ export async function openOutreachModel(stage: OutreachStage): Promise<ModelGate
     // notice. It is still well below 1: the constraint that matters is that
     // every claim traces to the profile, and temperature is exactly the knob
     // that loosens it.
-    options: { temperature: stage === 'draft' ? 0.6 : 0.1 } as Record<string, unknown>,
+    options: {
+      temperature: stage === 'draft' ? 0.6 : 0.1,
+      // Unset by default, and `draftNumCtx` says why: naming a context window
+      // makes Ollama reload the model, which evicts the instance the website is
+      // answering visitors from. The drafting prompt is the biggest one this
+      // job sends -- a whole profile, a posting, voice examples and, in the
+      // loop, a letter being revised -- so it is the one worth being able to
+      // raise deliberately. Every candidate logs `promptChars` so the size is
+      // visible rather than guessed at.
+      ...(stage === 'draft' && draftNumCtx() !== undefined ? { num_ctx: draftNumCtx() } : {}),
+    } as Record<string, unknown>,
   };
 
   const gate = await openMacTier(shared);

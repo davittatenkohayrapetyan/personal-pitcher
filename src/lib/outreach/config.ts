@@ -414,6 +414,86 @@ export function draftTimeoutMs(): number {
 }
 
 /**
+ * How many candidates the drafting loop asks for **per tone variant** (§7).
+ *
+ * Three by default, and the per-variant reading is the part worth being explicit
+ * about: with the default two variants this is six letters, not three. The
+ * arithmetic matters because every one of them is 46–58 seconds of the only GPU
+ * in the house — see `.env.example`, which does the sum.
+ *
+ * Bounded at five rather than left open. Best-of-N against a fixed rubric has
+ * sharply diminishing returns: the candidates come from one model at one
+ * temperature over one prompt, so the tenth is drawn from the same distribution
+ * as the second and mostly buys minutes. If the record shows the third candidate
+ * never winning, the honest response is to set this to 1, not to raise it.
+ */
+export function draftCandidates(): number {
+  const parsed = parseInt(env('OUTREACH_DRAFT_CANDIDATES') ?? '', 10);
+  if (!Number.isFinite(parsed)) return 3;
+  return Math.min(5, Math.max(1, parsed));
+}
+
+/**
+ * How many tone variants to run, 1 or 2 (`draft.ts`'s `DRAFT_VARIANTS`).
+ *
+ * Two by default because Davit asked to be shown two letters and pick one
+ * rather than be handed the winner of an argument he did not see — and because
+ * that pick is the only input to this stage that is genuinely his. It doubles
+ * the drafting half of the loop's cost.
+ *
+ * Set it to 1 once `data/outreach/tone-preferences.json` has enough picks to
+ * have established a register. The tally is in the discovery of that file and in
+ * every `outreach_draft_loop` log line, so "he has chosen the same variant nine
+ * times out of ten" is a thing that can actually be noticed.
+ */
+export function draftVariants(): number {
+  const parsed = parseInt(env('OUTREACH_DRAFT_VARIANTS') ?? '', 10);
+  if (!Number.isFinite(parsed)) return 2;
+  return Math.min(2, Math.max(1, parsed));
+}
+
+/**
+ * Revision rounds after the critic pass. **Hard ceiling of two.**
+ *
+ * The ceiling is the point, not the default. A loop that revises until a
+ * quality threshold is met has no bound on a bad morning: the model wanders,
+ * the score does not climb, and a scheduled job spends an hour of a shared
+ * machine discovering that. Two rounds and stop, keeping the best-scoring
+ * candidate seen — which, because every candidate is scored and kept, is never
+ * worse than what the first round produced.
+ */
+export function draftRevisions(): number {
+  const parsed = parseInt(env('OUTREACH_DRAFT_REVISIONS') ?? '', 10);
+  if (!Number.isFinite(parsed)) return 1;
+  return Math.min(2, Math.max(0, parsed));
+}
+
+/**
+ * Ollama's context window for the drafting stage, or undefined to leave it
+ * alone.
+ *
+ * **Undefined is the default and that is deliberate**, even though §23 records
+ * the context window as unmeasured and this loop makes the prompt bigger.
+ * Setting `num_ctx` makes Ollama reload the model with different parameters,
+ * which evicts the instance the website is serving visitors from — the same cost
+ * `OUTREACH_DRAFT_MODEL` is documented as having, arriving through a different
+ * door. Changing that silently, on shared hardware, is not a decision this file
+ * gets to make.
+ *
+ * What is done instead: every candidate logs `promptChars`, so the size of the
+ * input is visible rather than guessed at. Roughly four characters to a token,
+ * and Ollama truncates rather than erroring — with the rules at the *front* of
+ * the prompt, which is the half that would be lost.
+ */
+export function draftNumCtx(): number | undefined {
+  const parsed = parseInt(env('OUTREACH_DRAFT_NUM_CTX') ?? '', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+/** Letters Davit has picked between two variants — `tone-preferences.json`. */
+export const TONE_PREFERENCES_FILE = path.join(OUTREACH_DIR, 'tone-preferences.json');
+
+/**
  * §7: a role in Yerevan is never auto-drafted, whatever it scores.
  *
  * Not because those roles are worse — the Align Sr. Java Engineer is the best

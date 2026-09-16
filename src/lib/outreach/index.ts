@@ -248,6 +248,9 @@ async function judgePosting(
     // subject and body for a human to fill, which is the same shape stage C
     // will produce and therefore needs no migration when it arrives.
     draft: null,
+    // No loop ran, so there is nothing to explain. `draftLoop.ts` fills this
+    // when it writes the draft; a hand-typed one leaves it null for ever.
+    draftRecord: null,
   };
 
   const placeholder = (extracted: ExtractedPosting | null): Judgement => ({

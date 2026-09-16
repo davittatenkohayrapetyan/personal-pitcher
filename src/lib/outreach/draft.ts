@@ -2,8 +2,10 @@ import fs from 'fs';
 import type { Draft, ExtractedPosting, FitVerdict, OutreachViolation } from './types';
 import type { Preferences } from './preferences';
 import { PROFILE_FILE, disclosureLine } from './config';
-import { openOutreachModel, parseJsonBlock } from './llm';
+import { openOutreachModel, parseJsonBlock, type OutreachModel } from './llm';
+import { loadProjects, toneExamples } from '../refresh/propose';
 import { POSTING_LIMITS, sanitizeEditedBody, sanitizeEditedField } from './sanitize';
+import { mentionsMoney } from './rubric';
 import { logger } from '../logger';
 
 /**
@@ -84,6 +86,69 @@ const DRAFT_SCHEMA = {
   },
 } as const;
 
+/**
+ * The two openings, and why there are two.
+ *
+ * Davit asked to be shown two letters in different registers and to pick one,
+ * rather than to be handed a single letter and told it won the internal
+ * argument. That is a better use of the loop than it sounds: the rubric can say
+ * which candidate has fewer problems, and the critic can say whether the
+ * argument is about this posting, but neither can say which of two clean,
+ * on-topic letters *sounds like him*. He can, in about fifteen seconds, and the
+ * answer is recorded (`TonePreference`) and fed back into later prompts.
+ *
+ * Both variants sit inside §7's triad — friendly, professional, confident — and
+ * neither relaxes any rule. What differs is the **opening move**, which is the
+ * part of a cover letter a reader actually decides on:
+ *
+ * - `evidence` leads with the strongest checkable fact. It is the register §7
+ *   argues for most directly: "p95 under 500 ms at 100,000 requests a minute"
+ *   in the first eighty words, before any framing.
+ * - `problem` leads with the thing the posting says it needs, then answers it.
+ *   It reads as more consultative and risks being slower to the point, which is
+ *   exactly the trade worth putting in front of a person rather than guessing.
+ *
+ * `neutral` carries no extra instruction and is what the one-shot button uses,
+ * so the fast path is byte-for-byte the prompt it has always sent and the loop's
+ * contribution stays measurable against it.
+ */
+export interface DraftVariant {
+  id: string;
+  /** Shown on the card next to the letter. */
+  label: string;
+  /** One sentence added to the system prompt. Never relaxes a rule. */
+  instruction: string;
+}
+
+export const NEUTRAL_VARIANT: DraftVariant = {
+  id: 'neutral',
+  label: 'Default',
+  instruction: '',
+};
+
+export const DRAFT_VARIANTS: DraftVariant[] = [
+  {
+    id: 'evidence',
+    label: 'Evidence first',
+    instruction:
+      'OPENING: after one short line saying who is writing and about which role, go straight to the ' +
+      'single most checkable fact in the profile that bears on this posting — a measured number, ' +
+      'named system or named platform — and build the letter outward from it.',
+  },
+  {
+    id: 'problem',
+    label: 'Problem first',
+    instruction:
+      'OPENING: after one short line saying who is writing and about which role, name the problem ' +
+      'this posting is describing in your own words, in one sentence, and then answer it with what ' +
+      'he has actually done. Do not flatter the company and do not speculate about its business.',
+  },
+];
+
+export function variantById(id: string): DraftVariant {
+  return DRAFT_VARIANTS.find((variant) => variant.id === id) ?? NEUTRAL_VARIANT;
+}
+
 const SYSTEM_PROMPT = `You are writing one short job application email, as the candidate, in the first person.
 
 TONE: friendly, professional, confident.
@@ -121,6 +186,39 @@ function readProfile(): string {
 }
 
 /**
+ * Davit's own prose, as a register reference.
+ *
+ * §7 asks for this by name — "tone examples come from existing `data/` prose,
+ * reusing the `toneExamples()` trick in `refresh/propose.ts`" — and it is the
+ * cheapest quality lever stage C has. The alternative inputs are a profile,
+ * which is a list of facts, and a posting, which is somebody else's marketing.
+ * Neither tells a model what Davit sounds like when he writes a sentence about
+ * his own work, and that is exactly what a cover letter is.
+ *
+ * They are `description | highlight` pairs out of `projects.json`: sentences he
+ * wrote, published under his own name, about things he actually built. Not
+ * example letters — there are none, and inventing them would be putting words
+ * in his mouth at the one point where the whole letter is supposed to be his.
+ *
+ * Passed as voice and never as content, with the prompt saying so, exactly as
+ * `refresh/edit.ts` does. A letter that cited a project the posting has no use
+ * for because it appeared in this block would be a worse letter, and the
+ * grounding check cannot catch it — `projects.json` is also in `profile.md`, so
+ * it is grounded and wrong.
+ *
+ * Returns an empty array rather than throwing. A drafting stage that fails
+ * because `projects.json` moved would be trading the whole letter for its
+ * register.
+ */
+function voiceExamples(): string[] {
+  try {
+    return toneExamples(loadProjects());
+  } catch {
+    return [];
+  }
+}
+
+/**
  * What the model is told about the candidate's preferences.
  *
  * `notes` is included and the numbers are not. `preferences.ts` describes that
@@ -137,12 +235,8 @@ function preferenceLines(preferences: Preferences): string {
   return lines.join('\n');
 }
 
-function buildPrompt(
-  extracted: ExtractedPosting,
-  verdict: FitVerdict | null,
-  preferences: Preferences,
-  profile: string,
-): string {
+function buildPrompt(inputs: DraftInputs): string {
+  const { extracted, verdict, preferences, profile, voice, preferred } = inputs;
   return [
     'THE ROLE',
     `company: ${extracted.company}`,
@@ -156,15 +250,89 @@ function buildPrompt(
     '',
     // Stage B's reasons are why this role was worth a letter at all, so they
     // are the outline of the letter's middle. They are also already sanitised.
-    ...(verdict && verdict.reasons.length
-      ? ['WHY THIS ROLE WAS SHORTLISTED', ...verdict.reasons.map((reason) => `- ${reason}`), '']
+    //
+    // Filtered for money, and this is not belt-and-braces: stage B's own prompt
+    // *does* receive `compensation`, so a reason reading "the posted band sits
+    // above his floor, at …" is a published figure arriving in the drafting
+    // prompt by the back door. §5 says no figure in any currency, and §23 says
+    // why — a number in a prompt is a number that can be quoted back in a
+    // letter. Dropping one reason costs a sentence of outline; letting it
+    // through costs a salary figure in a message to a stranger.
+    ...(verdict && verdict.reasons.filter((reason) => !mentionsMoney(reason)).length
+      ? [
+          'WHY THIS ROLE WAS SHORTLISTED',
+          ...verdict.reasons.filter((reason) => !mentionsMoney(reason)).map((reason) => `- ${reason}`),
+          '',
+        ]
       : []),
     'THE CANDIDATE — the only permitted source of claims about him',
     profile,
     '',
     ...(preferenceLines(preferences) ? ['WHAT HE IS LOOKING FOR', preferenceLines(preferences), ''] : []),
+    ...(preferred.length
+      ? [
+          'A LETTER DAVIT CHOSE over an alternative for a different role. This is the register he',
+          'picked when he was shown two. Match the register; do not reuse a sentence of it, and do',
+          'not carry over a fact that is not in this posting or this profile:',
+          preferred[0],
+          '',
+        ]
+      : []),
+    ...(voice.length
+      ? [
+          'VOICE REFERENCE — sentences Davit wrote about his own work, for tone only.',
+          'Do not copy their content and do not mention these projects unless this posting',
+          'gives you a reason to:',
+          ...voice.map((example) => `  - ${example}`),
+          '',
+        ]
+      : []),
     'Write the email now.',
   ].join('\n');
+}
+
+/**
+ * Everything a draft call needs that is not the model.
+ *
+ * Bundled because the loop makes up to eleven calls for one opportunity and
+ * every one of them wants the same profile, the same voice examples and the
+ * same preferences. Reading `data/profile.md` eleven times would be harmless
+ * and re-opening the model gate would not: `openOutreachModel` probes the Mac
+ * for reachability, and eleven probes against a machine that has just answered
+ * one is eleven LAN round trips bought for nothing.
+ */
+export interface DraftInputs {
+  extracted: ExtractedPosting;
+  verdict: FitVerdict | null;
+  preferences: Preferences;
+  profile: string;
+  voice: string[];
+  /**
+   * Letters Davit has picked before, as register reference. At most one, and
+   * that bound is deliberate: `num_ctx` is the one budget in this prompt nobody
+   * has measured (§23), the profile alone is already 12 kB, and Ollama truncates
+   * rather than erroring — so the failure mode of being generous here is the
+   * front of the prompt, where the rules are, silently falling off the end.
+   */
+  preferred: string[];
+}
+
+/**
+ * Gathers the inputs, or returns null when the profile is unreadable.
+ *
+ * Null rather than a default, for the reason `readProfile` gives: the profile
+ * is the only permitted source of claims about Davit, so its absence is not
+ * something to write around.
+ */
+export function loadDraftInputs(
+  extracted: ExtractedPosting,
+  verdict: FitVerdict | null,
+  preferences: Preferences,
+  preferred: string[] = [],
+): DraftInputs | null {
+  const profile = readProfile();
+  if (!profile.trim()) return null;
+  return { extracted, verdict, preferences, profile, voice: voiceExamples(), preferred };
 }
 
 export interface DraftResult {
@@ -172,6 +340,121 @@ export interface DraftResult {
   violations: OutreachViolation[];
   /** A stable slug when there is no draft: `no_model`, `no_profile`, `unparseable`, `rejected`. */
   reason?: string;
+}
+
+/**
+ * Asks for one letter and returns it unsanitised.
+ *
+ * The single place a drafting prompt is sent, used by the one-shot button and by
+ * every step of the loop. Sanitising is the caller's job because the loop scores
+ * candidates it will throw away, and running the outbound-text sanitiser over a
+ * letter that is never going anywhere would record violations against `draft`
+ * for text nobody will ever see.
+ *
+ * Never throws: a model failure is an ordinary outcome here.
+ */
+export async function generateCandidate(
+  model: OutreachModel,
+  inputs: DraftInputs,
+  variant: DraftVariant,
+  revision?: { body: string; instructions: string[] },
+): Promise<{ subject: string; body: string; reason?: string; durationMs: number; promptChars: number }> {
+  const started = Date.now();
+  const system = [SYSTEM_PROMPT, variant.instruction].filter(Boolean).join('\n\n');
+
+  const prompt = revision
+    ? [
+        buildPrompt(inputs),
+        '',
+        'YOU HAVE ALREADY WRITTEN A DRAFT. Here it is:',
+        '---',
+        revision.body,
+        '---',
+        '',
+        'Rewrite it, fixing every point below and changing nothing else. Keep what already works;',
+        'this is an edit, not a fresh attempt. All the rules above still apply.',
+        ...revision.instructions.map((instruction) => `- ${instruction}`),
+        '',
+        'Return the rewritten email as JSON with exactly two fields, "subject" and "body".',
+      ].join('\n')
+    : buildPrompt(inputs);
+
+  // §23 records the context window as unmeasured, and this is the measurement,
+  // carried out to the caller rather than logged per call: Ollama truncates
+  // rather than erroring, and the rules are at the *front* of this prompt, so an
+  // input that outgrows `num_ctx` loses the half that keeps the letter honest.
+  // Roughly four characters to a token. `OUTREACH_DRAFT_NUM_CTX` is the lever
+  // and `config.ts` explains why it is not pulled by default.
+  const promptChars = system.length + prompt.length;
+
+  let raw: string;
+  try {
+    raw = await model.generate(system, prompt, DRAFT_SCHEMA);
+  } catch (err) {
+    logger.warn('outreach_draft_failed', {
+      job: 'outreach',
+      company: inputs.extracted.company,
+      variant: variant.id,
+      reason: err instanceof Error ? err.message : String(err),
+    });
+    return { subject: '', body: '', reason: 'model_failed', durationMs: Date.now() - started, promptChars };
+  }
+
+  const parsed = parseJsonBlock(raw) as { subject?: unknown; body?: unknown } | null;
+  if (!parsed || typeof parsed.subject !== 'string' || typeof parsed.body !== 'string') {
+    logger.warn('outreach_draft_failed', {
+      job: 'outreach',
+      company: inputs.extracted.company,
+      variant: variant.id,
+      reason: 'unparseable',
+    });
+    return { subject: '', body: '', reason: 'unparseable', durationMs: Date.now() - started, promptChars };
+  }
+
+  return { subject: parsed.subject, body: parsed.body, durationMs: Date.now() - started, promptChars };
+}
+
+/**
+ * Turns an accepted subject and body into the thing that would be sent.
+ *
+ * The one place the disclosure line is attached, so there is one place to read
+ * if anyone ever wonders whether a code path can produce a letter without it.
+ */
+export function finaliseDraft(
+  subject: string,
+  body: string,
+  /** Null is a real case: a card with no stage A extraction has no address. */
+  extracted: ExtractedPosting | null,
+  model: string,
+): Draft {
+  return {
+    subject,
+    // Appended here and nowhere else. A model asked to include a disclosure
+    // will reword it, and the wording is the commitment.
+    body: `${body.trim()}\n\n${disclosureLine()}`,
+    to: extracted?.applyMethod === 'email' ? extracted.applyTarget : '',
+    model,
+    draftedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * The two checks a hand-typed draft passes in the admin route, applied to a
+ * model-written one — same path, weaker author.
+ */
+export function sanitizeCandidate(
+  subject: string,
+  body: string,
+): { subject: string; body: string; violations: OutreachViolation[] } | { violations: OutreachViolation[] } {
+  const checkedSubject = sanitizeEditedField('subject', subject, POSTING_LIMITS.title, 'draft');
+  const checkedBody = sanitizeEditedBody('body', body, BODY_LIMIT, 'draft');
+  const violations = [...checkedSubject.violations, ...checkedBody.violations];
+
+  if (!checkedSubject.ok || checkedSubject.value === null || !checkedBody.ok || checkedBody.value === null) {
+    return { violations };
+  }
+
+  return { subject: checkedSubject.value, body: checkedBody.value, violations };
 }
 
 function violation(field: string, rule: string, detail: string): OutreachViolation {
@@ -191,8 +474,8 @@ export async function draftMessage(
   verdict: FitVerdict | null,
   preferences: Preferences,
 ): Promise<DraftResult> {
-  const profile = readProfile();
-  if (!profile.trim()) {
+  const inputs = loadDraftInputs(extracted, verdict, preferences);
+  if (!inputs) {
     logger.warn('outreach_draft_skipped', { job: 'outreach', reason: 'no_profile' });
     return { draft: null, violations: [], reason: 'no_profile' };
   }
@@ -203,51 +486,29 @@ export async function draftMessage(
     return { draft: null, violations: [], reason: 'no_model' };
   }
 
-  const started = Date.now();
-  let raw: string;
-  try {
-    raw = await gate.model.generate(
-      SYSTEM_PROMPT,
-      buildPrompt(extracted, verdict, preferences, profile),
-      DRAFT_SCHEMA,
-    );
-  } catch (err) {
-    logger.warn('outreach_draft_failed', {
-      job: 'outreach',
-      company: extracted.company,
-      reason: err instanceof Error ? err.message : String(err),
-    });
-    return { draft: null, violations: [], reason: 'model_failed' };
-  }
-
-  const parsed = parseJsonBlock(raw) as { subject?: unknown; body?: unknown } | null;
-  if (!parsed || typeof parsed.subject !== 'string' || typeof parsed.body !== 'string') {
-    logger.warn('outreach_draft_failed', {
-      job: 'outreach',
-      company: extracted.company,
-      reason: 'unparseable',
-    });
+  // `NEUTRAL_VARIANT` carries no extra instruction, so the fast path sends the
+  // prompt it has always sent. That is the point: the loop's contribution has
+  // to be measurable against something that did not move.
+  const candidate = await generateCandidate(gate.model, inputs, NEUTRAL_VARIANT);
+  if (candidate.reason) {
     return {
       draft: null,
-      violations: [violation('draft', 'unparseable', 'stage C returned no usable JSON')],
-      reason: 'unparseable',
+      violations:
+        candidate.reason === 'unparseable'
+          ? [violation('draft', 'unparseable', 'stage C returned no usable JSON')]
+          : [],
+      reason: candidate.reason,
     };
   }
 
-  // The same two checks a hand-typed draft passes in the admin route, and for a
-  // stronger reason: this text was written by a model, and the sanitiser is the
-  // thing standing between a model and an outbound channel.
-  const subject = sanitizeEditedField('subject', parsed.subject, POSTING_LIMITS.title, 'draft');
-  const body = sanitizeEditedBody('body', parsed.body, BODY_LIMIT, 'draft');
-  const violations = [...subject.violations, ...body.violations];
-
-  if (!subject.ok || subject.value === null || !body.ok || body.value === null) {
+  const checked = sanitizeCandidate(candidate.subject, candidate.body);
+  if (!('subject' in checked)) {
     logger.warn('outreach_draft_rejected', {
       job: 'outreach',
       company: extracted.company,
-      rules: violations.map((entry) => entry.rule),
+      rules: checked.violations.map((entry) => entry.rule),
     });
-    return { draft: null, violations, reason: 'rejected' };
+    return { draft: null, violations: checked.violations, reason: 'rejected' };
   }
 
   logger.info('outreach_drafted', {
@@ -255,23 +516,21 @@ export async function draftMessage(
     company: extracted.company,
     title: extracted.title,
     model: gate.model.model,
-    durationMs: Date.now() - started,
+    durationMs: candidate.durationMs,
+    promptChars: candidate.promptChars,
     // The body is not logged. It is bounded third-party-adjacent prose and
     // `logs/` rotates daily (§20); the draft itself is in `pending.json`, which
     // is where a person reads it anyway.
-    bodyChars: body.value.length,
+    bodyChars: checked.body.length,
   });
 
   return {
-    draft: {
-      subject: subject.value,
-      // Appended here and nowhere else. A model asked to include a disclosure
-      // will reword it, and the wording is the commitment.
-      body: `${body.value.trim()}\n\n${disclosureLine()}`,
-      to: extracted.applyMethod === 'email' ? extracted.applyTarget : '',
-      model: `${gate.model.label}:${gate.model.model}`,
-      draftedAt: new Date().toISOString(),
-    },
-    violations,
+    draft: finaliseDraft(
+      checked.subject,
+      checked.body,
+      extracted,
+      `${gate.model.label}:${gate.model.model}`,
+    ),
+    violations: checked.violations,
   };
 }

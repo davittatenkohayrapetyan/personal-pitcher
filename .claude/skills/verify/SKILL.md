@@ -129,23 +129,41 @@ visitor's answer.
 
 ## 10. Scheduled job drills (no server, no model, no network)
 
-The outreach jobs have no test framework either, but they do have five
+The outreach jobs have no test framework either, but they do have six
 pure-function drills over saved responses. They need nothing running — not the
-dev server, not the Mac — so run whichever ones the change touched, and all five
+dev server, not the Mac — so run whichever ones the change touched, and all six
 before calling a phase done:
 
 ```bash
 npm run outreach -- --geo-fixtures            # 15 cases, the Yerevan filter
 npm run outreach -- --posting-fixtures        # 8 cases, incl. the injection one
 npm run outreach -- --policy-fixtures         # 10 cases, the categorical rules
+npm run outreach -- --rubric-fixtures         # 16 cases, the drafting quality bar
 npm run outreach -- --source-fixtures         # 9 adapters over real responses
-npm run outreach:companies -- --detect-fixtures  # 12 careers-page shapes
+npm run outreach:companies -- --detect-fixtures  # 13 careers-page shapes
 ```
 
 Each prints `N/N passed` and exits 1 on any mismatch. They exist for bugs the
 type checker cannot see: an adapter written from a board's documentation rather
 than its output, a geo rule that drops the one role worth having, a detector
 that works on two ATS boards and fails on the third.
+
+**`--rubric-fixtures` is the one to run on any change to the drafting chain**
+(`draft.ts`, `rubric.ts`, `critic.ts`, `draftLoop.ts`, or `data/profile.md`'s
+shape). It is hand-written letters with asserted scores, and it exists because
+the alternative — asking the model to grade its own letters — cannot be
+asserted against at all: the same call returns a different number next week, so
+a quality bar built on it is a vibe with a number printed next to it. Two of its
+cases are *good* letters in different registers, and those are the ones that
+matter most: a rubric that only ever proves it can reject has not been checked
+for false positives, and a false positive there is the loop silently throwing
+away the letter Davit would have sent. The first run of the drill failed both of
+them.
+
+The last three cases assert an *ordering* rather than a score —
+`compareByQuality` is what picks the survivor out of best-of-N, and its whole
+claim is that a letter with a blocker never outranks a clean one however well it
+reads.
 
 Two live-ish checks, both safe to run repeatedly:
 

@@ -1472,6 +1472,385 @@ Known, recorded, and deliberately not fixed here:
   names in a dropdown. It is an adapter-boundary fix and it changes
   `dedupeHash`, so it belongs with a phase that is already touching the queue.
 
+**The best-of-N drafting loop, built 2026-09-16.** Stage C was one model call
+behind a button; it is now a deterministic rubric, best-of-N against it, one
+model critic and at most two revisions, run from a host-side script. The button
+is unchanged and stays the fast path.
+
+- **§16's fourth open question is answered: no.** Stage C does **not** get the
+  paid tier; drafting stays on the Mac, and extraction and scoring stay there
+  with it. That answer is what makes the rest of this entry the shape it is.
+  Best-of-3 across two tone variants, plus a critic, plus a revision round is
+  nine model calls — seven to nine minutes at the measured 46–58 seconds each —
+  and Ollama serialises per model, so for those minutes the website has no tier
+  0 at all. §23 already records what a *single* long call in the web process can
+  do: a visitor's one question makes two tier-0 calls, both can time out behind
+  the draft, and two timeouts is the whole of `MAC_CB_FAILURE_THRESHOLD`, so the
+  breaker opens and an alert fires about a machine that is healthy and busy.
+  Nine calls widen that window by an order of magnitude rather than narrowing
+  it. So the loop is `npm run outreach:draft -- --id=…`, a `tsx` process on the
+  host, with the copyable command on the card — §17.1's established pattern, the
+  same one `outreach:form` already uses, and for the same reason: the website's
+  process must not be inside it.
+- **The rubric is deterministic, and that is the whole design rather than an
+  optimisation.** `rubric.ts` scores a letter with no model in it: §7's actual
+  needy and oversell phrasings, grounding of every named employer and technology
+  against `data/profile.md`, word and paragraph counts, placeholders, markdown,
+  a sign-off block, and whether the letter names at least two concrete
+  requirements from the posting. The obvious alternative — ask the model to
+  grade its own letter — fails twice over. **A same-model judge is weak**:
+  `gemma4:26b` grading `gemma4:26b` rewards fluency, which is the property it
+  was optimised for, and forgives its own failure modes, because the generator
+  and the judge share a prior about what a good sentence looks like. And,
+  decisively, **a model judge cannot be fixtured**: hand it a bad letter, assert
+  that it scores 40, and the assertion does not hold next week, so a "quality
+  bar" built on one is a vibe with a number printed next to it. The rubric can
+  be fixtured and is, in `npm run outreach -- --rubric-fixtures`.
+- **The disclosure line is stripped before anything is scored.** It is Davit's
+  own wording, appended by code and never asked of the model, so it is not the
+  model's prose and must not be judged as if it were. Left in, it spends about
+  35 of the letter's 250-word budget, and "there is more about my work … on the
+  site" reads to a needy-marker regex exactly like the thing that regex is for.
+  Its presence is reported and never scored — candidates inside the loop have
+  not had it appended yet, so scoring it would mark every one of them down for
+  the absence of a line they are not allowed to write. There is a fixture that
+  asserts the same letter scores identically with and without it.
+- **The fixtures found four real defects on their first run, and two of them
+  were false positives on the good letters.** This is the part worth recording,
+  because it is the argument for writing good letters into a fixture file at
+  all. The grounding check reported "Keeping those figures true", "Thank you in
+  advance", "Whatever the pipeline needs" and "Best regards" as *invented
+  employers* — every capitalised word that opened a sentence. Two hand-written
+  letters that Davit would have been happy to send scored 88 with a blocker
+  each, which in the loop means being ranked below anything cleaner and
+  discarded. A rubric that only ever proves it can reject has not been checked
+  for false positives, and the cost of one here is silent. The fix is that a
+  capitalised word opening a sentence is not counted unless it is part of a
+  longer capitalised run or is shaped like a technology; the cost of the fix,
+  stated in the module rather than discovered later, is that a single invented
+  name opening a sentence is missed where the same name mid-sentence is caught.
+  The other two defects were double counting: `[Hiring Manager]` was reported
+  once as a placeholder and again as an invented employer, and a markdown link
+  `[my site](…)` was reported as an unfilled slot.
+- **Blockers rank ahead of the score, and the score is not lowered to match.**
+  A letter reading "Dear [Hiring Manager]" still scores in the high eighties,
+  because its prose is genuinely good and the total is about the prose.
+  "Unsendable" is what `blockers` is for, and `compareByQuality` sorts on blocker
+  count first, so a fluent letter that invents an employer never outranks a
+  plainer one that does not. Three of the fixture cases assert that ordering
+  directly rather than asserting a number, because the ordering is what the loop
+  actually depends on.
+- **Two tone variants, and Davit picks.** He asked to be shown two letters and
+  choose, rather than be handed the winner of an argument he did not see, and
+  that turns out to be the best available answer to a real gap: there are no
+  example letters he considers good, and inventing some would be putting words
+  in his mouth at the one point where the whole letter is supposed to be his.
+  The two variants — `evidence` first and `problem` first — differ only in the
+  opening move and both stay inside §7's triad. The pick is written to
+  `data/outreach/tone-preferences.json`, the most recent picked letter is handed
+  to later draft prompts as register reference, and the tally is logged so that
+  "he has chosen the same variant nine times out of ten" becomes a reason to set
+  `OUTREACH_DRAFT_VARIANTS=1` rather than a thing nobody notices. Whether the
+  rubric's pick agreed with his is logged too: persistent disagreement is a bug
+  in `rubric.ts`, not a quirk of his taste.
+- **`toneExamples()` was wired in first, before the loop, deliberately.** §7 asks
+  for it by name and it was about five lines. Doing it first is what keeps the
+  loop's contribution measurable — the one-shot button now sends the same prompt
+  the loop's candidates get, minus the variant instruction, so the difference
+  between them is the loop and not the voice examples.
+- **The critic is handed the rubric explicitly, not asked for "feedback".** It is
+  told, in the system prompt, exactly which categories have already been checked
+  and that it must not comment on them, and it is given the survivor's rubric
+  findings inline. Asking a model for feedback on a letter produces what that
+  always produces: a paragraph about adding a strong closing statement and
+  quantifying impact, generated from the shape of the request rather than from
+  the letter. It is asked one question — is the argument about *this* posting, or
+  would it read the same against any job with a similar title — which is the one
+  thing a rule genuinely cannot see, and which is a judgement about the *input*
+  rather than about the model's own prose. It runs **once**, over both survivors
+  in a single call, and is never re-run: a judge asked twice about text it has
+  just influenced is measuring its own echo.
+- **Two revisions maximum, and no quality threshold to loop towards.** The
+  ceiling is the point rather than the default. A loop that revises until a score
+  is good enough has no bound on the morning the model wanders. A revision that
+  comes back *worse* than its original is discarded and the original stands —
+  which is the concrete reason every candidate is kept and scored rather than
+  only the winner: a model told to fix four things can and does break a fifth,
+  and without the comparison the loop would hand over a worse letter and call it
+  an improvement. A round is skipped entirely when there is nothing left to ask
+  for, which is an empty instruction list and not a threshold.
+- **Every candidate and its score are in `pending.json`.** `DraftRecord` carries
+  all of them, the critic's verdict, and which one was chosen and by whom. "Why
+  is this the letter?" is answerable afterwards, and the `spread` — best score
+  minus worst — is logged on every run, because it is the only number that says
+  whether best-of-N is earning its minutes. A spread near zero means
+  `OUTREACH_DRAFT_CANDIDATES=1` is the honest setting, and that is a thing the
+  record makes noticeable rather than a thing to guess at.
+- **`readPending` fills in `draftRecord` on read.** All 55 entries already in
+  `pending.json` were written before the field existed, so a required field was
+  absent from every value the program actually reads. Filled in on read rather
+  than declared optional, which is the same lie `RawPosting` validation exists to
+  stop, one layer up.
+- **The context window is measured, and there is room.** §23 has carried "the
+  context window is unmeasured" since stage C shipped, and this loop makes the
+  prompt bigger, so it was measured rather than worried about: the live run's
+  `maxPromptChars` was **25,489** — roughly 6,400 tokens at four characters to a
+  token — and `/api/ps` reports `gemma4:26b` served with a context of **32,768**.
+  So the drafting prompt uses about a fifth of what is available, truncation is
+  not happening today, and it was not happening before this change either. The
+  entry below stands as the reason not to set `OUTREACH_DRAFT_NUM_CTX`; this is
+  the number that says it does not need setting. Re-measure if
+  `data/profile.md` roughly triples, or if the Mac's Ollama configuration
+  changes — `maxPromptChars` is in every `outreach_draft_loop` line precisely so
+  that check is one grep.
+- **`num_ctx` is now settable and is still not set.** §23 records the context
+  window as unmeasured, and this loop makes the prompt bigger — a profile, a
+  posting, voice examples, a previously-chosen letter, and during a revision the
+  letter being revised. `OUTREACH_DRAFT_NUM_CTX` exists, and is unset by default
+  on purpose: naming a context window makes Ollama reload the model with
+  different parameters, which evicts the instance the website is serving visitors
+  from — the same cost `OUTREACH_DRAFT_MODEL` is documented as having, arriving
+  through a different door, and not a change to make silently on shared hardware.
+  What is done instead is the measurement: every loop logs `maxPromptChars`, so
+  the size of the input is visible rather than guessed at.
+
+- **Scoring the three drafts already in the queue found three more defects, all
+  of them false positives.** Running the finished rubric over real stored
+  letters, rather than only over hand-written fixtures, is a different test and
+  it earned its turn. `"Java-based"`, `"AI-driven"` and `"GPU-accelerated"` were
+  each reported as an invented technology: a hyphenated compound folds to
+  `javabased`, which is in no profile ever written, while the claim it makes is
+  about Java. `"Kafka, Redis"` became the single entity `"Kafka Redis"`, because
+  the trailing-punctuation strip erased the comma before the run-joining code
+  could see that it separated two names. And the two older drafts carry the
+  *superseded* disclosure wording — the "Personal Pitcher … on my own hardware"
+  line this section already records as the overreach Davit rejected — which the
+  strip did not recognise, so thirty words of fixed text were being scored as
+  the model's prose. All three are fixed: a lower-case hyphen suffix is dropped,
+  separating punctuation breaks a run, a multi-word run whose every part is
+  grounded is not an invented name, and the disclosure fallback matches the site
+  URL *plus* an authorship marker rather than one exact phrasing.
+  With those in, all three stored letters score 100/100 with no blockers, which
+  agrees with the hand assessment recorded above for the Align one.
+- **Two drafts in the queue still carry the old disclosure wording, and nothing
+  rewrites them.** `disclosureLine()` is read when a draft is *written*, so the
+  NVIDIA and Align letters drafted before `ccc4dd1` hold the rejected phrasing
+  and would be sent with it if approved today. Not fixed here, because
+  rewriting a stored draft is editing a letter a person may already have read
+  and edited; regenerating those two cards, or editing the line by hand in
+  `/admin`, is the honest way to clear it. Worth knowing before either is
+  approved.
+- **The one-shot button's output and the loop's first candidate are now
+  comparable, and the gap is visible.** The stored Align letter scores 100 with
+  no blockers; the loop's first candidate for the same card scored 85 with one
+  blocker at 63 seconds. Best-of-N exists for exactly that spread.
+
+Known after this change, and deliberately not fixed here:
+
+- **Stage C's paid fallback still touches `openaiBreaker` not at all.** §23 said
+  to fix it with the §16 Q4 decision rather than before. The decision is now
+  made and it is *no*, so the drafting stage will not use the paid tier by
+  policy — which leaves the code path reachable only through the global
+  `OUTREACH_ALLOW_PAID_FALLBACK`, exactly as it was. Fixing it is still worth
+  doing and it is still a change to a breaker two other callers share, so it
+  belongs with whatever next touches `llm.ts` deliberately rather than riding
+  along with a drafting change.
+- **`draft` is not reachable as a stage B verdict for anything in this queue,
+  and that is a policy interaction rather than a model failure.** Checked rather
+  than assumed: the schema allows `draft`, the prompt describes it, and
+  `applyPolicy` downgrades it to `surface_only` whenever
+  `extracted.seniority` is not in `preferences.draftSeniority`, which is
+  `["staff", "principal", "lead"]`. Every one of the 18 scored cards in
+  `pending.json` extracts as `senior` or `unclear` — not one is staff, principal
+  or lead — so the downgrade fires unconditionally and `draft` has exactly one
+  reachable value. **A fit floor picked against that column would be a floor on a
+  constant.** There is also a contradiction worth naming: `score.ts`'s prompt
+  tells the model *"draft" for senior-plus scope*, while `applyPolicy` requires
+  staff-plus. The model is being told one rule and the code enforces a stricter
+  one, so the model's `draft` verdicts — if it ever emits any — are discarded
+  silently rather than disagreed with. Resolving that is a preferences decision
+  (is a posting titled "Senior X" at staff scope a `draft` case?) and it is
+  Davit's to make, so it is recorded here rather than guessed at.
+
+**What the review pass found, same day.** `pipeline-reviewer` was run against
+the drafting-loop diff, per `CLAUDE.md`'s routing table. It found seven
+confirmed defects, and the two most serious are both cases of the loop quietly
+defeating its own design — neither visible to `tsc`, to the build, or to a
+fixture drill that was passing 16/16 at the time.
+
+- **The critic's verdict was being truncated away.** `revisionInstructions`
+  appended every rubric finding, then the critic's `generic` verdict, then its
+  notes, and took the first four. Five of the thirteen fixture letters produce
+  four or more rubric findings, so for any letter like them the loop spent
+  forty-five seconds on its one model judgement and then dropped every word of
+  it. The docstring's own argument — that `generic` is promoted to an
+  instruction of its own so it does not arrive as one note among four — was
+  defeated by the ordering directly beneath it. The order is now blockers, then
+  the critic, then stylistic findings: a fact that makes a letter unsendable
+  outranks an opinion, and an opinion outranks a fact about style.
+- **Every letter got a revision round, and the instruction was a statistic.**
+  `requirementsCategory` reports `names 5 of 7 requirements` as a finding even at
+  100/100, because that is useful context for the critic — and
+  `revisionInstructions` treated every finding as a defect. So both of the
+  deliberately-perfect fixture letters, at 100/100 with zero blockers, still
+  produced one instruction, the model was told to "rewrite it, fixing every
+  point below: names 5 of 7 requirements", and the guard that skips a revision
+  when there is nothing to ask for could never fire. Dead code that read as a
+  working feature, costing `REVISIONS × VARIANTS` calls of the Mac on letters
+  that were already finished. Only categories scoring below full marks now
+  contribute.
+- **A stale `DraftRecord` outlived the draft it explains.** `generate_draft` and
+  `save_draft` both replaced `draft` and neither cleared `draftRecord`, so
+  two clicks — run the loop, then press *Generate draft* — left the A/B picker
+  on screen offering two candidates for a letter that was no longer on the card,
+  and *Use this one* would silently revert the letter just written. Both now
+  clear it: a record that explains where a draft came from must not survive the
+  draft.
+- **Picking a register did not clear the local edit buffer.** Exactly the bug
+  recorded above for *Generate draft* — `draftFor` falls back to the stored
+  draft with `??`, so a stale buffer keeps showing and Save or Approve posts it
+  over the pick — reintroduced in the new button, with the fix and its comment
+  sitting two hundred lines above. Worth recording twice for that reason.
+- **The Copy button did nothing in exactly the case its own comment described.**
+  `navigator.clipboard?.writeText(command).then(…).catch(…)` short-circuits the
+  *whole* member chain, not just the one access, so with no clipboard API the
+  `.catch` fallback never ran either — over plain HTTP on a LAN address, which
+  is how `/admin` is actually reached, the button was silent. An explicit `if`
+  now.
+- **`readPending` had become able to throw.** Normalising `draftRecord` on read
+  spreads every element, and a `null` entry is a `TypeError` where before it was
+  merely junk — in a read shared by the admin route, the script and the 08:00
+  run, which is the job §23 already records as wedging itself silently when it
+  throws. Guarded.
+- **§5 had a new carrier, and it is now a deterministic rule.** The constraint is
+  categorical — no salary figure reaches a drafting prompt, in any currency —
+  and every guard for it was prompt-side: `preferenceLines` omits the band, the
+  comparison happens in code, the system prompt forbids mentioning pay. The loop
+  opened a path around all of it. `preferredLetters()` feeds a letter Davit
+  picked into **every subsequent** draft prompt, so a figure that reached one
+  letter would become permanent input to every letter after it — and stage B's
+  prompt does receive `compensation`, so `verdict.reasons` is a live route for
+  one. There is now a `money` category in the rubric, it is a blocker, and it is
+  used at both carriers: a letter mentioning money is not used as register
+  reference, and a shortlisting reason mentioning money is dropped before it
+  reaches the prompt. The point of making it a rule rather than a stronger
+  instruction is that a rule can be fixtured, and the fixture that matters is
+  the false-positive one: this profile is full of numbers that are the whole
+  reason it is worth reading — 100,000 requests per minute, p95 under 500 ms,
+  Java 17 — so a bare number never matches and only a number wearing a currency
+  does.
+
+Two smaller ones worth the line:
+
+- **`--candidates=` bypassed the cap the environment variable respects**, because
+  `options.candidates ?? draftCandidates()` skips the clamping function
+  entirely when the flag is present. `--candidates=20 --variants=2` was forty
+  letters and about forty minutes of the household's only GPU.
+- **`offered` was ordered by rank, so the rubric's winner was always leftmost.**
+  The whole purpose of that control is that the rubric cannot tell which of two
+  clean letters sounds like Davit, and answering the question with position is a
+  quieter way of answering it than pre-selecting one. It is ordered by variant
+  now; the rubric's pick is still labelled.
+
+**The first browser pass on `/admin` that has ever succeeded, 2026-09-16.**
+Worth its own note because §23 has recorded two failed attempts: one died on a
+session rate limit after the desktop homepage, and one had no browser tooling at
+all and said so. The third had no browser tooling either — neither a browser MCP
+nor the `preview_start` the `ui-checker` definition calls for — and instead of
+reporting DOM assertions as a visual pass, it built a driver: headless Chrome
+over CDP, navigating, injecting the admin cookie, overriding device metrics and
+capturing real screenshots. Every number below is measured in a rendered page.
+
+The operational traps in this document were all real. `npm run dev` printed
+3003, then died with "another dev server is already running" — the live one was
+on **3002**, found with `netstat`, exactly as §20 warns.
+
+- **The card carrying two letters is 2559px tall at 375px — three and a third
+  viewport-heights**, against a median of 940px for every other extracted card.
+  Nothing overflowed, nothing was clipped, and the breakpoint behaved exactly as
+  intended (stacked below `sm`, two-up from 640px, flipping at precisely 640).
+  The problem is subtler than a layout bug and would have been invisible in a
+  diff: you scroll past two full screens of letter before reaching the message
+  box and the three decisions. The letters are now clamped to eight lines with a
+  "Show the whole letter" toggle — eight lines is the opening and most of the
+  argument, which is what you are choosing between — and the desktop layout,
+  which measured well at 1501px with the panels equal-height, is untouched.
+- **`break-all` holds at 375px and is deliberately kept.** The copyable command
+  measured 73.8px of clearance inside its card at both widths, with zero
+  horizontal overflow anywhere on the page. The reviewer's nit is fair — it
+  splits `-- --id` from `=d3dae27c2fa56f27` — but `break-all` is the rule that
+  *guarantees* no overflow, and trading a guarantee for a nicer break point on a
+  string whose length is fixed by `postingId()` is the wrong direction on a
+  phone narrower than the one measured.
+- **Two wording faults, both of the same kind: correct numbers that read as
+  wrong.** The saved line said "3 candidates" directly beneath two rendered
+  panels — the loop's total and the offered pair, two different true counts
+  colliding, which is worse than one of them being wrong. It says "3 tried" now.
+  And the blocker chip rendered "1 BLOCKERS".
+- **19 of 55 cards have an extraction, and exactly 19 `LoopCommand` rows
+  rendered.** Console and network were clean at every width — zero errors, zero
+  warnings, zero failed requests.
+- **`line-clamp-8` was verified in the compiled cascade, not assumed.**
+  Tailwind's documented clamp scale stops at 6; v4 generates the bare value on
+  demand, and the production bundle carries
+  `.line-clamp-8{-webkit-line-clamp:8;…}`. Checked the same way the v4 layering
+  fix in `97276ac` was, and for the same reason.
+
+What the pass could **not** verify, recorded rather than glossed: no live card
+has a `DraftRecord`, so the two-letter card was rendered from an injected one
+(restored byte-identically afterwards, md5 confirmed), and the `chosenBy:
+'human'` branch — the selected state and its copy — has still never been
+rendered. Neither has the Copy button's fallback, which needs the plain-HTTP LAN
+condition headless Chrome will not reproduce.
+
+**§5 was being violated by the deployed image, found 2026-09-16.** This
+section recorded, in the phase-4 notes and again under stage C, that
+`private/` is "in neither the Dockerfile nor the compose bind mount, by design
+(§5) — so `loadPreferences()` returns defaults there". The first half is true
+and the conclusion is false. `private/job-preferences.md`, which holds real
+salary figures, is **inside the running container's image layer**, 12,441 bytes
+at `/app/private/job-preferences.md`, and has been since the image was built.
+
+The vector is **Next.js output file tracing**, which is why reading the
+Dockerfile never caught it and why the claim survived two review passes. The
+runner stage names four things — `.next/standalone`, `.next/static`, `public`,
+`data` — and `private/` is not among them. But `preferences.ts` calls
+`fs.readFileSync(PREFERENCES_FILE)`, the tracer resolves that path statically at
+build time, and copies the file it points at into `.next/standalone/`. The
+runner then copies that directory wholesale. Every `COPY` line in the Dockerfile
+is innocent and the file arrives anyway.
+
+`.dockerignore` had already excluded `.env` and `data/proposals` for precisely
+this class of problem — "so a pending proposal sitting on the host at build time
+is not baked into an image layer" — and simply never named `private`. It does
+now, and the fix was verified by building a throwaway image rather than by
+reading: `/app/private` does not exist in it, and the app, `data/` and the
+standalone server are all intact.
+
+Three corrections follow from this, and they matter in both directions:
+
+- **The deployed container has had the preference doc all along.** So the
+  stage C note above — that "in the deployed container, every draft is written
+  without the preference doc", and that the route's `present` check would tell
+  the reviewer so — describes behaviour that was never happening. It will start
+  happening at the next rebuild, which is when that note becomes true for the
+  first time.
+- **Mounting `private/` read-only into the web container is no longer the open
+  question it was recorded as.** It was framed as "would fix it properly and is
+  a §5 decision rather than a code change". The decision is now the other way
+  round: the file was already there by accident, and the question is whether to
+  put it back *deliberately*, with a read-only mount, knowing that it puts salary
+  figures in a container that serves the public internet.
+- **The existing image still contains the file**, and a `.dockerignore` change
+  only affects the next build. Whether that image needs disposing of rather than
+  merely superseding is a judgement about where it has been.
+
+The general rule, which is the phase-3 redaction note one layer down: **§5
+applies to anything the build produces, not only to what the source tree
+contains.** A file that is unsafe in `data/` and unsafe in git history is unsafe
+in an image layer, and an image layer is the one of the three that nobody
+reviews.
+
 **Phase 5, built 2026-09-15.**
 
 - **The discovery job calls no model at all, and §9's "why it fits" sentence is

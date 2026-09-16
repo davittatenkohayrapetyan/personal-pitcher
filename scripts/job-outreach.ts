@@ -11,6 +11,7 @@
  *   npm run outreach -- --geo-fixtures  # the pure-function drill, no network at all
  *   npm run outreach -- --posting-fixtures # the stage A sanitiser, including the injection case
  *   npm run outreach -- --policy-fixtures  # section 7's categorical rules, with no model
+ *   npm run outreach -- --rubric-fixtures  # hand-written letters against the drafting rubric
  *   npm run outreach -- --source-fixtures # every adapter's normaliser over a saved response
  *
  * Exit codes matter because a scheduler is the caller: 0 means the run
@@ -28,6 +29,7 @@ import { loadPreferences } from '../src/lib/outreach/preferences';
 import { sanitizeExtractedPosting } from '../src/lib/outreach/sanitize';
 import { applyStructured } from '../src/lib/outreach/extract';
 import { applyPolicy } from '../src/lib/outreach/score';
+import { compareByQuality, scoreLetter, type RubricCategoryId } from '../src/lib/outreach/rubric';
 import { FIXTURE_DIR } from '../src/lib/outreach/config';
 import { normaliseWorkday } from '../src/lib/outreach/sources/workday';
 import { normalisePinpoint } from '../src/lib/outreach/sources/pinpoint';
@@ -402,12 +404,172 @@ function runPostingFixtures(): number {
   return failures;
 }
 
+/** One hand-written letter and what it is supposed to score. */
+interface LetterCase {
+  name: string;
+  body: string;
+  expect: {
+    minTotal: number;
+    maxTotal: number;
+    blockers: number;
+    categories?: Partial<Record<RubricCategoryId, number>>;
+    /** Substrings that must appear among a category's findings. */
+    findings?: Partial<Record<RubricCategoryId, string[]>>;
+    /** Substrings that must appear among the blockers. */
+    blockerContains?: string[];
+    /** The word count must equal that of the named case — the disclosure-strip test. */
+    sameWordsAs?: string;
+    disclosurePresent?: boolean;
+  };
+}
+
+/**
+ * The rubric drill: hand-written letters, asserted scores, no model anywhere.
+ *
+ * This is the drill that makes the drafting loop a quality bar rather than a
+ * vibe, and the argument is in `rubric.ts`'s header: a model judge returns a
+ * different number for the same letter next week, so there is nothing to
+ * assert against. These letters do not move, so the assertions hold, and a
+ * change to a marker list or a weight that quietly breaks the good letters
+ * fails here instead of in an email to a hiring manager.
+ *
+ * Two of the thirteen cases are *good* letters, in deliberately different
+ * registers, and they matter more than the eleven bad ones. A rubric that only
+ * ever proves it can reject is a rubric nobody has checked for false positives,
+ * and a false positive here is the loop discarding the letter Davit would
+ * actually have sent.
+ *
+ * The profile and the posting come from the fixture, not from `data/profile.md`
+ * and not from the queue — same reason `policy.json` carries its own
+ * preferences. A drill whose expected values move when unrelated content is
+ * edited is a drill people learn to ignore.
+ */
+function runRubricFixtures(): number {
+  const file = path.join(FIXTURE_DIR, 'letters.json');
+  const fixture = JSON.parse(fs.readFileSync(file, 'utf-8')) as {
+    profile: string;
+    extracted: ExtractedPosting;
+    cases: LetterCase[];
+    rankings: { name: string; better: string; worse: string }[];
+  };
+
+  let failures = 0;
+  const wordsByCase = new Map<string, number>();
+  const scoreByCase = new Map<string, ReturnType<typeof scoreLetter>>();
+
+  for (const testCase of fixture.cases) {
+    const score = scoreLetter({
+      body: testCase.body,
+      profile: fixture.profile,
+      extracted: fixture.extracted,
+    });
+    wordsByCase.set(testCase.name, score.words);
+    scoreByCase.set(testCase.name, score);
+
+    const problems: string[] = [];
+    const { expect } = testCase;
+
+    if (score.total < expect.minTotal || score.total > expect.maxTotal) {
+      problems.push(`total ${score.total} outside ${expect.minTotal}-${expect.maxTotal}`);
+    }
+
+    if (score.blockers.length !== expect.blockers) {
+      problems.push(
+        `expected ${expect.blockers} blockers, got ${score.blockers.length}: [${score.blockers.join(' | ')}]`,
+      );
+    }
+
+    for (const [id, wanted] of Object.entries(expect.categories ?? {})) {
+      const category = score.categories.find((entry) => entry.id === id);
+      if (!category) problems.push(`no category "${id}"`);
+      else if (category.score !== wanted) {
+        problems.push(`${id}: expected ${wanted}, got ${category.score} (${category.findings.join('; ') || 'no findings'})`);
+      }
+    }
+
+    for (const [id, wanted] of Object.entries(expect.findings ?? {})) {
+      const category = score.categories.find((entry) => entry.id === id);
+      const joined = (category?.findings ?? []).join(' | ').toLowerCase();
+      for (const needle of wanted ?? []) {
+        if (!joined.includes(needle.toLowerCase())) {
+          problems.push(`${id} findings missing "${needle}": [${joined}]`);
+        }
+      }
+    }
+
+    for (const needle of expect.blockerContains ?? []) {
+      if (!score.blockers.join(' | ').toLowerCase().includes(needle.toLowerCase())) {
+        problems.push(`blockers missing "${needle}": [${score.blockers.join(' | ')}]`);
+      }
+    }
+
+    if (expect.sameWordsAs) {
+      // The whole point of the disclosure-strip rule: appending Davit's fixed
+      // line must not cost the letter a single word of its budget.
+      const other = wordsByCase.get(expect.sameWordsAs);
+      if (other === undefined) problems.push(`"${expect.sameWordsAs}" has not run yet`);
+      else if (other !== score.words) {
+        problems.push(`words ${score.words} != ${other} from "${expect.sameWordsAs}"`);
+      }
+    }
+
+    if (expect.disclosurePresent !== undefined && score.disclosurePresent !== expect.disclosurePresent) {
+      problems.push(`disclosurePresent: expected ${expect.disclosurePresent}, got ${score.disclosurePresent}`);
+    }
+
+    if (problems.length > 0) failures += 1;
+
+    console.log(
+      `  ${problems.length === 0 ? 'ok  ' : 'FAIL'} ${testCase.name}\n` +
+        `       ${score.total}/100, ${score.words} words, ${score.blockers.length} blockers`,
+    );
+    for (const problem of problems) console.log(`       ${problem}`);
+  }
+
+  // The ordering assertions, which are the ones the loop actually depends on.
+  // `compareByQuality` is what picks the survivor out of best-of-N, and its
+  // whole claim is that blockers rank ahead of the score -- so a fluent letter
+  // that invents an employer never beats a plainer one that does not. That
+  // claim is a sort comparator, and a sort comparator is testable.
+  for (const ranking of fixture.rankings) {
+    const better = scoreByCase.get(ranking.better);
+    const worse = scoreByCase.get(ranking.worse);
+    const problems: string[] = [];
+
+    if (!better || !worse) problems.push('one of the named cases does not exist');
+    else if (compareByQuality(better, worse) >= 0) {
+      problems.push(
+        `"${ranking.better}" (${better.total}/100, ${better.blockers.length} blockers) did not rank ` +
+          `above "${ranking.worse}" (${worse.total}/100, ${worse.blockers.length} blockers)`,
+      );
+    }
+
+    if (problems.length > 0) failures += 1;
+    console.log(`  ${problems.length === 0 ? 'ok  ' : 'FAIL'} ${ranking.name}`);
+    for (const problem of problems) console.log(`       ${problem}`);
+  }
+
+  const total = fixture.cases.length + fixture.rankings.length;
+  console.log('');
+  console.log(`  ${total - failures}/${total} rubric fixtures passed`);
+  return failures;
+}
+
 async function main(): Promise<void> {
   if (hasFlag('policy-fixtures')) {
     console.log('');
     console.log('Scoring policy fixtures');
     console.log('');
     if (runPolicyFixtures() > 0) process.exitCode = 1;
+    console.log('');
+    return;
+  }
+
+  if (hasFlag('rubric-fixtures')) {
+    console.log('');
+    console.log('Drafting rubric fixtures');
+    console.log('');
+    if (runRubricFixtures() > 0) process.exitCode = 1;
     console.log('');
     return;
   }

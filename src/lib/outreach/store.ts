@@ -10,6 +10,7 @@ import type {
   OutreachRun,
   QueuedOpportunity,
   RawPosting,
+  TonePreference,
   WatchedCompany,
 } from './types';
 import {
@@ -23,8 +24,10 @@ import {
   RUN_REPORT_FILE,
   SEEN_FILE,
   SUGGESTIONS_FILE,
+  TONE_PREFERENCES_FILE,
   queueTtlDays,
 } from './config';
+import { mentionsMoney } from './rubric';
 import { logger } from '../logger';
 
 /**
@@ -170,7 +173,20 @@ export function recordSeen(additions: SeenEntry[]): SeenEntry[] {
 
 export function readPending(): QueuedOpportunity[] {
   const parsed = readJsonFile<QueuedOpportunity[]>(PENDING_FILE, []);
-  return Array.isArray(parsed) ? parsed : [];
+  if (!Array.isArray(parsed)) return [];
+
+  // `draftRecord` arrived with the best-of-N loop, and every entry written
+  // before it is missing the key. Filled in on read rather than declared
+  // optional, so the type stays true of every value in the program: a required
+  // field that is absent in the file the program actually reads is the same
+  // lie `RawPosting` validation exists to stop (§23), one layer up.
+  // Guarded, because spreading a `null` element throws and this read is shared
+  // by the admin route, `outreach:draft --list` and the 08:00 run. Before the
+  // normalisation existed a junk entry was merely junk; it must not become a
+  // crash in the one job that wedges itself silently when it throws (§23).
+  return parsed
+    .filter((item): item is QueuedOpportunity => Boolean(item) && typeof item === 'object')
+    .map((item) => ({ ...item, draftRecord: item.draftRecord ?? null }));
 }
 
 export function writePending(queue: QueuedOpportunity[]): void {
@@ -259,6 +275,77 @@ export function patchPending(
   queue[index] = updated;
   writePending(queue);
   return updated;
+}
+
+// ─── Tone preferences ─────────────────────────────────────────────────
+
+/**
+ * The letters Davit picked, when he was shown two.
+ *
+ * A log, not a model. Nothing is trained and nothing is fitted: the most recent
+ * pick is handed to later draft prompts as register reference, and the running
+ * tally is what turns "which variant does he actually like?" from an opinion
+ * into a count.
+ *
+ * Append-only and never pruned, for the same reason `seen.json` is permanent —
+ * it is a record of decisions a person made, and there are not going to be
+ * thousands of them.
+ */
+export function readTonePreferences(): TonePreference[] {
+  return readJsonFile<TonePreference[]>(TONE_PREFERENCES_FILE, []);
+}
+
+/**
+ * Records a choice, replacing any earlier choice on the same card.
+ *
+ * Upsert rather than append, and the case that forces it is ordinary: Davit
+ * clicks "Use this one" on the evidence-first letter, reads the other again,
+ * and clicks the problem-first one. Appending would leave two rows — chose
+ * evidence over problem, then chose problem over evidence — and the tally would
+ * read one vote each from a person who cast one vote. Clicking the same button
+ * twice would be worse still: two identical rows and a doubled count.
+ *
+ * The row that survives is the last one written, which is the decision that is
+ * actually true of the card.
+ */
+export function appendTonePreference(preference: TonePreference): TonePreference[] {
+  const all = [
+    ...readTonePreferences().filter((existing) => existing.cardId !== preference.cardId),
+    preference,
+  ];
+  writeJsonFile(TONE_PREFERENCES_FILE, all);
+  return all;
+}
+
+/**
+ * The most recent picks, newest first, as register reference for a draft prompt.
+ *
+ * `limit` defaults to one and the caller is expected to keep it there. The
+ * binding constraint is `num_ctx`, which nobody has measured (§23) and which
+ * Ollama enforces by truncation rather than by an error — so the cost of being
+ * generous here is the front of the prompt, where the rules live, quietly
+ * falling off the end of the context window.
+ */
+export function preferredLetters(limit = 1): string[] {
+  return readTonePreferences()
+    .slice(-limit)
+    .reverse()
+    .map((preference) => preference.body)
+    .filter(Boolean)
+    // §5, enforced at the one place a *letter* becomes prompt input. A stored
+    // letter is the only text in this system that can carry a figure forward
+    // into every draft written after it, so a letter mentioning money is not
+    // used as register reference — the register is not worth the number.
+    .filter((body) => !mentionsMoney(body));
+}
+
+/** How often each variant has been picked. The input to "stop paying for two". */
+export function tonePreferenceTally(): Record<string, number> {
+  const tally: Record<string, number> = {};
+  for (const preference of readTonePreferences()) {
+    tally[preference.chosenVariant] = (tally[preference.chosenVariant] ?? 0) + 1;
+  }
+  return tally;
 }
 
 // ─── Decisions ────────────────────────────────────────────────────────
