@@ -55,7 +55,7 @@ that survive a change of language.
 
 Examples of work Davit personally led rather than contributed to:
 
-- Leading the modernization of the Raymond James wealth-management platform
+- Leading the modernization of a wealth-management platform
   from legacy monoliths to resilient microservices, with full on- and
   off-business-hours ownership from testing through delivery
   (Grid Dynamics, 2025–).
@@ -77,7 +77,7 @@ Examples of work Davit personally led rather than contributed to:
 ## Grid Dynamics — Staff Software Engineer
 **January 2025 – Present**
 
-Project: Raymond James Wealth Management Platform
+Project: Wealth Management Platform
 
 Responsibilities:
 - Leading modernization of a mission-critical wealth-management platform
@@ -104,10 +104,16 @@ Highlights:
 - Led integration analysis for third-party financial data providers
 
 Measured outcomes:
-- Sustains peaks of around 100,000 requests per minute
-- p50 latency around 80 ms; p95 held under 500 ms
+- Service level objectives held, rather than a one-off benchmark: peaks of
+  around 100,000 requests per minute, p50 latency around 80 ms, and p95 under
+  500 ms
+- Those targets were maintained while new data vendors were being onboarded
+  continuously. The work was keeping them true as the system kept growing, not
+  reaching them once
 - Optimized at every level rather than in one place: database access,
   parallelized calls to vendor APIs, and caching strategy
+- Migrated a market-data vendor integration on a separate service from a legacy
+  XML API to the provider's REST API
 - Introduced local near-caches with resilient cluster-wide updating, so a node
   refresh never takes the cluster down with it
 - Worked directly with the data vendor to add delivery mechanisms beyond the
@@ -117,6 +123,7 @@ Measured outcomes:
   and the schedule with the vendor, then implementing both ends.
 - Held full ownership of the platform on and off business hours, beginning
   during testing and delivery rather than after handover
+- Sole engineer on this work, reporting directly to the product owner
 
 ---
 
@@ -131,6 +138,13 @@ Responsibilities:
 - Developed Angular frontend modules
 - Managed AWS and Docker Swarm deployments
 - Worked on enrollment, encryption, and document workflows
+
+Scope and status:
+- Delivered as a pilot. The design, the analysis and the conformance work with
+  EU policy were done in full; it did not carry production citizen volume
+- Owned the research, the backend implementation and the infrastructure
+- Worked alongside one mobile developer, with a product owner and a project
+  manager
 
 Key Technologies:
 - Kotlin
@@ -150,8 +164,12 @@ Project: Automotive Material Verification
 
 Responsibilities:
 - Led enterprise Java synchronization systems
-- Improved system reliability and architecture
 - Enhanced material verification workflows
+
+Scope:
+- Back-office Java software for an automotive manufacturer, handling vehicle
+  composition and the legal and compliance questions attached to it
+- A monolith, and a maintenance engagement rather than a build
 
 Key Technologies:
 - Java EE
@@ -174,6 +192,13 @@ Responsibilities:
 - Researched workflow and state-machine solutions
 - Helped standardize orchestration architecture
 
+Scope:
+- Proposed Spring State Machine with state held in ElastiCache, after writing a
+  comparison of the candidate solutions and their trade-offs
+- Led every stage through to production: development, testing and release.
+  Infrastructure was AWS, run by the SRE team
+- Tech lead of a two-person team
+
 Key Technologies:
 - Java 16
 - Spring Boot
@@ -192,6 +217,15 @@ Responsibilities:
 - Optimized aggregation and search performance
 - Improved scalability of e-commerce systems
 
+Measured outcomes:
+- Aggregation queries that had been taking up to 5 seconds came down to around
+  300 ms
+- Consolidated several relational databases — MariaDB and PostgreSQL — behind a
+  single Elasticsearch layer
+- A few gigabytes of catalogue and order records, across a number of online
+  stores
+- Sole engineer on the migration, reporting directly to the company owner
+
 Key Technologies:
 - Java
 - Spring Boot
@@ -207,7 +241,10 @@ Key Technologies:
 Responsibilities:
 - Developed embedded memory testing and repair systems
 - Worked on silicon production analysis tooling
-- Built performance-sensitive low-level software
+- Built simulation and test software for internal faults in embedded memory,
+  designed to run in real time against a virtual chip for foundry use
+- The work was tightly connected to the PhD (see Education)
+- Worked independently on the research, reporting to the department lead
 
 Key Technologies:
 - C++
@@ -235,6 +272,9 @@ Key Technologies:
 Responsibilities:
 - Enhanced CMS platforms for government organizations
 - Integrated web and desktop systems
+
+Scope:
+- Tech lead of a two-person team
 
 Key Technologies:
 - Java EE

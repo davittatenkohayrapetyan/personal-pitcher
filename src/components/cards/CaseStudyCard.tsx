@@ -31,7 +31,7 @@ const STUDIES: CaseStudy[] = [
     label: 'Grid Dynamics · 2025 — present',
     title: 'Modernizing a wealth-management platform without pausing it',
     context:
-      'Raymond James wealth-management platform — a mission-critical system carrying live financial workflows.',
+      'A wealth-management platform — a mission-critical system carrying live financial workflows.',
     problem:
       'Legacy monoliths had to become resilient microservices, while a platform that advisors depend on daily kept running.',
     constraint:
