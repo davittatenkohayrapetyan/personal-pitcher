@@ -21,7 +21,7 @@ const ROLES: Role[] = [
     title: 'Staff Software Engineer',
     period: 'Jan 2025 — Present',
     description:
-      'Leading modernization of a wealth-management platform: legacy monoliths into resilient microservices, observability, vendor integrations, and caching-led performance work.',
+      'Leading modernization of the Raymond James wealth-management platform: legacy monoliths into resilient microservices, observability, vendor integrations, and caching-led performance work.',
     highlights: ['Java 17 · Spring Boot · Redis', 'IBM MQ · OracleDB · OpenTelemetry · Splunk'],
   },
   {

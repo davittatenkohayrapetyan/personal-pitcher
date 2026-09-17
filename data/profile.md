@@ -55,7 +55,7 @@ that survive a change of language.
 
 Examples of work Davit personally led rather than contributed to:
 
-- Leading the modernization of a wealth-management platform
+- Leading the modernization of the Raymond James wealth-management platform
   from legacy monoliths to resilient microservices, with full on- and
   off-business-hours ownership from testing through delivery
   (Grid Dynamics, 2025–).
@@ -77,7 +77,7 @@ Examples of work Davit personally led rather than contributed to:
 ## Grid Dynamics — Staff Software Engineer
 **January 2025 – Present**
 
-Project: Wealth Management Platform
+Project: Raymond James Wealth Management Platform
 
 Responsibilities:
 - Leading modernization of a mission-critical wealth-management platform
@@ -112,8 +112,8 @@ Measured outcomes:
   reaching them once
 - Optimized at every level rather than in one place: database access,
   parallelized calls to vendor APIs, and caching strategy
-- Migrated a market-data vendor integration on a separate service from a legacy
-  XML API to the provider's REST API
+- Migrated a vendor integration on a separate service from Moody's legacy EDGE
+  XML API to its REST API
 - Introduced local near-caches with resilient cluster-wide updating, so a node
   refresh never takes the cluster down with it
 - Worked directly with the data vendor to add delivery mechanisms beyond the
@@ -167,8 +167,8 @@ Responsibilities:
 - Enhanced material verification workflows
 
 Scope:
-- Back-office Java software for an automotive manufacturer, handling vehicle
-  composition and the legal and compliance questions attached to it
+- Back-office Java software for a BMW project, handling vehicle composition
+  and the legal and compliance questions attached to it
 - A monolith, and a maintenance engagement rather than a build
 
 Key Technologies:
